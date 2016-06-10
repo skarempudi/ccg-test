@@ -28,10 +28,10 @@ public class Battlefield {
     public Battlefield(RxEventBus<RecyclerViewEvent> rvEventBus) {
         mLands = new ArrayList<>();
         mCreatures = new ArrayList<>();
-        for (int i = 0; i < NUM_CREATURES; i++) {
-            Card card = new Card(i);
-            mCreatures.add(new Permanent(card));
-        }
+//        for (int i = 0; i < NUM_CREATURES; i++) {
+//            Card card = new Card(i);
+//            addCreature(new Permanent(card));
+//        }
         mCombat = new ArrayList<>();
 
         mRecyclerViewEventBus = rvEventBus;
@@ -47,6 +47,14 @@ public class Battlefield {
     }
 
     /**
+     * Add land
+     * @param land
+     */
+    protected void addLand(Permanent land) {
+        mLands.add(land);
+    }
+
+    /**
      * Get a creature that is not in combat
      * @param position
      * @return
@@ -56,12 +64,24 @@ public class Battlefield {
     }
 
     /**
+     * Add creature not in combat
+     * @param creature
+     */
+    protected void addCreature(Permanent creature) {
+        mCreatures.add(creature);
+    }
+
+    /**
      * Get a creature that is in combat: attacking or blocking
      * @param position
      * @return
      */
     public Permanent getCombatCreature(int position) {
         return mCombat.get(position);
+    }
+
+    protected void addCombatCreature(Permanent combatCreature) {
+        mCombat.add(combatCreature);
     }
 
     /**
@@ -78,11 +98,20 @@ public class Battlefield {
     }
 
     /**
+     * Empties all lists
+     */
+    protected void clearLists() {
+        mLands.clear();
+        mCreatures.clear();
+        mCombat.clear();
+    }
+
+    /**
      * Add a new creature Permanent to the mBattlefield
      * @param creature
      */
     public void putCreatureOnBattlefield(Permanent creature) {
-        mCreatures.add(creature);
+        addCreature(creature);
     }
 
     /**
@@ -91,10 +120,10 @@ public class Battlefield {
      * @param position
      */
     public void moveToAttack(int position) {
-        Log.d(TAG, "moveToAttack: removing from creatures at " + position);
+//        Log.d(TAG, "moveToAttack: removing from creatures at " + position);
         Permanent creature = mCreatures.remove(position);
-        Log.d(TAG, "moveToAttack: creature has id " + creature.toString());
-        mCombat.add(creature);
+//        Log.d(TAG, "moveToAttack: creature has id " + creature.toString());
+        addCombatCreature(creature);
         //update the RecyclerViews
         //remove from mCreatures
         addRecyclerViewEvent(
@@ -116,10 +145,10 @@ public class Battlefield {
      * @param position
      */
     public void undoAttackDeclaration(int position) {
-        Log.d(TAG, "undoAttackDeclaration: removing from combat at " + position);
+//        Log.d(TAG, "undoAttackDeclaration: removing from combat at " + position);
         Permanent creature = mCombat.remove(position);
-        Log.d(TAG, "undoAttackDeclaration: creature has id " + creature.toString());
-        mCreatures.add(creature);
+//        Log.d(TAG, "undoAttackDeclaration: creature has id " + creature.toString());
+        addCreature(creature);
         //update RecyclerViews
         //remove from mCombat
         addRecyclerViewEvent(
@@ -156,7 +185,7 @@ public class Battlefield {
      */
     private void addRecyclerViewEvent(RecyclerViewEvent.Target target, RecyclerViewEvent.Action action, int index) {
         RecyclerViewEvent event = new RecyclerViewEvent(target, action, index);
-        Log.d(TAG, "addRecyclerViewEvent: " + event.toString());
+//        Log.d(TAG, "addRecyclerViewEvent: " + event.toString());
         mRecyclerViewEventBus.addEvent(event);
     }
 }
