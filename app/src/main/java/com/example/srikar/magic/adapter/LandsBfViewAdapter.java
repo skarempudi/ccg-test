@@ -2,10 +2,8 @@ package com.example.srikar.magic.adapter;
 
 import android.content.Context;
 
-import com.example.srikar.magic.databinding.PermanentBinding;
 import com.example.srikar.magic.event.RecyclerViewEvent;
 import com.example.srikar.magic.model.Permanent;
-import com.example.srikar.magic.viewmodel.PermanentViewModel;
 
 /**
  * Created by Srikar on 6/2/2016.
@@ -19,7 +17,7 @@ public class LandsBfViewAdapter extends BaseBfViewAdapter {
 
     @Override
     protected Permanent getPermanent(int position) {
-        return mBattlefield.getLand(position);
+        return mBattlefield.getViewPlayerLand(position);
     }
 
     @Override
@@ -32,7 +30,7 @@ public class LandsBfViewAdapter extends BaseBfViewAdapter {
 
     @Override
     public int getItemCount() {
-        return mBattlefield.getLandsSize();
+        return mBattlefield.getViewPlayerLandsSize();
     }
 
     /**

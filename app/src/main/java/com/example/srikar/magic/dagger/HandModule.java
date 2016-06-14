@@ -1,5 +1,6 @@
 package com.example.srikar.magic.dagger;
 
+import com.example.srikar.magic.model.GameState;
 import com.example.srikar.magic.model.Hand;
 
 import javax.inject.Singleton;
@@ -15,7 +16,7 @@ import dagger.Provides;
 public class HandModule {
     @Provides
     @Singleton
-    public Hand provideHand() {
-        return new Hand();
+    public Hand provideHand(GameState state) {
+        return new Hand(state);
     }
 }

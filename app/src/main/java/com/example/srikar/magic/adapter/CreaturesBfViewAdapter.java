@@ -2,10 +2,8 @@ package com.example.srikar.magic.adapter;
 
 import android.content.Context;
 
-import com.example.srikar.magic.databinding.PermanentBinding;
 import com.example.srikar.magic.event.RecyclerViewEvent;
 import com.example.srikar.magic.model.Permanent;
-import com.example.srikar.magic.viewmodel.PermanentViewModel;
 
 /**
  * Created by Srikar on 6/2/2016.
@@ -23,7 +21,7 @@ public class CreaturesBfViewAdapter extends BaseBfViewAdapter {
      * @param position
      */
     protected Permanent getPermanent(int position) {
-        return mBattlefield.getCreature(position);
+        return mBattlefield.getViewPlayerCreature(position);
     }
 
     @Override
@@ -41,7 +39,7 @@ public class CreaturesBfViewAdapter extends BaseBfViewAdapter {
      * Number of elements in list is equal to the number of creatures not in combat
      */
     public int getItemCount() {
-        return mBattlefield.getCreaturesSize();
+        return mBattlefield.getViewPlayerCreaturesSize();
     }
 
     /**

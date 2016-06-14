@@ -23,7 +23,7 @@ public class CombatBfViewAdapter extends BaseBfViewAdapter {
      * @param position
      */
     protected Permanent getPermanent(int position) {
-        return mBattlefield.getCombatCreature(position);
+        return mBattlefield.getViewPlayerCombatCreature(position);
     }
 
     @Override
@@ -41,7 +41,7 @@ public class CombatBfViewAdapter extends BaseBfViewAdapter {
      * Number of items displayed in list is number of creatures in combat
      */
     public int getItemCount() {
-        return mBattlefield.getCombatSize();
+        return mBattlefield.getViewPlayerCombatSize();
     }
 
     /**

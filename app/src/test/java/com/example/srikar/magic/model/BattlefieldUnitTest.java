@@ -8,13 +8,15 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import rx.Scheduler;
 import rx.Subscription;
 import rx.schedulers.Schedulers;
 
 import static org.junit.Assert.assertTrue;
 
 /**
+ * Test the Battlefield class
+ * Note that at this point, there is no interaction between Alice and Bob's parts of the Battlefield,
+ * and no way to switch between them, so won't test Bob's side at this point.
  * Created by Srikar on 6/9/2016.
  */
 public class BattlefieldUnitTest {
@@ -27,17 +29,17 @@ public class BattlefieldUnitTest {
      * Constructor, make Battlefield object
      */
     public BattlefieldUnitTest() {
-        battlefield = new Battlefield(new RxEventBus<>());
+        battlefield = new Battlefield(new RxEventBus<>(), new GameState());
     }
 
     @Before
     /**
-     * Starts with three creatures on battlefield
+     * Starts with three creatures on battlefield on Alice's side
      */
     public void setUp() {
         for (int i = 0; i < NUM_CREATURES; i++) {
             Card card = new Card(i);
-            battlefield.addCreature(new Permanent(card));
+            battlefield.addCreature(PlayerID.ALICE, new Permanent(card));
         }
     }
 
@@ -54,9 +56,9 @@ public class BattlefieldUnitTest {
      * Assert that after setUp(), there are NUM_CREATURES creatures and nothing in other lists
      */
     public void testStartCondition() {
-        int numLands = battlefield.getLandsSize();
-        int numCreatures = battlefield.getCreaturesSize();
-        int numCombat = battlefield.getCombatSize();
+        int numLands = battlefield.getViewPlayerLandsSize();
+        int numCreatures = battlefield.getViewPlayerCreaturesSize();
+        int numCombat = battlefield.getViewPlayerCombatSize();
 
         assertTrue("Number of lands is " + numLands, numLands == NUM_LANDS);
         assertTrue("Number of creatures is " + numCreatures, numCreatures == NUM_CREATURES);
@@ -65,11 +67,11 @@ public class BattlefieldUnitTest {
 
     @Test
     /**
-     * Assert that getCreature() returns the expected Permanents, given start condition
+     * Assert that getViewPlayerCreature() returns the expected Permanents, given start condition
      */
-    public void testGetCreature() {
+    public void testGetViewPlayerCreature() {
         for (int i = 0; i < NUM_CREATURES; i++) {
-            Permanent creature = battlefield.getCreature(i);
+            Permanent creature = battlefield.getViewPlayerCreature(i);
             assertTrue("The id is " + creature.toString(),
                     creature.toString().compareTo("" + i) == 0);
         }
@@ -82,21 +84,21 @@ public class BattlefieldUnitTest {
      */
     public void testAddLand() {
         Card card = new Card(0);
-        battlefield.addLand(new Permanent(card));
+        battlefield.addLand(PlayerID.ALICE, new Permanent(card));
 
-        int numLands = battlefield.getLandsSize();
+        int numLands = battlefield.getViewPlayerLandsSize();
         assertTrue("Number of lands is " + numLands, numLands == NUM_LANDS + 1);
     }
 
     @Test
     /**
-     * Assert that after add land, getLand() returns the expected Permanent
+     * Assert that after add land, getViewPlayerLand() returns the expected Permanent
      */
-    public void testGetLand() {
+    public void testGetViewPlayerLand() {
         Card card = new Card(0);
-        battlefield.addLand(new Permanent(card));
+        battlefield.addLand(PlayerID.ALICE, new Permanent(card));
 
-        Permanent land = battlefield.getLand(NUM_LANDS);
+        Permanent land = battlefield.getViewPlayerLand(NUM_LANDS);
         assertTrue("The id is " + land.toString(),
                 land.toString().compareTo("" + 0) == 0);
     }
@@ -108,21 +110,21 @@ public class BattlefieldUnitTest {
      */
     public void testAddCombatCreature() {
         Card card = new Card(0);
-        battlefield.addCombatCreature(new Permanent(card));
+        battlefield.addCombatCreature(PlayerID.ALICE, new Permanent(card));
 
-        int numCombat = battlefield.getCombatSize();
+        int numCombat = battlefield.getViewPlayerCombatSize();
         assertTrue("Number of lands is " + numCombat, numCombat == NUM_COMBAT + 1);
     }
 
     @Test
     /**
-     * Assert that after add combat, getCombatCreature() returns the expected Permanent
+     * Assert that after add combat, getViewPlayerCombatCreature() returns the expected Permanent
      */
-    public void testGetCombatCreature() {
+    public void testGetViewPlayerCombatCreature() {
         Card card = new Card(0);
-        battlefield.addCombatCreature(new Permanent(card));
+        battlefield.addCombatCreature(PlayerID.ALICE, new Permanent(card));
 
-        Permanent combat = battlefield.getCombatCreature(NUM_COMBAT);
+        Permanent combat = battlefield.getViewPlayerCombatCreature(NUM_COMBAT);
         assertTrue("The id is " + combat.toString(),
                 combat.toString().compareTo("" + 0) == 0);
     }
@@ -134,14 +136,14 @@ public class BattlefieldUnitTest {
      */
     public void testPutCreatureOnBattlefield() {
         Card card = new Card(0);
-        battlefield.putCreatureOnBattlefield(new Permanent(card));
+        battlefield.putCreatureOnBattlefield(PlayerID.ALICE, new Permanent(card));
 
         //assert number of creatures
-        int numCreatures = battlefield.getCreaturesSize();
+        int numCreatures = battlefield.getViewPlayerCreaturesSize();
         assertTrue("Number of creatures is " + numCreatures, numCreatures == NUM_CREATURES + 1);
 
         //assert that is creature that just added
-        Permanent creature = battlefield.getCreature(NUM_CREATURES);
+        Permanent creature = battlefield.getViewPlayerCreature(NUM_CREATURES);
         assertTrue("The id is " + creature.toString(),
                 creature.toString().compareTo("" + 0) == 0);
     }
@@ -152,17 +154,17 @@ public class BattlefieldUnitTest {
      * the combat list
      */
     public void testMoveToAttack() {
-        Permanent creature = battlefield.getCreature(0);
+        Permanent creature = battlefield.getViewPlayerCreature(0);
         battlefield.moveToAttack(0);
 
         //assert lengths of creature and combat lists
-        int numCreatures = battlefield.getCreaturesSize();
+        int numCreatures = battlefield.getViewPlayerCreaturesSize();
         assertTrue("Number of creatures is " + numCreatures, numCreatures == NUM_CREATURES - 1);
-        int numCombat = battlefield.getCombatSize();
+        int numCombat = battlefield.getViewPlayerCombatSize();
         assertTrue("Number of combat is " + numCombat, numCombat == NUM_COMBAT + 1);
 
         //assert that moved right creature
-        Permanent combatCreature = battlefield.getCombatCreature(NUM_COMBAT);
+        Permanent combatCreature = battlefield.getViewPlayerCombatCreature(NUM_COMBAT);
         assertTrue("The creatures aren't the same", creature == combatCreature);
     }
 
@@ -174,25 +176,25 @@ public class BattlefieldUnitTest {
     public void testUndoAttackDeclaration() {
         Card card = new Card(0);
         Permanent combatCreature = new Permanent(card);
-        battlefield.addCombatCreature(combatCreature);
+        battlefield.addCombatCreature(PlayerID.ALICE, combatCreature);
 
         //get the one that just added
         battlefield.undoAttackDeclaration(NUM_COMBAT);
 
         //assert lengths of creature and combat lists
-        int numCreatures = battlefield.getCreaturesSize();
+        int numCreatures = battlefield.getViewPlayerCreaturesSize();
         assertTrue("Number of creatures is " + numCreatures, numCreatures == NUM_CREATURES + 1);
-        int numCombat = battlefield.getCombatSize();
+        int numCombat = battlefield.getViewPlayerCombatSize();
         assertTrue("Number of combat is " + numCombat, numCombat == NUM_COMBAT);
 
         //assert that moved right creature
-        Permanent creature = battlefield.getCreature(NUM_CREATURES);
+        Permanent creature = battlefield.getViewPlayerCreature(NUM_CREATURES);
         assertTrue("The creatures aren't the same", creature == combatCreature);
     }
 
     /**
      * For testMoveToAttack_RecyclerViewEventBus(), listen for the Events on RxEventBus
-     * @param event
+     * @param event Event used to update RecyclerView in response to change in list
      */
     private void testMoveToAttack_RecyclerViewEventBus_Sub(RecyclerViewEvent event) {
         if (event.action == RecyclerViewEvent.Action.ADD) {
@@ -218,7 +220,7 @@ public class BattlefieldUnitTest {
         //creates thread to receive Events from RxEventBus
         Subscription sub = battlefield.getRecyclerViewEvents()
                 .observeOn(Schedulers.computation())
-                .subscribe(e -> testMoveToAttack_RecyclerViewEventBus_Sub(e));
+                .subscribe(this::testMoveToAttack_RecyclerViewEventBus_Sub);
 
         //will put two Events on RxEventBus
         battlefield.moveToAttack(0);
@@ -237,7 +239,7 @@ public class BattlefieldUnitTest {
 
     /**
      * For testUndoAttackDeclaration_RecyclerViewEventBus(), listen for the Events on RxEventBus
-     * @param event
+     * @param event Event used to update RecyclerView in response to change in list
      */
     private void testUndoAttackDeclaration_RecyclerViewEventBus_Sub(RecyclerViewEvent event) {
         if (event.action == RecyclerViewEvent.Action.ADD) {
@@ -262,11 +264,11 @@ public class BattlefieldUnitTest {
     public void testUndoAttackDeclaration_RecyclerViewEventBus() { //creates thread to receive Events from RxEventBus
         Subscription sub = battlefield.getRecyclerViewEvents()
                 .observeOn(Schedulers.computation())
-                .subscribe(e -> testUndoAttackDeclaration_RecyclerViewEventBus_Sub(e));
+                .subscribe(this::testUndoAttackDeclaration_RecyclerViewEventBus_Sub);
 
         Card card = new Card(0);
         Permanent combatCreature = new Permanent(card);
-        battlefield.addCombatCreature(combatCreature);
+        battlefield.addCombatCreature(PlayerID.ALICE, combatCreature);
 
         //will put two Events on RxEventBus
         //get the one that just added
