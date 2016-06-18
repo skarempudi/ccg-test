@@ -11,11 +11,11 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.srikar.magic.R;
-import com.example.srikar.magic.adapter.CombatBfViewAdapter;
 import com.example.srikar.magic.adapter.CreaturesBfViewAdapter;
 import com.example.srikar.magic.adapter.LandsBfViewAdapter;
 
 /**
+ * Fragment that collects all RecyclerViews connected to the Battlefield.
  * Created by Srikar on 5/20/2016.
  */
 public class BattlefieldViewFragment extends Fragment {
@@ -23,11 +23,10 @@ public class BattlefieldViewFragment extends Fragment {
 
     private Context mContext;
 
-    RecyclerView mLandsRecyclerView, mCreaturesRecyclerView, mCombatRecyclerView;
+    RecyclerView mLandsRecyclerView, mCreaturesRecyclerView;
     LandsBfViewAdapter mLandsAdapter;
     CreaturesBfViewAdapter mCreaturesAdapter;
-    CombatBfViewAdapter mCombatAdapter;
-    RecyclerView.LayoutManager mLandsLayoutManager, mCreaturesLayoutManager, mCombatLayoutManager;
+    RecyclerView.LayoutManager mLandsLayoutManager, mCreaturesLayoutManager;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -45,7 +44,6 @@ public class BattlefieldViewFragment extends Fragment {
         //get the RecyclerViews
         mLandsRecyclerView = (RecyclerView) rootView.findViewById(R.id.lands_recyclerview);
         mCreaturesRecyclerView = (RecyclerView) rootView.findViewById(R.id.creatures_recyclerview);
-        mCombatRecyclerView = (RecyclerView) rootView.findViewById(R.id.combat_recyclerview);
 
         //set layout managers
         //lands layout
@@ -54,19 +52,14 @@ public class BattlefieldViewFragment extends Fragment {
         //creatures layout
         mCreaturesLayoutManager = new LinearLayoutManager(mContext);
         setLayoutManager(mCreaturesRecyclerView, mCreaturesLayoutManager);
-        //combat layout
-        mCombatLayoutManager = new LinearLayoutManager(mContext);
-        setLayoutManager(mCombatRecyclerView, mCombatLayoutManager);
 
         //create adapters
         mLandsAdapter = new LandsBfViewAdapter(mContext);
         mCreaturesAdapter = new CreaturesBfViewAdapter(mContext);
-        mCombatAdapter = new CombatBfViewAdapter(mContext);
 
         //set adapters
         mLandsRecyclerView.setAdapter(mLandsAdapter);
         mCreaturesRecyclerView.setAdapter(mCreaturesAdapter);
-        mCombatRecyclerView.setAdapter(mCombatAdapter);
 
         return rootView;
     }
@@ -83,6 +76,5 @@ public class BattlefieldViewFragment extends Fragment {
         //for each adapter, remove the subscriptions to RxJava Observables
         mLandsAdapter.onDestroy();
         mCreaturesAdapter.onDestroy();
-        mCombatAdapter.onDestroy();
     }
 }
