@@ -11,8 +11,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.srikar.magic.R;
-import com.example.srikar.magic.adapter.CreaturesBfViewAdapter;
-import com.example.srikar.magic.adapter.LandsBfViewAdapter;
+import com.example.srikar.magic.adapter.CreaturesBfRecViewAdapter;
+import com.example.srikar.magic.adapter.LandsBfRecViewAdapter;
 
 /**
  * Fragment that collects all RecyclerViews connected to the Battlefield.
@@ -24,8 +24,8 @@ public class BattlefieldViewFragment extends Fragment {
     private Context mContext;
 
     RecyclerView mLandsRecyclerView, mCreaturesRecyclerView;
-    LandsBfViewAdapter mLandsAdapter;
-    CreaturesBfViewAdapter mCreaturesAdapter;
+    LandsBfRecViewAdapter mLandsAdapter;
+    CreaturesBfRecViewAdapter mCreaturesAdapter;
     RecyclerView.LayoutManager mLandsLayoutManager, mCreaturesLayoutManager;
 
     @Override
@@ -54,8 +54,8 @@ public class BattlefieldViewFragment extends Fragment {
         setLayoutManager(mCreaturesRecyclerView, mCreaturesLayoutManager);
 
         //create adapters
-        mLandsAdapter = new LandsBfViewAdapter(mContext);
-        mCreaturesAdapter = new CreaturesBfViewAdapter(mContext);
+        mLandsAdapter = new LandsBfRecViewAdapter(mContext);
+        mCreaturesAdapter = new CreaturesBfRecViewAdapter(mContext);
 
         //set adapters
         mLandsRecyclerView.setAdapter(mLandsAdapter);

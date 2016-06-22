@@ -15,13 +15,17 @@ public class PermanentViewModel extends BaseViewModel {
     //the data model
     private Permanent mPermanent;
 
-    public PermanentViewModel(Context context, Permanent perm, View.OnClickListener listener) {
-        super(context, listener);
-        mPermanent = perm;
+    public PermanentViewModel() {
+        super(null, null);
+        mPermanent = null;
     }
 
     public Permanent getPermanent() {
         return mPermanent;
+    }
+
+    public void setPermanent(Permanent permanent) {
+        mPermanent = permanent;
     }
 
     @Override

@@ -1,22 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:bind="http://schemas.android.com/apk/res-auto">
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/creatures_recyclerview"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:background="@drawable/layout_border"
-        />
+    <data>
+        <variable
+            name="creaturesModel"
+            type="com.example.srikar.magic.viewmodel.BaseRecyclerViewModel"
+            />
+        <variable
+            name="landsModel"
+            type="com.example.srikar.magic.viewmodel.BaseRecyclerViewModel"
+            />
+    </data>
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/lands_recyclerview"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:background="@drawable/layout_border"
-        />
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:orientation="vertical" android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
-</LinearLayout>
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/creatures_recyclerview"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:background="@drawable/layout_border"
+            bind:recyclerViewModel="@{creaturesModel}"
+            />
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/lands_recyclerview"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:background="@drawable/layout_border"
+            bind:recyclerViewModel="@{landsModel}"
+            />
+
+    </LinearLayout>
+</layout>

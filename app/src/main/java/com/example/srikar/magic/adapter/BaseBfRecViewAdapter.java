@@ -28,8 +28,8 @@ import rx.subscriptions.CompositeSubscription;
  * Adapter for the RecyclerView used to hold lands
  * Created by Srikar on 5/20/2016.
  */
-public abstract class BaseBfViewAdapter extends RecyclerView.Adapter<BaseBfViewAdapter.PermanentViewHolder> {
-    protected static final String TAG = "BaseBfViewAdapter";
+public abstract class BaseBfRecViewAdapter extends RecyclerView.Adapter<BaseBfRecViewAdapter.PermanentViewHolder> {
+    protected static final String TAG = "BaseBfRecViewAdapter";
     @Inject
     protected Battlefield mBattlefield;
     protected final Context mContext;
@@ -43,7 +43,7 @@ public abstract class BaseBfViewAdapter extends RecyclerView.Adapter<BaseBfViewA
      * Constructor
      * @param activityContext Used to inflate views
      */
-    protected BaseBfViewAdapter(Context activityContext) {
+    protected BaseBfRecViewAdapter(Context activityContext) {
         super();
         mContext = activityContext;
         MagicApplication.getInstance()
@@ -61,14 +61,27 @@ public abstract class BaseBfViewAdapter extends RecyclerView.Adapter<BaseBfViewA
      */
     public class PermanentViewHolder extends RecyclerView.ViewHolder {
         private PermanentBinding binding;
+        private PermanentViewModel viewModel;
 
         public PermanentViewHolder(PermanentBinding binding) {
-            super(binding.cardImage);
+            super(binding.getRoot());
             this.binding = binding;
         }
 
         public PermanentBinding getBinding() {
             return binding;
+        }
+
+        public PermanentViewModel getViewModel() {
+            return viewModel;
+        }
+
+        /**
+         * When bind view holder, don't create new view model, but rather set the relevant Permanent
+         * @param permanent The new Permanent
+         */
+        public void setPermanent(Permanent permanent) {
+            viewModel.setPermanent(permanent);
         }
     }
 
@@ -85,6 +98,10 @@ public abstract class BaseBfViewAdapter extends RecyclerView.Adapter<BaseBfViewA
                 false //don't attach to parent, handled by RecyclerView
         );
 
+        //create new view model and set in binding
+        PermanentViewModel permViewModel = new PermanentViewModel();
+        binding.setPermanentViewModel(permViewModel);
+
         return new PermanentViewHolder(binding);
     }
 
@@ -96,19 +113,11 @@ public abstract class BaseBfViewAdapter extends RecyclerView.Adapter<BaseBfViewA
         //get binding from holder
         PermanentBinding binding = holder.getBinding();
 
-        //get creature in combat permanent that corresponds to this position
+        //get permanent that corresponds to this position
         Permanent perm = getPermanent(position);
 
-        //set the view model, including the OnClick
-        //on click, will remove from combat and put back in noncombat creatures list
-        binding.setPermanentViewModel(
-                new PermanentViewModel(
-                        mContext,
-                        perm,
-//                        v -> onClick(holder, holder.getLayoutPosition())
-                        null //not binding onClick to view, instead using RxBinding
-                )
-        );
+        //set in the holder
+        holder.setPermanent(perm);
 
         //subscribe to the onClick for the ImageView
         Subscription sub = RxView.clicks(binding.cardImage)

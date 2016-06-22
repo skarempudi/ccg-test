@@ -8,38 +8,29 @@ import com.example.srikar.magic.model.Permanent;
 /**
  * Created by Srikar on 6/2/2016.
  */
-public class CreaturesBfViewAdapter extends BaseBfViewAdapter {
-    private static final String TAG = "CreaturesBfViewAdapter";
+public class LandsBfRecViewAdapter extends BaseBfRecViewAdapter {
+    private static final String TAG = "LandsBfRecViewAdapter";
 
-    public CreaturesBfViewAdapter(Context activityContext) {
+    public LandsBfRecViewAdapter(Context activityContext) {
         super(activityContext);
     }
 
     @Override
-    /**
-     * Permanents are taken from the noncombat creature list
-     * @param position
-     */
     protected Permanent getPermanent(int position) {
-        return mBattlefield.getViewPlayerCreature(position);
+        return mBattlefield.getViewPlayerLand(position);
     }
 
     @Override
     /**
-     * When click creature, move to combat (move to combat list)
-     * @param position
+     * When click land, just logs data
      */
     protected void onClick(PermanentViewHolder holder, int position) {
         super.onClick(holder, position);
-        mBattlefield.moveToAttack(position);
     }
 
     @Override
-    /**
-     * Number of elements in list is equal to the number of creatures not in combat
-     */
     public int getItemCount() {
-        return mBattlefield.getViewPlayerCreaturesSize();
+        return mBattlefield.getViewPlayerLandsSize();
     }
 
     /**
@@ -50,6 +41,6 @@ public class CreaturesBfViewAdapter extends BaseBfViewAdapter {
      * On event bus, only listen for events affiliated with this subclass
      */
     public RecyclerViewEvent.Target getThisTarget() {
-        return RecyclerViewEvent.Target.CREATURES;
+        return RecyclerViewEvent.Target.LANDS;
     }
 }
