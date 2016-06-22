@@ -3,6 +3,7 @@ package com.example.srikar.magic.viewmodel;
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 
+import com.example.srikar.magic.adapter.BaseBfRecViewAdapter;
 import com.example.srikar.magic.adapter.CreaturesBfRecViewAdapter;
 
 import rx.Subscription;
@@ -18,7 +19,7 @@ public class CreaturesBfRecViewModel extends BaseRecyclerViewModel {
     }
 
     @Override
-    protected RecyclerView.Adapter getAdapter() {
+    protected BaseBfRecViewAdapter getAdapter() {
         return new CreaturesBfRecViewAdapter(mContext);
     }
 

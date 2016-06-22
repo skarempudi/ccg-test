@@ -18,7 +18,7 @@ public class PermanentViewModel extends BaseViewModel {
     //the data model
     private Permanent mPermanent;
     @Inject
-    private RxEventBus<RecyclerViewEvent> mRecyclerViewEventBus;
+    protected RxEventBus<RecyclerViewEvent> mRecyclerViewEventBus;
 
     public PermanentViewModel() {
         super(null, null);
