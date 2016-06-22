@@ -5,6 +5,7 @@ import android.support.v7.widget.RecyclerView;
 
 import com.example.srikar.magic.adapter.BaseBfRecViewAdapter;
 import com.example.srikar.magic.adapter.LandsBfRecViewAdapter;
+import com.example.srikar.magic.event.RecyclerViewEvent;
 
 import rx.Subscription;
 
@@ -24,7 +25,7 @@ public class LandsBfRecViewModel extends BaseRecyclerViewModel {
     }
 
     @Override
-    protected Subscription registerEventBus() {
-        return null;
+    protected RecyclerViewEvent.Target getThisTarget() {
+        return RecyclerViewEvent.Target.LANDS;
     }
 }

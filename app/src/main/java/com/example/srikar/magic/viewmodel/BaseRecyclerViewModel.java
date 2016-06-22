@@ -2,11 +2,14 @@ package com.example.srikar.magic.viewmodel;
 
 import android.content.Context;
 import android.databinding.BaseObservable;
+import android.support.annotation.CallSuper;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 
 import com.example.srikar.magic.MagicApplication;
 import com.example.srikar.magic.adapter.BaseBfRecViewAdapter;
+import com.example.srikar.magic.event.RecyclerViewEvent;
 import com.example.srikar.magic.model.Battlefield;
 
 import javax.inject.Inject;
@@ -20,6 +23,8 @@ import rx.Subscription;
  * Created by Srikar on 6/21/2016.
  */
 public abstract class BaseRecyclerViewModel extends BaseObservable {
+    private static final String TAG = "BaseRecyclerViewModel";
+
     protected final Context mContext;
     protected BaseBfRecViewAdapter mAdapter;
     protected RecyclerView.LayoutManager mLayoutManager;
@@ -101,9 +106,42 @@ public abstract class BaseRecyclerViewModel extends BaseObservable {
      * EVENT BUS
      **********************************************************************************************/
 
-    protected abstract Subscription registerEventBus();
-
-    public void actOnEvent() {
-
+    /**
+     * Register to Battlefield's event bus for RecyclerView events
+     * @return The subscripton
+     */
+    public Subscription registerEventBus() {
+        Log.d(TAG, "registerEventBus: ");
+        return mBattlefield.getRecyclerViewEvents()
+                .filter(e -> e.target == getThisTarget())
+                .subscribe(this::actOnEvent);
     }
+
+    /**
+     * When hear of event where relevant list updated, update the view to match
+     * @param event The event that acting on, either adding or removing element
+     */
+    @CallSuper
+    public void actOnEvent(RecyclerViewEvent event) {
+        Log.d(TAG, "actOnEvent: " + event.toString());
+        //if adding
+        if (event.action == RecyclerViewEvent.Action.ADD) {
+            mAdapter.notifyItemInserted(event.index);
+        }
+        //if removing
+        else if (event.action == RecyclerViewEvent.Action.REMOVE) {
+            mAdapter.notifyItemRemoved(event.index);
+        }
+        //if updating
+        else if (event.action == RecyclerViewEvent.Action.UPDATE) {
+            mAdapter.notifyItemChanged(event.index);
+        }
+    }
+
+
+    /**
+     * When filtering what events on event bus, specify target affiliated with this subclass
+     * @return
+     */
+    protected abstract RecyclerViewEvent.Target getThisTarget();
 }

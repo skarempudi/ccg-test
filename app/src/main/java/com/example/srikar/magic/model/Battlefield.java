@@ -125,6 +125,34 @@ public class Battlefield {
     }
 
     /**
+     * When a creature Permanent is clicked from the view player creature RecyclerView, determine
+     * what to do.
+     * Right now, just taps or untaps creature.
+     * @param position Position in view player creatures list, which matches position in RecyclerView
+     */
+    public void onViewPlayerCreatureClicked(int position) {
+        //get creature
+        Permanent creature = getViewPlayerCreature(position);
+
+        //if creature tapped, untap it
+        if (creature.isTapped()) {
+            creature.untap();
+        }
+        //if creature not tapped, tap it
+        else {
+            creature.tap();
+        }
+
+        //alert RecyclerView that position has updated, and Permanent should be drawn tapped or
+        //untapped
+        addRecyclerViewEvent(
+                RecyclerViewEvent.Target.CREATURES,
+                RecyclerViewEvent.Action.UPDATE,
+                position
+        );
+    }
+
+    /**
      * Add a new creature Permanent to the mBattlefield for given player
      * @param playerID Either PlayerID.ALICE or PlayerID.BOB
      * @param creature Creature

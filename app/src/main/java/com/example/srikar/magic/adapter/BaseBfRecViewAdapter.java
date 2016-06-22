@@ -2,7 +2,6 @@ package com.example.srikar.magic.adapter;
 
 import android.content.Context;
 import android.databinding.DataBindingUtil;
-import android.support.annotation.CallSuper;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -11,7 +10,6 @@ import android.view.ViewGroup;
 import com.example.srikar.magic.MagicApplication;
 import com.example.srikar.magic.R;
 import com.example.srikar.magic.databinding.PermanentBinding;
-import com.example.srikar.magic.event.RecyclerViewEvent;
 import com.example.srikar.magic.model.Battlefield;
 import com.example.srikar.magic.model.Permanent;
 import com.example.srikar.magic.viewmodel.PermanentViewModel;
@@ -69,10 +67,6 @@ public abstract class BaseBfRecViewAdapter extends RecyclerView.Adapter<BaseBfRe
             this.viewModel = viewModel;
         }
 
-        public PermanentBinding getBinding() {
-            return binding;
-        }
-
         /**
          * When bind view holder, don't create new view model, but rather set the relevant Permanent
          * @param permanent The new Permanent
@@ -82,10 +76,13 @@ public abstract class BaseBfRecViewAdapter extends RecyclerView.Adapter<BaseBfRe
         }
 
         /**
-         * Calls the onClick() method for the view model.
+         * Calls the onClick() method for the view model, passing in the layout position.
+         * Will use that position to call methods in Battlefield, instead of the set permanent.
          */
         public void onClick() {
-            viewModel.onClick();
+            int position = getLayoutPosition();
+            Log.d(TAG, "onClick: Clicking position " + position);
+            viewModel.onClick(position);
         }
     }
 
@@ -156,41 +153,4 @@ public abstract class BaseBfRecViewAdapter extends RecyclerView.Adapter<BaseBfRe
 
         mOnClickSubs.unsubscribe();
     }
-
-    /***********************************************************************************************
-     * EVENT BUS
-     **********************************************************************************************/
-//    /**
-//     * Register to Battlefield's event bus for RecyclerView events
-//     * @return The subscripton
-//     */
-//    public Subscription registerEventBus() {
-//        Log.d(TAG, "registerEventBus: ");
-//        return mBattlefield.getRecyclerViewEvents()
-//                .filter(e -> e.target == getThisTarget())
-//                .subscribe(e -> actOnEvent(e));
-//    }
-//
-//    @CallSuper
-//    /**
-//     * When hear of event where relevant list updated, update the view to match
-//     * @param event The event that acting on, either adding or removing element
-//     */
-//    public void actOnEvent(RecyclerViewEvent event) {
-//        Log.d(TAG, "actOnEvent: " + event.toString());
-//        //if adding
-//        if (event.action == RecyclerViewEvent.Action.ADD) {
-//            notifyItemInserted(event.index);
-//        }
-//        //if removing
-//        else if (event.action == RecyclerViewEvent.Action.REMOVE) {
-//            notifyItemRemoved(event.index);
-//        }
-//    }
-//
-//    /**
-//     * When filtering what events on event bus, specify target affiliated with this subclass
-//     * @return
-//     */
-//    protected abstract RecyclerViewEvent.Target getThisTarget();
 }

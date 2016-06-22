@@ -16,6 +16,11 @@ public class LandsBfRecViewAdapter extends BaseBfRecViewAdapter {
         super(activityContext);
     }
 
+    /**
+     * Get permanent from the land list
+     * @param position Position clicked in RecyclerView, which should match position in data list
+     * @return
+     */
     @Override
     protected Permanent getPermanent(int position) {
         return mBattlefield.getViewPlayerLand(position);

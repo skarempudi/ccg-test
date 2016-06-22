@@ -10,13 +10,16 @@ import com.example.srikar.magic.R;
 import com.squareup.picasso.Picasso;
 
 /**
+ * Base View Model for item views, CardViewModel and PermanentViewModel
+ * Instead of directly working with the views, act through View Models, which are created by the
+ * XML layout files
  * Created by Srikar on 5/20/2016.
  */
-public class BaseViewModel extends BaseObservable {
+public abstract class BaseItemViewModel extends BaseObservable {
     private Context mContext;
     private View.OnClickListener mOnClickListener;
 
-    public BaseViewModel(Context context, View.OnClickListener listener) {
+    public BaseItemViewModel(Context context, View.OnClickListener listener) {
         mContext = context;
         mOnClickListener = listener;
     }
@@ -26,19 +29,7 @@ public class BaseViewModel extends BaseObservable {
         return "";
     }
 
-    /**
-     * When card.xml tries to load image using android:src, instead calls this function
-     * @param view
-     * @param url
-     */
-    @BindingAdapter("android:src")
-    public static void setImageUrl(ImageView view, String url) {
-        if (url == null || url == "") {
-            Picasso.with(view.getContext())
-                    .load(R.drawable.ic_launcher)
-                    .into(view);
-        }
-    }
+    protected abstract void handleSettingImage(ImageView view, String url);
 
     public View.OnClickListener onClickImage() {
         return mOnClickListener;

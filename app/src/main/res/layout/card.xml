@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:bind="http://schemas.android.com/apk/res-auto">
 
     <data>
         <variable
@@ -11,6 +12,7 @@
     <ImageView
         android:id="@+id/card_image"
         android:src="@{cardViewModel.imageUrl}"
+        bind:itemViewModel="@{cardViewModel}"
         android:layout_width="@dimen/card_width"
         android:layout_height="@dimen/card_height"
         android:paddingLeft="@dimen/activity_horizontal_margin"

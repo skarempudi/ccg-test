@@ -11,8 +11,48 @@ public class Permanent {
     private static final String TAG = "Permanent";
     private Card mCard;
 
+    private boolean tapped = false;
+
     public Permanent(Card card) {
         mCard = card;
+    }
+
+    /**
+     * Returns if this Permanent is tapped
+     * @return if tapped
+     */
+    public boolean isTapped() {
+        return tapped;
+    }
+
+    /**
+     * Tap the permanent. Returns false if already tapped.
+     * Some cards may care if try to tap already tapped Permanent.
+     * @return If tap action succeeded
+     */
+    public boolean tap() {
+        //if already tapped, tap action doesn't occur
+        if (tapped) {
+            return false;
+        }
+
+        tapped = true;
+        return true;
+    }
+
+    /**
+     * Untap the permanent. Returns false if already untapped.
+     * Some cards may care if try to untap already untapped Permanent.
+     * @return If untap action succeeded
+     */
+    public boolean untap() {
+        //if already untapped, untap action doesn't occur
+        if (!tapped) {
+            return false;
+        }
+
+        tapped = false;
+        return true;
     }
 
     public void onClick() {
@@ -21,6 +61,6 @@ public class Permanent {
 
     @Override
     public String toString() {
-        return new String("" + mCard.mId);
+        return mCard.mId + " " + (tapped? "tapped" : "untapped");
     }
 }

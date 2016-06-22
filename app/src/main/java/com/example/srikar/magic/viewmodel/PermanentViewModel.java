@@ -1,11 +1,14 @@
 package com.example.srikar.magic.viewmodel;
 
+import android.databinding.BindingAdapter;
 import android.view.View;
+import android.widget.ImageView;
 
 import com.example.srikar.magic.MagicApplication;
-import com.example.srikar.magic.event.RecyclerViewEvent;
-import com.example.srikar.magic.event.RxEventBus;
+import com.example.srikar.magic.R;
+import com.example.srikar.magic.model.Battlefield;
 import com.example.srikar.magic.model.Permanent;
+import com.squareup.picasso.Picasso;
 
 import javax.inject.Inject;
 
@@ -14,16 +17,16 @@ import javax.inject.Inject;
  * Instead of directly handling the permanent views, work with this model that uses data binding
  * Created by Srikar on 5/20/2016.
  */
-public class PermanentViewModel extends BaseViewModel {
+public class PermanentViewModel extends BaseItemViewModel {
     //the data model
     private Permanent mPermanent;
     @Inject
-    protected RxEventBus<RecyclerViewEvent> mRecyclerViewEventBus;
+    protected Battlefield mBattlefield;
 
     public PermanentViewModel() {
         super(null, null);
         mPermanent = null;
-        //used to inject RxEventBus, to alert RecyclerViews about change to Permanent data model
+        //get instance of Battlefield
         MagicApplication.getInstance()
                 .getMainComponent()
                 .inject(this);
@@ -42,10 +45,12 @@ public class PermanentViewModel extends BaseViewModel {
     }
 
     /**
-     * Looks at the Permanent and state of the game to determine what to do when click
+     * Looks at the Permanent at the given position in Battlefield's creature list and the game state
+     * and acts based on that
+     * @param position
      */
-    public void onClick() {
-        mPermanent.onClick();
+    public void onClick(int position) {
+        mBattlefield.onViewPlayerCreatureClicked(position);
     }
 
     @Override
@@ -58,14 +63,24 @@ public class PermanentViewModel extends BaseViewModel {
     }
 
     /**
-     * Add event to mRecyclerViewEventBus, which alerts the specified RecyclerView to update
-     * @param target Which RecyclerView, using RecyclerViewEvent.Target
-     * @param action Whether to add or remove, using RecyclerViewEvent.Action
-     * @param index What index to update in list
+     * When permanent.xml tries to load image using android:src, instead calls this function
+     * @param view The view being loaded into
+     * @param url The URL of the image, currently unused
      */
-    private void addRecyclerViewEvent(RecyclerViewEvent.Target target, RecyclerViewEvent.Action action, int index) {
-        RecyclerViewEvent event = new RecyclerViewEvent(target, action, index);
-//        Log.d(TAG, "addRecyclerViewEvent: " + event.toString());
-        mRecyclerViewEventBus.addEvent(event);
+    @Override
+    protected void handleSettingImage(ImageView view, String url) {
+        //if tapped, rotate 90 degrees
+        //in future, will instead have a set of custom transformations that apply
+        if (mPermanent.isTapped()) {
+            Picasso.with(view.getContext())
+                    .load(R.drawable.ic_launcher)
+                    .rotate(90f)
+                    .into(view);
+        }
+        else {
+            Picasso.with(view.getContext())
+                    .load(R.drawable.ic_launcher)
+                    .into(view);
+        }
     }
 }

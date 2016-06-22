@@ -18,7 +18,7 @@ public class CreaturesBfRecViewAdapter extends BaseBfRecViewAdapter {
 
     @Override
     /**
-     * Permanents are taken from the noncombat creature list
+     * Permanents are taken from the creature list
      * @param position
      */
     protected Permanent getPermanent(int position) {

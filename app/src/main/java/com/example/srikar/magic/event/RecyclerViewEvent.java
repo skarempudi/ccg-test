@@ -16,7 +16,8 @@ public class RecyclerViewEvent implements MagicEvent {
 
     public enum Action {
         ADD,
-        REMOVE
+        REMOVE,
+        UPDATE
     }
 
     public Target target;
