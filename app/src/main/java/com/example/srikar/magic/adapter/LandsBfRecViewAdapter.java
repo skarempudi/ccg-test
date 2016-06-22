@@ -6,6 +6,7 @@ import com.example.srikar.magic.event.RecyclerViewEvent;
 import com.example.srikar.magic.model.Permanent;
 
 /**
+ * Adapter for the RecyclerView that shows the viewing player's lands
  * Created by Srikar on 6/2/2016.
  */
 public class LandsBfRecViewAdapter extends BaseBfRecViewAdapter {
@@ -21,26 +22,7 @@ public class LandsBfRecViewAdapter extends BaseBfRecViewAdapter {
     }
 
     @Override
-    /**
-     * When click land, just logs data
-     */
-    protected void onClick(PermanentViewHolder holder, int position) {
-        super.onClick(holder, position);
-    }
-
-    @Override
     public int getItemCount() {
         return mBattlefield.getViewPlayerLandsSize();
-    }
-
-    /**
-     * EVENT BUS
-     */
-    @Override
-    /**
-     * On event bus, only listen for events affiliated with this subclass
-     */
-    public RecyclerViewEvent.Target getThisTarget() {
-        return RecyclerViewEvent.Target.LANDS;
     }
 }

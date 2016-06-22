@@ -6,6 +6,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
 import com.example.srikar.magic.MagicApplication;
+import com.example.srikar.magic.adapter.BaseBfRecViewAdapter;
 import com.example.srikar.magic.model.Battlefield;
 
 import javax.inject.Inject;
@@ -15,12 +16,12 @@ import rx.Subscription;
 /**
  * Using data binding, the layout uses this View Model to interact with the rest of the code.
  * This is the base class used for RecyclerView View Models.
- * The Adapter and LayoutManager are set here.
+ * The Adapter and LayoutManager are set here, with the Adapter provided in subclasses.
  * Created by Srikar on 6/21/2016.
  */
 public abstract class BaseRecyclerViewModel extends BaseObservable {
     protected final Context mContext;
-    protected RecyclerView.Adapter mAdapter;
+    protected BaseBfRecViewAdapter mAdapter;
     protected RecyclerView.LayoutManager mLayoutManager;
 
     @Inject
@@ -72,12 +73,12 @@ public abstract class BaseRecyclerViewModel extends BaseObservable {
      * Gets the Adapter used by the RecyclerView being modeled
      * @return Adapter
      */
-    protected abstract RecyclerView.Adapter getAdapter();
+    protected abstract BaseBfRecViewAdapter getAdapter();
 
     /**
      * Writing in separate function so can potentially override.
      * Gets the LayoutManager used by the RecyclerView being modeled.
-     * By default,
+     * By default, linear layout with horizontal orientation.
      * @return
      */
     protected RecyclerView.LayoutManager getLayoutManager() {
@@ -86,10 +87,23 @@ public abstract class BaseRecyclerViewModel extends BaseObservable {
         return manager;
     }
 
+    /**
+     * Call when containing View or Fragment is destroyed, will unregister Subscriptions
+     */
+    public void onDestroy() {
+        if (mBattlefieldEventSub != null) {
+            mBattlefieldEventSub.unsubscribe();
+        }
+    }
+
 
     /***********************************************************************************************
      * EVENT BUS
      **********************************************************************************************/
 
     protected abstract Subscription registerEventBus();
+
+    public void actOnEvent() {
+
+    }
 }

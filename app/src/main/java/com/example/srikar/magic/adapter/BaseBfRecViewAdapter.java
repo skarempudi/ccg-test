@@ -25,7 +25,11 @@ import rx.Subscription;
 import rx.subscriptions.CompositeSubscription;
 
 /**
- * Adapter for the RecyclerView used to hold lands
+ * Base adapter for the RecyclerViews that represent the Battlefield
+ * Interacts with data model to get the Permanent object at a specific point in a Battlefield list,
+ * and know how many entries are in the list, and it throttles click events for the Permanent view,
+ * but more complex data model interaction is handled by the PermanentViewModel it creates.
+ * The Battlefield list it uses is specified by its subclasses.
  * Created by Srikar on 5/20/2016.
  */
 public abstract class BaseBfRecViewAdapter extends RecyclerView.Adapter<BaseBfRecViewAdapter.PermanentViewHolder> {
@@ -34,8 +38,6 @@ public abstract class BaseBfRecViewAdapter extends RecyclerView.Adapter<BaseBfRe
     protected Battlefield mBattlefield;
     protected final Context mContext;
 
-    //listens for changes in Battlefield model to can update display
-    protected Subscription mBattlefieldEventSub;
     //used to store all onClick subscriptions, so can unsubscribe when destroy
     protected CompositeSubscription mOnClickSubs;
 
@@ -50,8 +52,6 @@ public abstract class BaseBfRecViewAdapter extends RecyclerView.Adapter<BaseBfRe
                 .getMainComponent()
                 .inject(this);
 
-        //implemented by children
-        mBattlefieldEventSub = registerEventBus();
         //used to hold onClick subscriptions
         mOnClickSubs = new CompositeSubscription();
     }
@@ -63,17 +63,14 @@ public abstract class BaseBfRecViewAdapter extends RecyclerView.Adapter<BaseBfRe
         private PermanentBinding binding;
         private PermanentViewModel viewModel;
 
-        public PermanentViewHolder(PermanentBinding binding) {
+        public PermanentViewHolder(PermanentBinding binding, PermanentViewModel viewModel) {
             super(binding.getRoot());
             this.binding = binding;
+            this.viewModel = viewModel;
         }
 
         public PermanentBinding getBinding() {
             return binding;
-        }
-
-        public PermanentViewModel getViewModel() {
-            return viewModel;
         }
 
         /**
@@ -82,6 +79,13 @@ public abstract class BaseBfRecViewAdapter extends RecyclerView.Adapter<BaseBfRe
          */
         public void setPermanent(Permanent permanent) {
             viewModel.setPermanent(permanent);
+        }
+
+        /**
+         * Calls the onClick() method for the view model.
+         */
+        public void onClick() {
+            viewModel.onClick();
         }
     }
 
@@ -98,52 +102,43 @@ public abstract class BaseBfRecViewAdapter extends RecyclerView.Adapter<BaseBfRe
                 false //don't attach to parent, handled by RecyclerView
         );
 
-        //create new view model and set in binding
+        //create new view model and set in binding and holder
         PermanentViewModel permViewModel = new PermanentViewModel();
         binding.setPermanentViewModel(permViewModel);
 
-        return new PermanentViewHolder(binding);
+        //create the view holder
+        PermanentViewHolder holder = new PermanentViewHolder(binding, permViewModel);
+
+        //subscribe to the onClick for the ImageView, handle with holder's onClick()
+        Subscription sub = RxView.clicks(binding.cardImage)
+                .throttleFirst(500, TimeUnit.MILLISECONDS) //ignore double clicks
+                .subscribe(empty -> holder.onClick());
+
+        //store so can unsubscribe later
+        mOnClickSubs.add(sub);
+
+        return holder;
     }
 
     @Override
     /**
-     * When list entry becomes visible on screen, set the view model
+     * When list entry becomes visible on screen, set the Permanent used in view model
      */
     public void onBindViewHolder(PermanentViewHolder holder, int position) {
-        //get binding from holder
-        PermanentBinding binding = holder.getBinding();
-
         //get permanent that corresponds to this position
         Permanent perm = getPermanent(position);
 
         //set in the holder
         holder.setPermanent(perm);
-
-        //subscribe to the onClick for the ImageView
-        Subscription sub = RxView.clicks(binding.cardImage)
-                .throttleFirst(500, TimeUnit.MILLISECONDS) //ignore double clicks
-                .subscribe(empty -> onClick(holder, holder.getLayoutPosition()));
-
-        //store so can unsubscribe later
-        mOnClickSubs.add(sub);
     }
 
     /**
      * Used in onBindViewHolder()
      * Gets the permanent from the relevant list affiliated with the given position
-     * @param position
-     * @return
+     * @param position Position clicked in RecyclerView, which should match position in data list
+     * @return Permanent object at that position in the affiliated data list
      */
     protected abstract Permanent getPermanent(int position);
-
-    @CallSuper
-    /**
-     * The onClickListener action for list elements, used in onBindViewHolder()
-     */
-    protected void onClick(PermanentViewHolder holder, int position) {
-        Permanent perm = holder.getBinding().getPermanentViewModel().getPermanent();
-        Log.d(TAG, "onClick: " + ((perm == null)? "no permanent" : perm.toString()) );
-    }
 
     @Override
     /**
@@ -152,12 +147,12 @@ public abstract class BaseBfRecViewAdapter extends RecyclerView.Adapter<BaseBfRe
     public abstract int getItemCount();
 
     /**
-     * When RecyclerView this is attached to is destroyed, remove all subscriptions
+     * When RecyclerView this is attached to detaches adapter, remove all subscriptions
      */
-    public void onDestroy() {
-        Log.d(TAG, "onDestroy: Unsubscribing subscriptions");
-
-        mBattlefieldEventSub.unsubscribe();
+    @Override
+    public void onDetachedFromRecyclerView(RecyclerView recyclerView) {
+        Log.d(TAG, "onDetachedFromRecyclerView: Unsubscribing subscriptions");
+        super.onDetachedFromRecyclerView(recyclerView);
 
         mOnClickSubs.unsubscribe();
     }
@@ -165,37 +160,37 @@ public abstract class BaseBfRecViewAdapter extends RecyclerView.Adapter<BaseBfRe
     /***********************************************************************************************
      * EVENT BUS
      **********************************************************************************************/
-    /**
-     * Register to Battlefield's event bus for RecyclerView events
-     * @return The subscripton
-     */
-    public Subscription registerEventBus() {
-        Log.d(TAG, "registerEventBus: ");
-        return mBattlefield.getRecyclerViewEvents()
-                .filter(e -> e.target == getThisTarget())
-                .subscribe(e -> actOnEvent(e));
-    }
-
-    @CallSuper
-    /**
-     * When hear of event where relevant list updated, update the view to match
-     * @param event The event that acting on, either adding or removing element
-     */
-    public void actOnEvent(RecyclerViewEvent event) {
-        Log.d(TAG, "actOnEvent: " + event.toString());
-        //if adding
-        if (event.action == RecyclerViewEvent.Action.ADD) {
-            notifyItemInserted(event.index);
-        }
-        //if removing
-        else if (event.action == RecyclerViewEvent.Action.REMOVE) {
-            notifyItemRemoved(event.index);
-        }
-    }
-
-    /**
-     * When filtering what events on event bus, specify target affiliated with this subclass
-     * @return
-     */
-    protected abstract RecyclerViewEvent.Target getThisTarget();
+//    /**
+//     * Register to Battlefield's event bus for RecyclerView events
+//     * @return The subscripton
+//     */
+//    public Subscription registerEventBus() {
+//        Log.d(TAG, "registerEventBus: ");
+//        return mBattlefield.getRecyclerViewEvents()
+//                .filter(e -> e.target == getThisTarget())
+//                .subscribe(e -> actOnEvent(e));
+//    }
+//
+//    @CallSuper
+//    /**
+//     * When hear of event where relevant list updated, update the view to match
+//     * @param event The event that acting on, either adding or removing element
+//     */
+//    public void actOnEvent(RecyclerViewEvent event) {
+//        Log.d(TAG, "actOnEvent: " + event.toString());
+//        //if adding
+//        if (event.action == RecyclerViewEvent.Action.ADD) {
+//            notifyItemInserted(event.index);
+//        }
+//        //if removing
+//        else if (event.action == RecyclerViewEvent.Action.REMOVE) {
+//            notifyItemRemoved(event.index);
+//        }
+//    }
+//
+//    /**
+//     * When filtering what events on event bus, specify target affiliated with this subclass
+//     * @return
+//     */
+//    protected abstract RecyclerViewEvent.Target getThisTarget();
 }

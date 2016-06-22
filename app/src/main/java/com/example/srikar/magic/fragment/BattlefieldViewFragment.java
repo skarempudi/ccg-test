@@ -11,8 +11,9 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.srikar.magic.R;
-import com.example.srikar.magic.adapter.CreaturesBfRecViewAdapter;
-import com.example.srikar.magic.adapter.LandsBfRecViewAdapter;
+import com.example.srikar.magic.databinding.FragmentBattlefieldBinding;
+import com.example.srikar.magic.viewmodel.CreaturesBfRecViewModel;
+import com.example.srikar.magic.viewmodel.LandsBfRecViewModel;
 
 /**
  * Fragment that collects all RecyclerViews connected to the Battlefield.
@@ -23,10 +24,12 @@ public class BattlefieldViewFragment extends Fragment {
 
     private Context mContext;
 
-    RecyclerView mLandsRecyclerView, mCreaturesRecyclerView;
-    LandsBfRecViewAdapter mLandsAdapter;
-    CreaturesBfRecViewAdapter mCreaturesAdapter;
-    RecyclerView.LayoutManager mLandsLayoutManager, mCreaturesLayoutManager;
+    /**
+     * RecyclerView Models, which handle more complex interactions and communicate with the
+     * data model classes.
+     */
+    LandsBfRecViewModel mLandsRecViewModel;
+    CreaturesBfRecViewModel mCreaturesRecViewModel;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -41,40 +44,37 @@ public class BattlefieldViewFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_battlefield, container, false);
 
-        //get the RecyclerViews
-        mLandsRecyclerView = (RecyclerView) rootView.findViewById(R.id.lands_recyclerview);
-        mCreaturesRecyclerView = (RecyclerView) rootView.findViewById(R.id.creatures_recyclerview);
+        //get binding for the Fragment's layout
+        FragmentBattlefieldBinding binding = FragmentBattlefieldBinding.bind(rootView);
 
-        //set layout managers
-        //lands layout
-        mLandsLayoutManager = new LinearLayoutManager(mContext);
-        setLayoutManager(mLandsRecyclerView, mLandsLayoutManager);
-        //creatures layout
-        mCreaturesLayoutManager = new LinearLayoutManager(mContext);
-        setLayoutManager(mCreaturesRecyclerView, mCreaturesLayoutManager);
+        //create the RecyclerViewModels
+        createRecyclerViewModels();
 
-        //create adapters
-        mLandsAdapter = new LandsBfRecViewAdapter(mContext);
-        mCreaturesAdapter = new CreaturesBfRecViewAdapter(mContext);
-
-        //set adapters
-        mLandsRecyclerView.setAdapter(mLandsAdapter);
-        mCreaturesRecyclerView.setAdapter(mCreaturesAdapter);
+        //attach the view models to the binding
+        binding.setLandsModel(mLandsRecViewModel);
+        binding.setCreaturesModel(mCreaturesRecViewModel);
 
         return rootView;
     }
 
-    private void setLayoutManager(RecyclerView recyclerView, RecyclerView.LayoutManager manager) {
-        ((LinearLayoutManager)manager).setOrientation(LinearLayoutManager.HORIZONTAL);
-        recyclerView.setLayoutManager(manager);
+    /**
+     * Used to create the RecyclerViewModels that handle interaction with the data model
+     */
+    private void createRecyclerViewModels() {
+        if (mLandsRecViewModel == null) {
+            mLandsRecViewModel = new LandsBfRecViewModel(mContext);
+        }
+        if (mCreaturesRecViewModel == null) {
+            mCreaturesRecViewModel = new CreaturesBfRecViewModel(mContext);
+        }
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
 
-        //for each adapter, remove the subscriptions to RxJava Observables
-        mLandsAdapter.onDestroy();
-        mCreaturesAdapter.onDestroy();
+        //for each RecyclerViewModel, remove the subscriptions to RxJava Observables
+        mLandsRecViewModel.onDestroy();
+        mCreaturesRecViewModel.onDestroy();
     }
 }

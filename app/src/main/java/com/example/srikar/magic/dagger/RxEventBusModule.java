@@ -9,6 +9,7 @@ import dagger.Module;
 import dagger.Provides;
 
 /**
+ * This event bus is used to note to listening RecyclerViews that their data set changed.
  * Created by Srikar on 6/7/2016.
  */
 @Module

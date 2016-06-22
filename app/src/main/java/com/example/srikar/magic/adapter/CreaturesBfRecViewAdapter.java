@@ -6,6 +6,7 @@ import com.example.srikar.magic.event.RecyclerViewEvent;
 import com.example.srikar.magic.model.Permanent;
 
 /**
+ * Adapter for the RecyclerView that displays viewing player's creatures
  * Created by Srikar on 6/2/2016.
  */
 public class CreaturesBfRecViewAdapter extends BaseBfRecViewAdapter {
@@ -26,30 +27,9 @@ public class CreaturesBfRecViewAdapter extends BaseBfRecViewAdapter {
 
     @Override
     /**
-     * When click creature, move to combat (move to combat list)
-     * @param position
-     */
-    protected void onClick(PermanentViewHolder holder, int position) {
-        super.onClick(holder, position);
-        mBattlefield.moveToAttack(position);
-    }
-
-    @Override
-    /**
      * Number of elements in list is equal to the number of creatures not in combat
      */
     public int getItemCount() {
         return mBattlefield.getViewPlayerCreaturesSize();
-    }
-
-    /**
-     * EVENT BUS
-     */
-    @Override
-    /**
-     * On event bus, only listen for events affiliated with this subclass
-     */
-    public RecyclerViewEvent.Target getThisTarget() {
-        return RecyclerViewEvent.Target.CREATURES;
     }
 }
