@@ -4,16 +4,14 @@ import android.app.Fragment;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.srikar.magic.R;
 import com.example.srikar.magic.databinding.FragmentBattlefieldBinding;
-import com.example.srikar.magic.viewmodel.CreaturesBfRecViewModel;
-import com.example.srikar.magic.viewmodel.LandsBfRecViewModel;
+import com.example.srikar.magic.viewmodel.recyclerview.CreaturesBfRecViewModel;
+import com.example.srikar.magic.viewmodel.recyclerview.LandsBfRecViewModel;
 
 /**
  * Fragment that collects all RecyclerViews connected to the Battlefield.

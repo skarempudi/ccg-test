@@ -1,4 +1,4 @@
-package com.example.srikar.magic.viewmodel;
+package com.example.srikar.magic.viewmodel.recyclerview;
 
 import android.content.Context;
 import android.databinding.BaseObservable;
@@ -8,9 +8,8 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 
 import com.example.srikar.magic.MagicApplication;
-import com.example.srikar.magic.adapter.BaseBfRecViewAdapter;
 import com.example.srikar.magic.event.RecyclerViewEvent;
-import com.example.srikar.magic.model.Battlefield;
+import com.example.srikar.magic.event.RxEventBus;
 
 import javax.inject.Inject;
 
@@ -26,13 +25,13 @@ public abstract class BaseRecyclerViewModel extends BaseObservable {
     private static final String TAG = "BaseRecyclerViewModel";
 
     protected final Context mContext;
-    protected BaseBfRecViewAdapter mAdapter;
+    protected RecyclerView.Adapter mAdapter;
     protected RecyclerView.LayoutManager mLayoutManager;
 
     @Inject
-    protected Battlefield mBattlefield;
-    //listens for changes in Battlefield model to can update display
-    protected Subscription mBattlefieldEventSub;
+    protected RxEventBus<RecyclerViewEvent> mEventBus;
+    //listens for changes in model so can update display
+    protected Subscription mRecyclerViewEventSub;
 
     /**
      * Don't use this constructor, only here to provide default constructor.
@@ -44,7 +43,7 @@ public abstract class BaseRecyclerViewModel extends BaseObservable {
     /**
      * Since LayoutManager needs Context to create, have to manually construct this View Model and
      * pass it into the RecyclerView's binding.
-     * @param appContext
+     * @param appContext Context used to create the LayoutManager
      */
     public BaseRecyclerViewModel(Context appContext) {
         mContext = appContext;
@@ -52,14 +51,14 @@ public abstract class BaseRecyclerViewModel extends BaseObservable {
         MagicApplication.getInstance()
                 .getMainComponent()
                 .inject(this);
-        //implemented by children, listens for changes in models to update RecyclerView
-        mBattlefieldEventSub = registerEventBus();
+        //partially implemented by children, listens for changes in models to update RecyclerView
+        mRecyclerViewEventSub = registerEventBus();
     }
 
     /**
      * Use this function to attach the Adapter and LayoutManager to the bound RecyclerView
      * Called by custom binding for attribute bind:recyclerViewModel="@{recyclerViewModel}"
-     * @param recyclerView
+     * @param recyclerView The RecyclerView being set up
      */
     public final void setupRecyclerView(RecyclerView recyclerView) {
         if (mAdapter == null) {
@@ -78,13 +77,13 @@ public abstract class BaseRecyclerViewModel extends BaseObservable {
      * Gets the Adapter used by the RecyclerView being modeled
      * @return Adapter
      */
-    protected abstract BaseBfRecViewAdapter getAdapter();
+    protected abstract RecyclerView.Adapter getAdapter();
 
     /**
      * Writing in separate function so can potentially override.
      * Gets the LayoutManager used by the RecyclerView being modeled.
      * By default, linear layout with horizontal orientation.
-     * @return
+     * @return New horizontal LinearLayoutManager
      */
     protected RecyclerView.LayoutManager getLayoutManager() {
         LinearLayoutManager manager = new LinearLayoutManager(mContext);
@@ -96,8 +95,8 @@ public abstract class BaseRecyclerViewModel extends BaseObservable {
      * Call when containing View or Fragment is destroyed, will unregister Subscriptions
      */
     public void onDestroy() {
-        if (mBattlefieldEventSub != null) {
-            mBattlefieldEventSub.unsubscribe();
+        if (mRecyclerViewEventSub != null) {
+            mRecyclerViewEventSub.unsubscribe();
         }
     }
 
@@ -107,12 +106,13 @@ public abstract class BaseRecyclerViewModel extends BaseObservable {
      **********************************************************************************************/
 
     /**
-     * Register to Battlefield's event bus for RecyclerView events
+     * Register to event bus for RecyclerView events
+     * Filtering handled by child implementation of getThisTarget()
      * @return The subscripton
      */
-    public Subscription registerEventBus() {
+    protected Subscription registerEventBus() {
         Log.d(TAG, "registerEventBus: ");
-        return mBattlefield.getRecyclerViewEvents()
+        return mEventBus.getEvents()
                 .filter(e -> e.target == getThisTarget())
                 .subscribe(this::actOnEvent);
     }
@@ -122,7 +122,7 @@ public abstract class BaseRecyclerViewModel extends BaseObservable {
      * @param event The event that acting on, either adding or removing element
      */
     @CallSuper
-    public void actOnEvent(RecyclerViewEvent event) {
+    protected void actOnEvent(RecyclerViewEvent event) {
         Log.d(TAG, "actOnEvent: " + event.toString());
         //if adding
         if (event.action == RecyclerViewEvent.Action.ADD) {
@@ -141,7 +141,7 @@ public abstract class BaseRecyclerViewModel extends BaseObservable {
 
     /**
      * When filtering what events on event bus, specify target affiliated with this subclass
-     * @return
+     * @return The target name for the RecyclerView being modeled
      */
     protected abstract RecyclerViewEvent.Target getThisTarget();
 }

@@ -3,7 +3,7 @@ package com.example.srikar.magic.dagger;
 import com.example.srikar.magic.MainActivity;
 import com.example.srikar.magic.adapter.BaseBfRecViewAdapter;
 import com.example.srikar.magic.adapter.HandViewAdapter;
-import com.example.srikar.magic.viewmodel.BaseRecyclerViewModel;
+import com.example.srikar.magic.viewmodel.recyclerview.BaseRecyclerViewModel;
 import com.example.srikar.magic.viewmodel.PermanentViewModel;
 
 import javax.inject.Singleton;

@@ -4,6 +4,8 @@ import android.databinding.BindingAdapter;
 import android.support.v7.widget.RecyclerView;
 import android.widget.ImageView;
 
+import com.example.srikar.magic.viewmodel.recyclerview.BaseRecyclerViewModel;
+
 /**
  * Container class for custom setters used in layout data binding.
  * Basically, used to override layout settings.
