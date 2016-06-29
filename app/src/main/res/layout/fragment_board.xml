@@ -5,11 +5,15 @@
     <data>
         <variable
             name="creaturesModel"
-            type="com.example.srikar.magic.viewmodel.BaseRecyclerViewModel"
+            type="com.example.srikar.magic.viewmodel.recyclerview.BaseRecyclerViewModel"
             />
         <variable
             name="landsModel"
-            type="com.example.srikar.magic.viewmodel.BaseRecyclerViewModel"
+            type="com.example.srikar.magic.viewmodel.recyclerview.BaseRecyclerViewModel"
+            />
+        <variable
+            name="handModel"
+            type="com.example.srikar.magic.viewmodel.recyclerview.BaseRecyclerViewModel"
             />
     </data>
 
@@ -33,6 +37,15 @@
             android:layout_weight="1"
             android:background="@drawable/layout_border"
             bind:recyclerViewModel="@{landsModel}"
+            />
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/hand_recyclerview"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:background="@drawable/layout_border"
+            bind:recyclerViewModel="@{handModel}"
             />
 
     </LinearLayout>

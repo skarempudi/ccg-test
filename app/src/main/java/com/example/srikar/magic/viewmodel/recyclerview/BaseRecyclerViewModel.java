@@ -28,9 +28,9 @@ public abstract class BaseRecyclerViewModel extends BaseObservable {
     protected RecyclerView.Adapter mAdapter;
     protected RecyclerView.LayoutManager mLayoutManager;
 
+    //listens for changes in model so can update display
     @Inject
     protected RxEventBus<RecyclerViewEvent> mEventBus;
-    //listens for changes in model so can update display
     protected Subscription mRecyclerViewEventSub;
 
     /**

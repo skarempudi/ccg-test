@@ -9,16 +9,17 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.srikar.magic.R;
-import com.example.srikar.magic.databinding.FragmentBattlefieldBinding;
+import com.example.srikar.magic.databinding.FragmentBoardBinding;
 import com.example.srikar.magic.viewmodel.recyclerview.CreaturesBfRecViewModel;
+import com.example.srikar.magic.viewmodel.recyclerview.HandRecViewModel;
 import com.example.srikar.magic.viewmodel.recyclerview.LandsBfRecViewModel;
 
 /**
- * Fragment that collects all RecyclerViews connected to the Battlefield.
+ * Fragment that collects all RecyclerViews connected to the Hand and Battlefield.
  * Created by Srikar on 5/20/2016.
  */
-public class BattlefieldViewFragment extends Fragment {
-    private static final String TAG = "BattlefieldViewFragment";
+public class BoardFragment extends Fragment {
+    private static final String TAG = "BoardFragment";
 
     private Context mContext;
 
@@ -26,6 +27,7 @@ public class BattlefieldViewFragment extends Fragment {
      * RecyclerView Models, which handle more complex interactions and communicate with the
      * data model classes.
      */
+    HandRecViewModel mHandRecViewModel;
     LandsBfRecViewModel mLandsRecViewModel;
     CreaturesBfRecViewModel mCreaturesRecViewModel;
 
@@ -40,15 +42,16 @@ public class BattlefieldViewFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_battlefield, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_board, container, false);
 
         //get binding for the Fragment's layout
-        FragmentBattlefieldBinding binding = FragmentBattlefieldBinding.bind(rootView);
+        FragmentBoardBinding binding = FragmentBoardBinding.bind(rootView);
 
         //create the RecyclerViewModels
         createRecyclerViewModels();
 
         //attach the view models to the binding
+        binding.setHandModel(mHandRecViewModel);
         binding.setLandsModel(mLandsRecViewModel);
         binding.setCreaturesModel(mCreaturesRecViewModel);
 
@@ -59,6 +62,9 @@ public class BattlefieldViewFragment extends Fragment {
      * Used to create the RecyclerViewModels that handle interaction with the data model
      */
     private void createRecyclerViewModels() {
+        if (mHandRecViewModel == null) {
+            mHandRecViewModel = new HandRecViewModel(mContext);
+        }
         if (mLandsRecViewModel == null) {
             mLandsRecViewModel = new LandsBfRecViewModel(mContext);
         }
@@ -72,6 +78,7 @@ public class BattlefieldViewFragment extends Fragment {
         super.onDestroyView();
 
         //for each RecyclerViewModel, remove the subscriptions to RxJava Observables
+        mHandRecViewModel.onDestroy();
         mLandsRecViewModel.onDestroy();
         mCreaturesRecViewModel.onDestroy();
     }

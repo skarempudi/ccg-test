@@ -14,7 +14,7 @@ import com.example.srikar.magic.viewmodel.recyclerview.BaseRecyclerViewModel;
 public class ViewModelBindings {
     /**
      * FRAGMENT_BATTLEFIELD.XML
-     * Called by fragment_battlefield.xml for RecyclerView with attribute
+     * Called by fragment_board.xmlecyclerView with attribute
      * bind:recyclerViewModel="@{recyclerViewModel}".
      * Sets up the RecyclerView with the Adapter and LayoutManager.
      * Have to do this way to pass parameters into View Model on construction.
