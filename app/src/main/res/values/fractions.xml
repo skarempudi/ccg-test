@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Percentage heights -->
+    <fraction name="first_row_percent">16%</fraction>
+    <fraction name="second_row_percent">20%</fraction>
+    <fraction name="third_row_percent">16%</fraction>
+    <fraction name="fourth_row_percent">16%</fraction>
+    <fraction name="fifth_row_percent">16%</fraction>
+    <fraction name="sixth_row_percent">16%</fraction>
+
+    <!-- Percentage widths -->
+    <fraction name="turn_width_percent">25%</fraction>
+    <fraction name="life_counter_width_percent">50%</fraction>
+    <fraction name="switch_player_width_percent">25%</fraction>
+    <fraction name="lands_rv_width_percent">50%</fraction>
+    <fraction name="library_width_percent">25%</fraction>
+    <fraction name="graveyard_width_percent">25%</fraction>
+</resources>

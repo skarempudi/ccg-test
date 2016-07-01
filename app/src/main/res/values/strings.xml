@@ -1,6 +1,12 @@
 <resources>
     <string name="app_name">Magic</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="turn">Turn</string>
+    <string name="life">Life</string>
+    <string name="switch_player">Switch</string>
+    <string name="log">Game action log</string>
+    <string name="opp_creatures">Opposing creatures</string>
+    <string name="library">Library</string>
+    <string name="graveyard">Graveyard</string>
+
 </resources>

@@ -17,36 +17,118 @@
             />
     </data>
 
-    <LinearLayout
+    <android.support.percent.PercentRelativeLayout
         android:orientation="vertical" android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        xmlns:app="http://schemas.android.com/apk/res-auto">
 
+        <!-- Though will show errors due to not having android:layout_height and such, will build -->
+
+        <!--First row: turn, life, switch -->
+        <TextView
+            android:id="@+id/turn_counter"
+            android:text="@string/turn"
+            android:layout_alignParentTop="true"
+            app:layout_widthPercent="@fraction/turn_width_percent"
+            app:layout_heightPercent="@fraction/first_row_percent"
+            android:gravity="center"
+            android:background="@drawable/layout_border"
+            />
+        
+        <TextView
+            android:id="@+id/life_counter"
+            android:text="@string/life"
+            android:layout_alignParentTop="true"
+            android:layout_toRightOf="@id/turn_counter"
+            app:layout_widthPercent="@fraction/life_counter_width_percent"
+            app:layout_heightPercent="@fraction/first_row_percent"
+            android:gravity="center"
+            android:background="@drawable/layout_border"
+            />
+        
+        <Button
+            android:id="@+id/switch_player"
+            android:text="@string/switch_player"
+            android:layout_alignParentTop="true"
+            android:layout_toRightOf="@id/life_counter"
+            app:layout_widthPercent="@fraction/switch_player_width_percent"
+            app:layout_heightPercent="@fraction/first_row_percent"
+            android:background="@drawable/layout_border"
+            />
+        
+        <!--Second row: log -->
+        <TextView
+            android:id="@+id/game_action_log"
+            android:text="@string/log"
+            android:layout_below="@id/turn_counter"
+            android:layout_width="match_parent"
+            app:layout_heightPercent="@fraction/second_row_percent"
+            android:gravity="center"
+            android:background="@drawable/layout_border"
+            />
+
+        <!--Third row: opposing creatures -->
+        <TextView
+            android:id="@+id/opp_creatures"
+            android:text="@string/opp_creatures"
+            android:layout_below="@id/game_action_log"
+            android:layout_width="match_parent"
+            app:layout_heightPercent="@fraction/third_row_percent"
+            android:gravity="center"
+            android:background="@drawable/layout_border"
+            />
+
+        <!--Fourth row: my creatures -->
         <android.support.v7.widget.RecyclerView
             android:id="@+id/creatures_recyclerview"
+            android:layout_below="@id/opp_creatures"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
+            app:layout_heightPercent="@fraction/fourth_row_percent"
             android:background="@drawable/layout_border"
             bind:recyclerViewModel="@{creaturesModel}"
             />
 
+        <!--Fifth row: lands, library, graveyard -->
         <android.support.v7.widget.RecyclerView
             android:id="@+id/lands_recyclerview"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
+            android:layout_below="@id/creatures_recyclerview"
+            app:layout_widthPercent="@fraction/lands_rv_width_percent"
+            app:layout_heightPercent="@fraction/fifth_row_percent"
             android:background="@drawable/layout_border"
             bind:recyclerViewModel="@{landsModel}"
             />
 
+        <TextView
+            android:id="@+id/library"
+            android:text="@string/library"
+            android:layout_below="@id/creatures_recyclerview"
+            android:layout_toRightOf="@id/lands_recyclerview"
+            app:layout_widthPercent="@fraction/library_width_percent"
+            app:layout_heightPercent="@fraction/fifth_row_percent"
+            android:gravity="center"
+            android:background="@drawable/layout_border"
+            />
+
+        <TextView
+            android:id="@+id/graveyard"
+            android:text="@string/graveyard"
+            android:layout_below="@id/creatures_recyclerview"
+            android:layout_toRightOf="@id/library"
+            app:layout_widthPercent="@fraction/graveyard_width_percent"
+            app:layout_heightPercent="@fraction/fifth_row_percent"
+            android:gravity="center"
+            android:background="@drawable/layout_border"
+            />
+
+        <!-- Sixth row: hand -->
         <android.support.v7.widget.RecyclerView
             android:id="@+id/hand_recyclerview"
+            android:layout_below="@id/lands_recyclerview"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
+            app:layout_heightPercent="@fraction/sixth_row_percent"
             android:background="@drawable/layout_border"
             bind:recyclerViewModel="@{handModel}"
             />
 
-    </LinearLayout>
+    </android.support.percent.PercentRelativeLayout>
 </layout>
