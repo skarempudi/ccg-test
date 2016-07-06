@@ -43,7 +43,7 @@
             app:layout_widthPercent="@fraction/life_counter_width_percent"
             app:layout_heightPercent="@fraction/first_row_percent"
             android:gravity="center"
-            android:background="@drawable/layout_border"
+            android:background="@drawable/alice_layout_border"
             />
         
         <Button
