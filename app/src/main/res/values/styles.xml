@@ -8,4 +8,9 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <!-- Board layout base theme. -->
+    <style name="AliceBorderTheme">
+        <item name="android:background">@drawable/alice_layout_border</item>
+    </style>
+
 </resources>
