@@ -25,13 +25,14 @@ import rx.subscriptions.CompositeSubscription;
 /**
  * Base adapter for the RecyclerViews that represent the Battlefield
  * Interacts with data model to get the Permanent object at a specific point in a Battlefield list,
- * and know how many entries are in the list, and it throttles click events for the Permanent view,
+ * and know how many entries are in the list; and it throttles click events for the Permanent view;
  * but more complex data model interaction is handled by the PermanentViewModel it creates.
  * The Battlefield list it uses is specified by its subclasses.
  * Created by Srikar on 5/20/2016.
  */
 public abstract class BaseBfRecViewAdapter extends RecyclerView.Adapter<BaseBfRecViewAdapter.PermanentViewHolder> {
     protected static final String TAG = "BaseBfRecViewAdapter";
+    private static final int CLICK_DELAY = 500;
     @Inject
     protected Battlefield mBattlefield;
     protected final Context mContext;
@@ -86,11 +87,11 @@ public abstract class BaseBfRecViewAdapter extends RecyclerView.Adapter<BaseBfRe
         }
     }
 
-    @Override
     /**
      * Used to create the view holder for each list entry
      * When first create a list entry, create a binding to the permanent layout
      */
+    @Override
     public PermanentViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         PermanentBinding binding = DataBindingUtil.inflate(
                 LayoutInflater.from(mContext),
@@ -108,7 +109,7 @@ public abstract class BaseBfRecViewAdapter extends RecyclerView.Adapter<BaseBfRe
 
         //subscribe to the onClick for the ImageView, handle with holder's onClick()
         Subscription sub = RxView.clicks(binding.cardImage)
-                .throttleFirst(500, TimeUnit.MILLISECONDS) //ignore double clicks
+                .throttleFirst(CLICK_DELAY, TimeUnit.MILLISECONDS) //ignore double clicks
                 .subscribe(empty -> holder.onClick());
 
         //store so can unsubscribe later
@@ -117,10 +118,10 @@ public abstract class BaseBfRecViewAdapter extends RecyclerView.Adapter<BaseBfRe
         return holder;
     }
 
-    @Override
     /**
      * When list entry becomes visible on screen, set the Permanent used in view model
      */
+    @Override
     public void onBindViewHolder(PermanentViewHolder holder, int position) {
         //get permanent that corresponds to this position
         Permanent perm = getPermanent(position);
@@ -137,10 +138,10 @@ public abstract class BaseBfRecViewAdapter extends RecyclerView.Adapter<BaseBfRe
      */
     protected abstract Permanent getPermanent(int position);
 
-    @Override
     /**
      * Used to determine the number of list elements to display
      */
+    @Override
     public abstract int getItemCount();
 
     /**

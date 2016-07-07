@@ -6,7 +6,7 @@
     tools:context="com.example.srikar.magic.MainActivity">
 
     <fragment class="com.example.srikar.magic.fragment.BoardFragment"
-        android:id="@+id/battlefield"
+        android:id="@+id/board"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         />

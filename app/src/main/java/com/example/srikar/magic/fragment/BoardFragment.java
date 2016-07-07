@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 
 import com.example.srikar.magic.R;
 import com.example.srikar.magic.databinding.FragmentBoardBinding;
+import com.example.srikar.magic.viewmodel.BoardFragmentModel;
 import com.example.srikar.magic.viewmodel.recyclerview.CreaturesBfRecViewModel;
 import com.example.srikar.magic.viewmodel.recyclerview.HandRecViewModel;
 import com.example.srikar.magic.viewmodel.recyclerview.LandsBfRecViewModel;
@@ -24,12 +25,9 @@ public class BoardFragment extends Fragment {
     private Context mContext;
 
     /**
-     * RecyclerView Models, which handle more complex interactions and communicate with the
-     * data model classes.
+     * Model for this Fragment, which handles interactions and communication with the data models.
      */
-    HandRecViewModel mHandRecViewModel;
-    LandsBfRecViewModel mLandsRecViewModel;
-    CreaturesBfRecViewModel mCreaturesRecViewModel;
+    BoardFragmentModel mBoardFragmentModel;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -47,39 +45,23 @@ public class BoardFragment extends Fragment {
         //get binding for the Fragment's layout
         FragmentBoardBinding binding = FragmentBoardBinding.bind(rootView);
 
-        //create the RecyclerViewModels
-        createRecyclerViewModels();
+        //create the view model for this Fragment
+        //it handles the binding for the inner views
+        mBoardFragmentModel = new BoardFragmentModel(mContext, binding);
 
-        //attach the view models to the binding
-        binding.setHandModel(mHandRecViewModel);
-        binding.setLandsModel(mLandsRecViewModel);
-        binding.setCreaturesModel(mCreaturesRecViewModel);
+        //attach the view model to the binding
+        binding.setFragmentBoardModel(mBoardFragmentModel);
 
         return rootView;
-    }
-
-    /**
-     * Used to create the RecyclerViewModels that handle interaction with the data model
-     */
-    private void createRecyclerViewModels() {
-        if (mHandRecViewModel == null) {
-            mHandRecViewModel = new HandRecViewModel(mContext);
-        }
-        if (mLandsRecViewModel == null) {
-            mLandsRecViewModel = new LandsBfRecViewModel(mContext);
-        }
-        if (mCreaturesRecViewModel == null) {
-            mCreaturesRecViewModel = new CreaturesBfRecViewModel(mContext);
-        }
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
 
-        //for each RecyclerViewModel, remove the subscriptions to RxJava Observables
-        mHandRecViewModel.onDestroy();
-        mLandsRecViewModel.onDestroy();
-        mCreaturesRecViewModel.onDestroy();
+        //remove subscriptions to RxJava Observables in view model
+        if (mBoardFragmentModel != null) {
+            mBoardFragmentModel.onDestroy();
+        }
     }
 }

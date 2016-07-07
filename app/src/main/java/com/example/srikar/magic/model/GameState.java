@@ -1,6 +1,8 @@
 package com.example.srikar.magic.model;
 
 /**
+ * Class used to keep track of the general game state, such as whose turn it is, the life totals,
+ * and if the game has ended.
  * Created by Srikar on 4/26/2016.
  */
 public class GameState {
