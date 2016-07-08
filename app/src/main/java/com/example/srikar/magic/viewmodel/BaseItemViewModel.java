@@ -16,22 +16,10 @@ import com.squareup.picasso.Picasso;
  * Created by Srikar on 5/20/2016.
  */
 public abstract class BaseItemViewModel extends BaseObservable {
-    private Context mContext;
-    private View.OnClickListener mOnClickListener;
-
-    public BaseItemViewModel(Context context, View.OnClickListener listener) {
-        mContext = context;
-        mOnClickListener = listener;
-    }
-
     public String getImageUrl() {
         //does nothing for now
         return "";
     }
 
     protected abstract void handleSettingImage(ImageView view, String url);
-
-    public View.OnClickListener onClickImage() {
-        return mOnClickListener;
-    }
 }

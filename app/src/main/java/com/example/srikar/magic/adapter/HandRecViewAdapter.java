@@ -8,49 +8,42 @@ import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
 import com.example.srikar.magic.databinding.CardBinding;
-import com.example.srikar.magic.model.Card;
 import com.example.srikar.magic.R;
-import com.example.srikar.magic.MagicApplication;
-import com.example.srikar.magic.model.Hand;
 import com.example.srikar.magic.viewmodel.CardViewModel;
-
-import javax.inject.Inject;
+import com.example.srikar.magic.viewmodel.recyclerview.BaseRecyclerViewModel;
 
 /**
+ * There is currently no complex hand interaction, so this is separated from the Battlefield-related code.
  * Adapter for the RecyclerView used to hold cards in mHand
  * Created by Srikar on 4/15/2016.
  */
-public class HandViewAdapter extends RecyclerView.Adapter<HandViewAdapter.HandViewHolder> {
-    private static final String TAG = "HandViewAdapter";
-    @Inject
-    public Hand mHand;
-    final Context mContext;
+public class HandRecViewAdapter extends RecyclerView.Adapter<HandRecViewAdapter.HandViewHolder> {
+    private static final String TAG = "HandRecViewAdapter";
+    private final Context mContext;
+    //the RecyclerViewModel that created this
+    protected final BaseRecyclerViewModel mRecyclerViewModel;
 
     /**
      * Constructor
      * @param activityContext Used to inflate views
      */
-    public HandViewAdapter(Context activityContext) {
+    public HandRecViewAdapter(Context activityContext, BaseRecyclerViewModel recyclerViewModel) {
         super();
         mContext = activityContext;
-        MagicApplication.getInstance()
-                .getMainComponent()
-                .inject(this);
+        mRecyclerViewModel = recyclerViewModel;
     }
 
     /**
      * Used to hold the layout data for each element of the list
      */
     public class HandViewHolder extends RecyclerView.ViewHolder {
-        private CardBinding mBinding;
+        public CardBinding binding;
+        public CardViewModel viewModel;
 
-        public HandViewHolder(CardBinding binding) {
-            super(binding.cardImage);
-            mBinding = binding;
-        }
-
-        public CardBinding getBinding() {
-            return mBinding;
+        public HandViewHolder(CardBinding binding, CardViewModel viewModel) {
+            super(binding.getRoot());
+            this.binding = binding;
+            this.viewModel = viewModel;
         }
     }
 
@@ -67,7 +60,11 @@ public class HandViewAdapter extends RecyclerView.Adapter<HandViewAdapter.HandVi
                 false //don't attach to parent, handled by RecyclerView
         );
 
-        return new HandViewHolder(binding);
+        //create view model that takes binding, will handle onClick and such
+        CardViewModel viewModel = new CardViewModel(binding);
+        binding.setCardViewModel(viewModel);
+
+        return new HandViewHolder(binding, viewModel);
     }
 
     @Override
@@ -76,19 +73,8 @@ public class HandViewAdapter extends RecyclerView.Adapter<HandViewAdapter.HandVi
      * When click, just logs data now
      */
     public void onBindViewHolder(HandViewHolder holder, int position) {
-        Log.d(TAG, "onBindViewHolder: " + position);
-        //get the mBinding from the holder
-        CardBinding cardBinding = holder.getBinding();
-        //get the card that corresponds to this position
-        Card card = mHand.getCard(position);
-
-        //set card model and what happens when click view
-        cardBinding.setCardViewModel(new CardViewModel(
-                mContext,
-                card,
-                v -> card.onClick()
-            )
-        );
+        //update position of the view model
+        holder.viewModel.setListPosition(position);
     }
 
     @Override
@@ -96,6 +82,6 @@ public class HandViewAdapter extends RecyclerView.Adapter<HandViewAdapter.HandVi
      * Number of elements in list equal to number of cards in hand
      */
     public int getItemCount() {
-        return mHand.getHandSize();
+        return mRecyclerViewModel.getItemCount();
     }
 }

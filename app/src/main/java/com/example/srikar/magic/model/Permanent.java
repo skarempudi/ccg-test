@@ -33,6 +33,7 @@ public class Permanent {
     public boolean tap() {
         //if already tapped, tap action doesn't occur
         if (tapped) {
+            Log.d(TAG, "tap: Already tapped, no action");
             return false;
         }
 
@@ -48,6 +49,7 @@ public class Permanent {
     public boolean untap() {
         //if already untapped, untap action doesn't occur
         if (!tapped) {
+            Log.d(TAG, "untap: Already untapped, no action");
             return false;
         }
 

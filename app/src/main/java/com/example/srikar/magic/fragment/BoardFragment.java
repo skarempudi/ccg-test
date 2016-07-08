@@ -11,9 +11,6 @@ import android.view.ViewGroup;
 import com.example.srikar.magic.R;
 import com.example.srikar.magic.databinding.FragmentBoardBinding;
 import com.example.srikar.magic.viewmodel.BoardFragmentModel;
-import com.example.srikar.magic.viewmodel.recyclerview.CreaturesBfRecViewModel;
-import com.example.srikar.magic.viewmodel.recyclerview.HandRecViewModel;
-import com.example.srikar.magic.viewmodel.recyclerview.LandsBfRecViewModel;
 
 /**
  * Fragment that collects all RecyclerViews connected to the Hand and Battlefield.

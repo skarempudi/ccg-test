@@ -5,6 +5,7 @@ import android.view.View;
 import android.widget.ImageView;
 
 import com.example.srikar.magic.R;
+import com.example.srikar.magic.databinding.CardBinding;
 import com.example.srikar.magic.model.Card;
 import com.squareup.picasso.Picasso;
 
@@ -14,11 +15,20 @@ import com.squareup.picasso.Picasso;
  * Created by Srikar on 5/10/2016.
  */
 public class CardViewModel extends BaseItemViewModel {
-    private Card mCard;
+    private CardBinding mBinding;
+    private int mPosition;
 
-    public CardViewModel(Context context, Card card, View.OnClickListener listener) {
-        super(context, listener);
-        mCard = card;
+    public CardViewModel(CardBinding binding) {
+        mBinding = binding;
+    }
+
+    /**
+     * When RecyclerView Adapter binds View Holder, set the position where can find the relevant
+     * Card
+     * @param position Position in Hand's card list
+     */
+    public void setListPosition(int position) {
+        mPosition = position;
     }
 
     /**

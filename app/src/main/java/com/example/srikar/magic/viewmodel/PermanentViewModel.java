@@ -1,16 +1,25 @@
 package com.example.srikar.magic.viewmodel;
 
 import android.databinding.BindingAdapter;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 
+import com.example.srikar.magic.AppConstants;
 import com.example.srikar.magic.MagicApplication;
 import com.example.srikar.magic.R;
+import com.example.srikar.magic.databinding.PermanentBinding;
+import com.example.srikar.magic.event.RecyclerViewEvent;
 import com.example.srikar.magic.model.Battlefield;
 import com.example.srikar.magic.model.Permanent;
+import com.jakewharton.rxbinding.view.RxView;
 import com.squareup.picasso.Picasso;
 
+import java.util.concurrent.TimeUnit;
+
 import javax.inject.Inject;
+
+import rx.Subscription;
 
 /**
  * Tied to permanent.xml
@@ -18,48 +27,50 @@ import javax.inject.Inject;
  * Created by Srikar on 5/20/2016.
  */
 public class PermanentViewModel extends BaseItemViewModel {
-    //the data model
-    private Permanent mPermanent;
+    private static final String TAG = "PermanentViewModel";
+
+    //bindings for views in Permanent layout
+    private PermanentBinding mBinding;
+
+    //what list to access and what entry
+    private RecyclerViewEvent.Target mTargetList;
+    private int mPosition;
+
     @Inject
     protected Battlefield mBattlefield;
 
-    public PermanentViewModel() {
-        super(null, null);
-        mPermanent = null;
+    public PermanentViewModel(PermanentBinding binding) {
+        mBinding = binding;
+
         //get instance of Battlefield
         MagicApplication.getInstance()
                 .getMainComponent()
                 .inject(this);
-    }
 
-    public Permanent getPermanent() {
-        return mPermanent;
-    }
-
-    /**
-     * Change what Permanent will be using for data model
-     * @param permanent Permanent
-     */
-    public void setPermanent(Permanent permanent) {
-        mPermanent = permanent;
+        //subscribe to the onClick for the ImageView
+        Subscription sub = RxView.clicks(binding.cardImage)
+                .throttleFirst(AppConstants.CLICK_DELAY, TimeUnit.MILLISECONDS) //ignore double clicks
+                .subscribe(empty -> onImageClick());
     }
 
     /**
-     * Looks at the Permanent at the given position in Battlefield's creature list and the game state
-     * and acts based on that
-     * @param position
+     * When RecyclerView Adapter binds View Holder, set the list and position where can find the
+     * relevant Permanent.
+     * @param targetList Target that maps to a Battlefield list
+     * @param position Position in that list, which should be the same as in the RecyclerView
      */
-    public void onClick(int position) {
-        mBattlefield.onViewPlayerCreatureClicked(position);
+    public void setListPosition(RecyclerViewEvent.Target targetList, int position) {
+        mTargetList = targetList;
+        mPosition = position;
     }
 
-    @Override
     /**
-     * Using RxBinding so can throttle number of clicks
-     * Overriding here to note that not used in permanent.xml
+     * What to do when click image.
+     * Right now, just taps or untaps in data model, which will use an event bus to alert a listening
+     * RecyclerViewModel, which tells the RecyclerView Adapter to update at this position
      */
-    public View.OnClickListener onClickImage() {
-        return null;
+    private void onImageClick() {
+        mBattlefield.onViewPlayerPermanentClicked(mTargetList, mPosition);
     }
 
     /**
@@ -69,18 +80,32 @@ public class PermanentViewModel extends BaseItemViewModel {
      */
     @Override
     protected void handleSettingImage(ImageView view, String url) {
+        //get the Permanent
+        Permanent perm = retrievePermanent();
+
         //if tapped, rotate 90 degrees
         //in future, will instead have a set of custom transformations that apply
-        if (mPermanent.isTapped()) {
+        if (perm.isTapped()) {
+            Log.d(TAG, "handleSettingImage: Drawing tapped");
             Picasso.with(view.getContext())
                     .load(R.drawable.ic_launcher)
                     .rotate(90f)
                     .into(view);
         }
         else {
+            Log.d(TAG, "handleSettingImage: Drawing untapped");
             Picasso.with(view.getContext())
                     .load(R.drawable.ic_launcher)
                     .into(view);
         }
+    }
+
+    /**
+     * Using the target list and the position in that list, get the Permanent that matches to this
+     * position in the RecyclerView
+     * @return Permanent
+     */
+    private Permanent retrievePermanent() {
+        return mBattlefield.getViewPlayerPermanent(mTargetList, mPosition);
     }
 }

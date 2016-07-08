@@ -6,6 +6,8 @@ import com.example.srikar.magic.dagger.DaggerMainComponent;
 import com.example.srikar.magic.dagger.MainComponent;
 
 /**
+ * Application class created before everything else and acts independently of Activities.
+ * Stores the Dagger component that stores singletons.
  * Created by Srikar on 4/26/2016.
  */
 public class MagicApplication extends Application {

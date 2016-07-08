@@ -2,21 +2,24 @@ package com.example.srikar.magic.viewmodel;
 
 import android.content.Context;
 import android.databinding.BaseObservable;
-import android.graphics.drawable.Drawable;
-import android.support.v4.content.res.ResourcesCompat;
 import android.util.Log;
 
+import com.example.srikar.magic.AppConstants;
 import com.example.srikar.magic.MagicApplication;
 import com.example.srikar.magic.R;
 import com.example.srikar.magic.databinding.FragmentBoardBinding;
+import com.example.srikar.magic.event.RecyclerViewEvent;
 import com.example.srikar.magic.model.GameState;
 import com.example.srikar.magic.model.PlayerID;
-import com.example.srikar.magic.viewmodel.recyclerview.CreaturesBfRecViewModel;
+import com.example.srikar.magic.viewmodel.recyclerview.BattlefieldRecViewModel;
 import com.example.srikar.magic.viewmodel.recyclerview.HandRecViewModel;
-import com.example.srikar.magic.viewmodel.recyclerview.LandsBfRecViewModel;
+import com.jakewharton.rxbinding.view.RxView;
+
+import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
 
+import rx.Subscription;
 import rx.subscriptions.CompositeSubscription;
 
 /**
@@ -29,6 +32,7 @@ public class BoardFragmentModel extends BaseObservable {
     protected GameState mGameState;
 
     private Context mContext;
+    //view bindings for the Fragment
     private FragmentBoardBinding mBinding;
 
     //used to store all onClick subscriptions, so can unsubscribe when destroy
@@ -39,8 +43,8 @@ public class BoardFragmentModel extends BaseObservable {
      * data model classes.
      */
     HandRecViewModel mHandRecViewModel;
-    LandsBfRecViewModel mLandsRecViewModel;
-    CreaturesBfRecViewModel mCreaturesRecViewModel;
+    BattlefieldRecViewModel mLandsRecViewModel;
+    BattlefieldRecViewModel mCreaturesRecViewModel;
 
     public BoardFragmentModel(Context context, FragmentBoardBinding binding) {
         Log.d(TAG, "BoardFragmentModel: Created");
@@ -52,6 +56,9 @@ public class BoardFragmentModel extends BaseObservable {
         mContext = context;
         mBinding = binding;
 
+        //used to hold onClick subscriptions
+        mOnClickSubs = new CompositeSubscription();
+
         //set the backgrounds
         setBackgrounds();
 
@@ -62,6 +69,9 @@ public class BoardFragmentModel extends BaseObservable {
         binding.setHandModel(mHandRecViewModel);
         binding.setLandsModel(mLandsRecViewModel);
         binding.setCreaturesModel(mCreaturesRecViewModel);
+
+        //register on click event handlers
+        registerOnClicks();
     }
 
     /**
@@ -72,10 +82,10 @@ public class BoardFragmentModel extends BaseObservable {
             mHandRecViewModel = new HandRecViewModel(mContext);
         }
         if (mLandsRecViewModel == null) {
-            mLandsRecViewModel = new LandsBfRecViewModel(mContext);
+            mLandsRecViewModel = new BattlefieldRecViewModel(mContext, RecyclerViewEvent.Target.LANDS);
         }
         if (mCreaturesRecViewModel == null) {
-            mCreaturesRecViewModel = new CreaturesBfRecViewModel(mContext);
+            mCreaturesRecViewModel = new BattlefieldRecViewModel(mContext, RecyclerViewEvent.Target.CREATURES);
         }
     }
 
@@ -121,7 +131,30 @@ public class BoardFragmentModel extends BaseObservable {
      * RecyclerView onClicks handled by Permanent
      */
     private void registerOnClicks() {
+        //subscribe to onClick for player switch button
+        Subscription switchSub = RxView.clicks(mBinding.switchPlayer)
+                .throttleFirst(AppConstants.CLICK_DELAY, TimeUnit.MILLISECONDS) //ignore double clicks
+                .subscribe(empty -> switchPlayerOnClick());
 
+        mOnClickSubs.add(switchSub);
+    }
+
+    /**
+     * When click the switch player button, switches the view player.
+     * Updates the backgrounds.
+     */
+    private void switchPlayerOnClick() {
+        //switch the player in the data model
+        mGameState.switchViewPlayer();
+
+        //TODO: Should separate into listener for EventBus
+        //updates the backgrounds
+        setBackgrounds();
+
+        //notifies the RecyclerViewModels to update Adapters
+        mHandRecViewModel.onViewPlayerSwitched();
+        mLandsRecViewModel.onViewPlayerSwitched();
+        mCreaturesRecViewModel.onViewPlayerSwitched();
     }
 
     /**

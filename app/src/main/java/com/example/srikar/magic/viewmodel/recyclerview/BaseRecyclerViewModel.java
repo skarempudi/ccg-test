@@ -17,14 +17,16 @@ import rx.Subscription;
 
 /**
  * Using data binding, the layout uses this View Model to interact with the rest of the code.
- * This is the base class used for RecyclerView View Models.
- * The Adapter and LayoutManager are set here, with the Adapter provided in subclasses.
+ * This is the base class used for RecyclerView View Models. Subclasses determine which data model
+ * list to use.
+ * The Adapter and LayoutManager are set here.
  * Created by Srikar on 6/21/2016.
  */
 public abstract class BaseRecyclerViewModel extends BaseObservable {
     private static final String TAG = "BaseRecyclerViewModel";
 
     protected final Context mContext;
+    //adapter handles changes to the list, creates view models for Permanents or Cards
     protected RecyclerView.Adapter mAdapter;
     protected RecyclerView.LayoutManager mLayoutManager;
 
@@ -33,21 +35,18 @@ public abstract class BaseRecyclerViewModel extends BaseObservable {
     protected RxEventBus<RecyclerViewEvent> mEventBus;
     protected Subscription mRecyclerViewEventSub;
 
-    /**
-     * Don't use this constructor, only here to provide default constructor.
-     */
-    public BaseRecyclerViewModel() {
-        mContext = null;
-    }
+    //used to determine which data model list to populate the RecyclerView with
+    protected final RecyclerViewEvent.Target mTargetList;
 
     /**
-     * Since LayoutManager needs Context to create, have to manually construct this View Model and
-     * pass it into the RecyclerView's binding.
+     * Base View Model for RecyclerView, which will handle interactions with the data model.
+     * Subclasses handle which list from data model to use.
      * @param appContext Context used to create the LayoutManager
      */
-    public BaseRecyclerViewModel(Context appContext) {
+    protected BaseRecyclerViewModel(Context appContext, RecyclerViewEvent.Target targetList) {
         mContext = appContext;
-        //injects instance of Battlefield
+        mTargetList = targetList;
+        //injects instance of RecyclerView event bus
         MagicApplication.getInstance()
                 .getMainComponent()
                 .inject(this);
@@ -73,8 +72,8 @@ public abstract class BaseRecyclerViewModel extends BaseObservable {
     }
 
     /**
-     * Implemented by subclasses
      * Gets the Adapter used by the RecyclerView being modeled
+     * Adapter type determined by subclasses
      * @return Adapter
      */
     protected abstract RecyclerView.Adapter getAdapter();
@@ -89,6 +88,20 @@ public abstract class BaseRecyclerViewModel extends BaseObservable {
         LinearLayoutManager manager = new LinearLayoutManager(mContext);
         manager.setOrientation(LinearLayoutManager.HORIZONTAL);
         return manager;
+    }
+
+    /**
+     * Called by the Adapter created by this view model, to determine the size of the RecyclerView
+     * Which list to use is determined by subclass
+     * @return Number of items in relevant list
+     */
+    public abstract int getItemCount();
+
+    /**
+     * When the view player switches, the content of the RecyclerView is changed.
+     */
+    public void onViewPlayerSwitched() {
+        mAdapter.notifyDataSetChanged();
     }
 
     /**
@@ -113,7 +126,7 @@ public abstract class BaseRecyclerViewModel extends BaseObservable {
     protected Subscription registerEventBus() {
         Log.d(TAG, "registerEventBus: ");
         return mEventBus.getEvents()
-                .filter(e -> e.target == getThisTarget())
+                .filter(e -> e.target == mTargetList)
                 .subscribe(this::actOnEvent);
     }
 
@@ -137,11 +150,4 @@ public abstract class BaseRecyclerViewModel extends BaseObservable {
             mAdapter.notifyItemChanged(event.index);
         }
     }
-
-
-    /**
-     * When filtering what events on event bus, specify target affiliated with this subclass
-     * @return The target name for the RecyclerView being modeled
-     */
-    protected abstract RecyclerViewEvent.Target getThisTarget();
 }

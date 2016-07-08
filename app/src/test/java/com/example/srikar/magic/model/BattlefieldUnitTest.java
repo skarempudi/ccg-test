@@ -22,7 +22,6 @@ import static org.junit.Assert.assertTrue;
 public class BattlefieldUnitTest {
     final int NUM_LANDS = 0;
     final int NUM_CREATURES = 3;
-    final int NUM_COMBAT = 0;
     Battlefield battlefield;
 
     /**
@@ -58,11 +57,9 @@ public class BattlefieldUnitTest {
     public void testStartCondition() {
         int numLands = battlefield.getViewPlayerLandsSize();
         int numCreatures = battlefield.getViewPlayerCreaturesSize();
-        int numCombat = battlefield.getViewPlayerCombatSize();
 
         assertTrue("Number of lands is " + numLands, numLands == NUM_LANDS);
         assertTrue("Number of creatures is " + numCreatures, numCreatures == NUM_CREATURES);
-        assertTrue("Number of combat is " + numCombat, numCombat == NUM_COMBAT);
     }
 
     @Test
@@ -103,187 +100,187 @@ public class BattlefieldUnitTest {
                 land.toString().compareTo("" + 0) == 0);
     }
 
-    @Test
-    /**
-     * Assert that after add combat, there is one combat, NUM_CREATURES creatures, and nothing in other
-     * lists
-     */
-    public void testAddCombatCreature() {
-        Card card = new Card(0);
-        battlefield.addCombatCreature(PlayerID.ALICE, new Permanent(card));
+//    @Test
+//    /**
+//     * Assert that after add combat, there is one combat, NUM_CREATURES creatures, and nothing in other
+//     * lists
+//     */
+//    public void testAddCombatCreature() {
+//        Card card = new Card(0);
+//        battlefield.addCombatCreature(PlayerID.ALICE, new Permanent(card));
+//
+//        int numCombat = battlefield.getViewPlayerCombatSize();
+//        assertTrue("Number of lands is " + numCombat, numCombat == NUM_COMBAT + 1);
+//    }
+//
+//    @Test
+//    /**
+//     * Assert that after add combat, getViewPlayerCombatCreature() returns the expected Permanent
+//     */
+//    public void testGetViewPlayerCombatCreature() {
+//        Card card = new Card(0);
+//        battlefield.addCombatCreature(PlayerID.ALICE, new Permanent(card));
+//
+//        Permanent combat = battlefield.getViewPlayerCombatCreature(NUM_COMBAT);
+//        assertTrue("The id is " + combat.toString(),
+//                combat.toString().compareTo("" + 0) == 0);
+//    }
+//
+//    @Test
+//    /**
+//     * Assert that putCreatureOnBattlefield() increases size of creatures list and has Permanent
+//     * that passed in
+//     */
+//    public void testPutCreatureOnBattlefield() {
+//        Card card = new Card(0);
+//        battlefield.putCreatureOnBattlefield(PlayerID.ALICE, new Permanent(card));
+//
+//        //assert number of creatures
+//        int numCreatures = battlefield.getViewPlayerCreaturesSize();
+//        assertTrue("Number of creatures is " + numCreatures, numCreatures == NUM_CREATURES + 1);
+//
+//        //assert that is creature that just added
+//        Permanent creature = battlefield.getViewPlayerCreature(NUM_CREATURES);
+//        assertTrue("The id is " + creature.toString(),
+//                creature.toString().compareTo("" + 0) == 0);
+//    }
+//
+//    @Test
+//    /**
+//     * Assert that moveToAttack() moves the permanent at the given position in creatures list to
+//     * the combat list
+//     */
+//    public void testMoveToAttack() {
+//        Permanent creature = battlefield.getViewPlayerCreature(0);
+//        battlefield.moveToAttack(0);
+//
+//        //assert lengths of creature and combat lists
+//        int numCreatures = battlefield.getViewPlayerCreaturesSize();
+//        assertTrue("Number of creatures is " + numCreatures, numCreatures == NUM_CREATURES - 1);
+//        int numCombat = battlefield.getViewPlayerCombatSize();
+//        assertTrue("Number of combat is " + numCombat, numCombat == NUM_COMBAT + 1);
+//
+//        //assert that moved right creature
+//        Permanent combatCreature = battlefield.getViewPlayerCombatCreature(NUM_COMBAT);
+//        assertTrue("The creatures aren't the same", creature == combatCreature);
+//    }
+//
+//    @Test
+//    /**
+//     * Assert that undoAttackDeclaration() moves the permanent at the given position in combat list
+//     * to the creatures list
+//     */
+//    public void testUndoAttackDeclaration() {
+//        Card card = new Card(0);
+//        Permanent combatCreature = new Permanent(card);
+//        battlefield.addCombatCreature(PlayerID.ALICE, combatCreature);
+//
+//        //get the one that just added
+//        battlefield.undoAttackDeclaration(NUM_COMBAT);
+//
+//        //assert lengths of creature and combat lists
+//        int numCreatures = battlefield.getViewPlayerCreaturesSize();
+//        assertTrue("Number of creatures is " + numCreatures, numCreatures == NUM_CREATURES + 1);
+//        int numCombat = battlefield.getViewPlayerCombatSize();
+//        assertTrue("Number of combat is " + numCombat, numCombat == NUM_COMBAT);
+//
+//        //assert that moved right creature
+//        Permanent creature = battlefield.getViewPlayerCreature(NUM_CREATURES);
+//        assertTrue("The creatures aren't the same", creature == combatCreature);
+//    }
+//
+//    /**
+//     * For testMoveToAttack_RecyclerViewEventBus(), listen for the Events on RxEventBus
+//     * @param event Event used to update RecyclerView in response to change in list
+//     */
+//    private void testMoveToAttack_RecyclerViewEventBus_Sub(RecyclerViewEvent event) {
+//        if (event.action == RecyclerViewEvent.Action.ADD) {
+//            testMoveToAttack_RecyclerViewEventBus_add =
+//                    event.target == RecyclerViewEvent.Target.COMBAT
+//                    && event.index == NUM_COMBAT;
+//        }
+//        else if (event.action == RecyclerViewEvent.Action.REMOVE) {
+//            testMoveToAttack_RecyclerViewEventBus_remove =
+//                    event.target == RecyclerViewEvent.Target.CREATURES
+//                    && event.index == 0;
+//        }
+//    }
 
-        int numCombat = battlefield.getViewPlayerCombatSize();
-        assertTrue("Number of lands is " + numCombat, numCombat == NUM_COMBAT + 1);
-    }
-
-    @Test
-    /**
-     * Assert that after add combat, getViewPlayerCombatCreature() returns the expected Permanent
-     */
-    public void testGetViewPlayerCombatCreature() {
-        Card card = new Card(0);
-        battlefield.addCombatCreature(PlayerID.ALICE, new Permanent(card));
-
-        Permanent combat = battlefield.getViewPlayerCombatCreature(NUM_COMBAT);
-        assertTrue("The id is " + combat.toString(),
-                combat.toString().compareTo("" + 0) == 0);
-    }
-
-    @Test
-    /**
-     * Assert that putCreatureOnBattlefield() increases size of creatures list and has Permanent
-     * that passed in
-     */
-    public void testPutCreatureOnBattlefield() {
-        Card card = new Card(0);
-        battlefield.putCreatureOnBattlefield(PlayerID.ALICE, new Permanent(card));
-
-        //assert number of creatures
-        int numCreatures = battlefield.getViewPlayerCreaturesSize();
-        assertTrue("Number of creatures is " + numCreatures, numCreatures == NUM_CREATURES + 1);
-
-        //assert that is creature that just added
-        Permanent creature = battlefield.getViewPlayerCreature(NUM_CREATURES);
-        assertTrue("The id is " + creature.toString(),
-                creature.toString().compareTo("" + 0) == 0);
-    }
-
-    @Test
-    /**
-     * Assert that moveToAttack() moves the permanent at the given position in creatures list to
-     * the combat list
-     */
-    public void testMoveToAttack() {
-        Permanent creature = battlefield.getViewPlayerCreature(0);
-        battlefield.moveToAttack(0);
-
-        //assert lengths of creature and combat lists
-        int numCreatures = battlefield.getViewPlayerCreaturesSize();
-        assertTrue("Number of creatures is " + numCreatures, numCreatures == NUM_CREATURES - 1);
-        int numCombat = battlefield.getViewPlayerCombatSize();
-        assertTrue("Number of combat is " + numCombat, numCombat == NUM_COMBAT + 1);
-
-        //assert that moved right creature
-        Permanent combatCreature = battlefield.getViewPlayerCombatCreature(NUM_COMBAT);
-        assertTrue("The creatures aren't the same", creature == combatCreature);
-    }
-
-    @Test
-    /**
-     * Assert that undoAttackDeclaration() moves the permanent at the given position in combat list
-     * to the creatures list
-     */
-    public void testUndoAttackDeclaration() {
-        Card card = new Card(0);
-        Permanent combatCreature = new Permanent(card);
-        battlefield.addCombatCreature(PlayerID.ALICE, combatCreature);
-
-        //get the one that just added
-        battlefield.undoAttackDeclaration(NUM_COMBAT);
-
-        //assert lengths of creature and combat lists
-        int numCreatures = battlefield.getViewPlayerCreaturesSize();
-        assertTrue("Number of creatures is " + numCreatures, numCreatures == NUM_CREATURES + 1);
-        int numCombat = battlefield.getViewPlayerCombatSize();
-        assertTrue("Number of combat is " + numCombat, numCombat == NUM_COMBAT);
-
-        //assert that moved right creature
-        Permanent creature = battlefield.getViewPlayerCreature(NUM_CREATURES);
-        assertTrue("The creatures aren't the same", creature == combatCreature);
-    }
-
-    /**
-     * For testMoveToAttack_RecyclerViewEventBus(), listen for the Events on RxEventBus
-     * @param event Event used to update RecyclerView in response to change in list
-     */
-    private void testMoveToAttack_RecyclerViewEventBus_Sub(RecyclerViewEvent event) {
-        if (event.action == RecyclerViewEvent.Action.ADD) {
-            testMoveToAttack_RecyclerViewEventBus_add =
-                    event.target == RecyclerViewEvent.Target.COMBAT
-                    && event.index == NUM_COMBAT;
-        }
-        else if (event.action == RecyclerViewEvent.Action.REMOVE) {
-            testMoveToAttack_RecyclerViewEventBus_remove =
-                    event.target == RecyclerViewEvent.Target.CREATURES
-                    && event.index == 0;
-        }
-    }
-
-    boolean testMoveToAttack_RecyclerViewEventBus_add = false;
-    boolean testMoveToAttack_RecyclerViewEventBus_remove = false;
-    @Test
-    /**
-     * Assert that moveToAttack() puts two events on RecyclerView event bus and subscriber gets
-     * both
-     */
-    public void testMoveToAttack_RecyclerViewEventBus() {
-        //creates thread to receive Events from RxEventBus
-        Subscription sub = battlefield.getRecyclerViewEvents()
-                .observeOn(Schedulers.computation())
-                .subscribe(this::testMoveToAttack_RecyclerViewEventBus_Sub);
-
-        //will put two Events on RxEventBus
-        battlefield.moveToAttack(0);
-
-        //wait for response
-        try {
-            Thread.sleep(500);
-        } catch (InterruptedException e) {
-            sub.unsubscribe();
-            assertTrue("Took too long", false);
-        }
-
-        assertTrue("Add event was incorrect", testMoveToAttack_RecyclerViewEventBus_add);
-        assertTrue("Remove event was incorrect", testMoveToAttack_RecyclerViewEventBus_remove);
-    }
-
-    /**
-     * For testUndoAttackDeclaration_RecyclerViewEventBus(), listen for the Events on RxEventBus
-     * @param event Event used to update RecyclerView in response to change in list
-     */
-    private void testUndoAttackDeclaration_RecyclerViewEventBus_Sub(RecyclerViewEvent event) {
-        if (event.action == RecyclerViewEvent.Action.ADD) {
-            testUndoAttackDeclaration_RecyclerViewEventBus_add =
-                    event.target == RecyclerViewEvent.Target.CREATURES
-                            && event.index == NUM_CREATURES;
-        }
-        else if (event.action == RecyclerViewEvent.Action.REMOVE) {
-            testUndoAttackDeclaration_RecyclerViewEventBus_remove =
-                    event.target == RecyclerViewEvent.Target.COMBAT
-                            && event.index == NUM_COMBAT;
-        }
-    }
-
-    boolean testUndoAttackDeclaration_RecyclerViewEventBus_add = false;
-    boolean testUndoAttackDeclaration_RecyclerViewEventBus_remove = false;
-    @Test
-    /**
-     * Assert that undoAttackDeclaration() puts two events on RecyclerView event bus and subscriber
-     * gets both
-     */
-    public void testUndoAttackDeclaration_RecyclerViewEventBus() { //creates thread to receive Events from RxEventBus
-        Subscription sub = battlefield.getRecyclerViewEvents()
-                .observeOn(Schedulers.computation())
-                .subscribe(this::testUndoAttackDeclaration_RecyclerViewEventBus_Sub);
-
-        Card card = new Card(0);
-        Permanent combatCreature = new Permanent(card);
-        battlefield.addCombatCreature(PlayerID.ALICE, combatCreature);
-
-        //will put two Events on RxEventBus
-        //get the one that just added
-        battlefield.undoAttackDeclaration(NUM_COMBAT);
-
-        //wait for response
-        try {
-            Thread.sleep(500);
-        } catch (InterruptedException e) {
-            sub.unsubscribe();
-            assertTrue("Took too long", false);
-        }
-
-        assertTrue("Add event was incorrect", testUndoAttackDeclaration_RecyclerViewEventBus_add);
-        assertTrue("Remove event was incorrect",
-                testUndoAttackDeclaration_RecyclerViewEventBus_remove);
-    }
+//    boolean testMoveToAttack_RecyclerViewEventBus_add = false;
+//    boolean testMoveToAttack_RecyclerViewEventBus_remove = false;
+//    @Test
+//    /**
+//     * Assert that moveToAttack() puts two events on RecyclerView event bus and subscriber gets
+//     * both
+//     */
+//    public void testMoveToAttack_RecyclerViewEventBus() {
+//        //creates thread to receive Events from RxEventBus
+//        Subscription sub = battlefield.getRecyclerViewEvents()
+//                .observeOn(Schedulers.computation())
+//                .subscribe(this::testMoveToAttack_RecyclerViewEventBus_Sub);
+//
+//        //will put two Events on RxEventBus
+//        battlefield.moveToAttack(0);
+//
+//        //wait for response
+//        try {
+//            Thread.sleep(500);
+//        } catch (InterruptedException e) {
+//            sub.unsubscribe();
+//            assertTrue("Took too long", false);
+//        }
+//
+//        assertTrue("Add event was incorrect", testMoveToAttack_RecyclerViewEventBus_add);
+//        assertTrue("Remove event was incorrect", testMoveToAttack_RecyclerViewEventBus_remove);
+//    }
+//
+//    /**
+//     * For testUndoAttackDeclaration_RecyclerViewEventBus(), listen for the Events on RxEventBus
+//     * @param event Event used to update RecyclerView in response to change in list
+//     */
+//    private void testUndoAttackDeclaration_RecyclerViewEventBus_Sub(RecyclerViewEvent event) {
+//        if (event.action == RecyclerViewEvent.Action.ADD) {
+//            testUndoAttackDeclaration_RecyclerViewEventBus_add =
+//                    event.target == RecyclerViewEvent.Target.CREATURES
+//                            && event.index == NUM_CREATURES;
+//        }
+//        else if (event.action == RecyclerViewEvent.Action.REMOVE) {
+//            testUndoAttackDeclaration_RecyclerViewEventBus_remove =
+//                    event.target == RecyclerViewEvent.Target.COMBAT
+//                            && event.index == NUM_COMBAT;
+//        }
+//    }
+//
+//    boolean testUndoAttackDeclaration_RecyclerViewEventBus_add = false;
+//    boolean testUndoAttackDeclaration_RecyclerViewEventBus_remove = false;
+//    @Test
+//    /**
+//     * Assert that undoAttackDeclaration() puts two events on RecyclerView event bus and subscriber
+//     * gets both
+//     */
+//    public void testUndoAttackDeclaration_RecyclerViewEventBus() { //creates thread to receive Events from RxEventBus
+//        Subscription sub = battlefield.getRecyclerViewEvents()
+//                .observeOn(Schedulers.computation())
+//                .subscribe(this::testUndoAttackDeclaration_RecyclerViewEventBus_Sub);
+//
+//        Card card = new Card(0);
+//        Permanent combatCreature = new Permanent(card);
+//        battlefield.addCombatCreature(PlayerID.ALICE, combatCreature);
+//
+//        //will put two Events on RxEventBus
+//        //get the one that just added
+//        battlefield.undoAttackDeclaration(NUM_COMBAT);
+//
+//        //wait for response
+//        try {
+//            Thread.sleep(500);
+//        } catch (InterruptedException e) {
+//            sub.unsubscribe();
+//            assertTrue("Took too long", false);
+//        }
+//
+//        assertTrue("Add event was incorrect", testUndoAttackDeclaration_RecyclerViewEventBus_add);
+//        assertTrue("Remove event was incorrect",
+//                testUndoAttackDeclaration_RecyclerViewEventBus_remove);
+//    }
 }

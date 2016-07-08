@@ -45,7 +45,7 @@ public class Hand {
     }
 
     /**
-     * Used by HandViewAdapter to determine how many entries are in the RecyclerView
+     * Used by HandRecViewAdapter to determine how many entries are in the RecyclerView
      * Only see the hand of player that view focused on
      * @return Size of list
      */

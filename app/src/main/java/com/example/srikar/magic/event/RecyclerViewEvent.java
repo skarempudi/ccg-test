@@ -10,8 +10,7 @@ public class RecyclerViewEvent implements MagicEvent {
     public enum Target {
         HAND,
         LANDS,
-        CREATURES,
-        COMBAT
+        CREATURES
     }
 
     public enum Action {
@@ -38,6 +37,6 @@ public class RecyclerViewEvent implements MagicEvent {
 
     @Override
     public String toString() {
-        return new String(target + ", " + action + ", " + index);
+        return target + ", " + action + ", " + index;
     }
 }

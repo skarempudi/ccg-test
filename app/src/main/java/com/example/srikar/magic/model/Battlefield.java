@@ -17,7 +17,7 @@ import rx.Observable;
  */
 public class Battlefield {
     private static final String TAG = "Battlefield";
-    private final ArrayList<Permanent>[] mLands, mCreatures, mCombat;
+    private final ArrayList<Permanent>[] mLands, mCreatures;
 
     /**
      * Used to signal to RecyclerViews for above ArrayLists that lists updated
@@ -40,17 +40,32 @@ public class Battlefield {
             mCreatures[PlayerID.ALICE].add(new Permanent(card));
         }
 
-        mCombat = new ArrayList[2];
-        mCombat[PlayerID.ALICE] = new ArrayList<>();
-        mCombat[PlayerID.BOB] = new ArrayList<>();
-
         mRecyclerViewEventBus = rvEventBus;
         mGameState = gameState;
     }
 
     /**
+     * Get a permanent from the specified list for the player that is viewing
+     * @param targetList The list that is being targeted
+     * @param position The position in the list
+     * @return The permanent
+     */
+    public Permanent getViewPlayerPermanent(RecyclerViewEvent.Target targetList, int position) {
+        switch(targetList) {
+            case LANDS:
+                return getViewPlayerLand(position);
+
+            case CREATURES:
+                return getViewPlayerCreature(position);
+
+            default:
+                return null;
+        }
+    }
+
+    /**
      * Get a land for player that viewing
-     * @param position Position in list that user touching
+     * @param position Position in list
      * @return Land
      */
     public Permanent getViewPlayerLand(int position) {
@@ -67,8 +82,8 @@ public class Battlefield {
     }
 
     /**
-     * Get a creature that is not in combat for player that viewing
-     * @param position Position in list that user touching
+     * Get a creature for player that viewing
+     * @param position Position in list
      * @return Creature
      */
     public Permanent getViewPlayerCreature(int position) {
@@ -76,7 +91,7 @@ public class Battlefield {
     }
 
     /**
-     * Add creature not in combat for specified player
+     * Add creature for specified player
      * @param playerID Either PlayerID.ALICE or PlayerID.BOB
      * @param creature Creature
      */
@@ -85,29 +100,31 @@ public class Battlefield {
     }
 
     /**
-     * Get a creature that is in combat: attacking or blocking
-     * @param position Position in list that user touching
-     * @return Creature
-     */
-    public Permanent getViewPlayerCombatCreature(int position) {
-        return mCombat[mGameState.getViewPlayer()].get(position);
-    }
-
-    protected void addCombatCreature(int playerID, Permanent combatCreature) {
-        mCombat[playerID].add(combatCreature);
-    }
-
-    /**
      * Methods to return size of list
      */
+    /**
+     * Gets the size of the list that matches to the given target.
+     * @param targetList The list being targeted
+     * @return The size of that list
+     */
+    public int getViewPlayerListSize(RecyclerViewEvent.Target targetList) {
+        switch(targetList) {
+            case LANDS:
+                return getViewPlayerLandsSize();
+
+            case CREATURES:
+                return getViewPlayerCreaturesSize();
+
+            default:
+                return 0;
+        }
+    }
+
     public int getViewPlayerLandsSize() {
         return mLands[mGameState.getViewPlayer()].size();
     }
     public int getViewPlayerCreaturesSize() {
         return mCreatures[mGameState.getViewPlayer()].size();
-    }
-    public int getViewPlayerCombatSize() {
-        return mCombat[mGameState.getViewPlayer()].size();
     }
 
     /**
@@ -119,9 +136,25 @@ public class Battlefield {
 
         mCreatures[PlayerID.ALICE].clear();
         mCreatures[PlayerID.BOB].clear();
+    }
 
-        mCombat[PlayerID.ALICE].clear();
-        mCombat[PlayerID.BOB].clear();
+    /**
+     * When a creature Permanent is clicked from the view player creature RecyclerView, determine
+     * what to do.
+     * Right now, just taps or untaps creature.
+     * @param position Position in view player creatures list, which matches position in RecyclerView
+     */
+    public void onViewPlayerPermanentClicked(RecyclerViewEvent.Target targetList, int position) {
+        switch(targetList) {
+            case LANDS:
+                return;
+
+            case CREATURES:
+                onViewPlayerCreatureClicked(position);
+                return;
+
+            default:
+        }
     }
 
     /**
@@ -136,10 +169,12 @@ public class Battlefield {
 
         //if creature tapped, untap it
         if (creature.isTapped()) {
+            Log.d(TAG, "onViewPlayerCreatureClicked: Creature at position " + position + " tapped, untapping");
             creature.untap();
         }
         //if creature not tapped, tap it
         else {
+            Log.d(TAG, "onViewPlayerCreatureClicked: Creature at position " + position + " untapped, tapping");
             creature.tap();
         }
 
@@ -152,70 +187,9 @@ public class Battlefield {
         );
     }
 
-    /**
-     * Add a new creature Permanent to the mBattlefield for given player
-     * @param playerID Either PlayerID.ALICE or PlayerID.BOB
-     * @param creature Creature
-     */
-    public void putCreatureOnBattlefield(int playerID, Permanent creature) {
-        addCreature(playerID, creature);
-    }
-
-    /**
-     * Select a creature to move to combat during your declare attackers step
-     * Will throw exception if out of bounds
-     * Can only be done with current player when viewing as it
-     * @param position Position in list that user touching
-     */
-    public void moveToAttack(int position) {
-//        Log.d(TAG, "moveToAttack: removing from creatures at " + position);
-        Permanent creature = mCreatures[mGameState.getViewPlayer()].remove(position);
-//        Log.d(TAG, "moveToAttack: creature has id " + creature.toString());
-        addCombatCreature(mGameState.getViewPlayer(), creature);
-        //update the RecyclerViews
-        //remove from mCreatures
-        addRecyclerViewEvent(
-                RecyclerViewEvent.Target.CREATURES,
-                RecyclerViewEvent.Action.REMOVE,
-                position
-        );
-        //add to mCombat
-        addRecyclerViewEvent(
-                RecyclerViewEvent.Target.COMBAT,
-                RecyclerViewEvent.Action.ADD,
-                mCombat[mGameState.getViewPlayer()].size() - 1
-        );
-    }
-
-    /**
-     * Select a creature to move out of combat during your declare attackers step
-     * Will throw exception if out of bounds
-     * Can only be done with current player when viewing as it
-     * @param position Position in list that user touching
-     */
-    public void undoAttackDeclaration(int position) {
-//        Log.d(TAG, "undoAttackDeclaration: removing from combat at " + position);
-        Permanent creature = mCombat[mGameState.getViewPlayer()].remove(position);
-//        Log.d(TAG, "undoAttackDeclaration: creature has id " + creature.toString());
-        addCreature(mGameState.getViewPlayer(), creature);
-        //update RecyclerViews
-        //remove from mCombat
-        addRecyclerViewEvent(
-                RecyclerViewEvent.Target.COMBAT,
-                RecyclerViewEvent.Action.REMOVE,
-                position
-        );
-        //add to mCreatures
-        addRecyclerViewEvent(
-                RecyclerViewEvent.Target.CREATURES,
-                RecyclerViewEvent.Action.ADD,
-                mCreatures[mGameState.getViewPlayer()].size() - 1
-        );
-    }
-
-    /**
+    /***********************************************************************************************
      * EVENT BUS
-     */
+     **********************************************************************************************/
 
     /**
      * Get Observable for event bus for RecyclerViewEvents, which can subscribe to for events that
