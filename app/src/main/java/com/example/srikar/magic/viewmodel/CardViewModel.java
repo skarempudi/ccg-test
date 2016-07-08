@@ -1,12 +1,9 @@
 package com.example.srikar.magic.viewmodel;
 
-import android.content.Context;
-import android.view.View;
 import android.widget.ImageView;
 
 import com.example.srikar.magic.R;
 import com.example.srikar.magic.databinding.CardBinding;
-import com.example.srikar.magic.model.Card;
 import com.squareup.picasso.Picasso;
 
 /**
@@ -32,12 +29,11 @@ public class CardViewModel extends BaseItemViewModel {
     }
 
     /**
-     * When card.xml tries to load image using android:src, instead calls this function
-     * @param view The view being loaded into
-     * @param url The URL of the image, currently unused
+     * Load image
      */
     @Override
-    protected void handleSettingImage(ImageView view, String url) {
+    public void loadImage() {
+        ImageView view = mBinding.cardImage;
         Picasso.with(view.getContext())
                 .load(R.drawable.ic_launcher)
                 .into(view);

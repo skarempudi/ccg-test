@@ -16,10 +16,5 @@ import com.squareup.picasso.Picasso;
  * Created by Srikar on 5/20/2016.
  */
 public abstract class BaseItemViewModel extends BaseObservable {
-    public String getImageUrl() {
-        //does nothing for now
-        return "";
-    }
-
-    protected abstract void handleSettingImage(ImageView view, String url);
+    public abstract void loadImage();
 }

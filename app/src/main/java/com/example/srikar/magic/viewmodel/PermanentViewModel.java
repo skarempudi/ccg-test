@@ -1,8 +1,6 @@
 package com.example.srikar.magic.viewmodel;
 
-import android.databinding.BindingAdapter;
 import android.util.Log;
-import android.view.View;
 import android.widget.ImageView;
 
 import com.example.srikar.magic.AppConstants;
@@ -74,26 +72,26 @@ public class PermanentViewModel extends BaseItemViewModel {
     }
 
     /**
-     * When permanent.xml tries to load image using android:src, instead calls this function
-     * @param view The view being loaded into
-     * @param url The URL of the image, currently unused
+     * Load image
      */
     @Override
-    protected void handleSettingImage(ImageView view, String url) {
+    public void loadImage() {
+        //get the view
+        ImageView view = mBinding.cardImage;
         //get the Permanent
         Permanent perm = retrievePermanent();
 
         //if tapped, rotate 90 degrees
         //in future, will instead have a set of custom transformations that apply
         if (perm.isTapped()) {
-            Log.d(TAG, "handleSettingImage: Drawing tapped");
+            Log.d(TAG, "loadImage: Drawing tapped");
             Picasso.with(view.getContext())
                     .load(R.drawable.ic_launcher)
                     .rotate(90f)
                     .into(view);
         }
         else {
-            Log.d(TAG, "handleSettingImage: Drawing untapped");
+            Log.d(TAG, "loadImage: Drawing untapped");
             Picasso.with(view.getContext())
                     .load(R.drawable.ic_launcher)
                     .into(view);

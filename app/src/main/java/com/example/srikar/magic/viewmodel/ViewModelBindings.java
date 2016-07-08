@@ -2,6 +2,7 @@ package com.example.srikar.magic.viewmodel;
 
 import android.databinding.BindingAdapter;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.widget.ImageView;
 
 import com.example.srikar.magic.viewmodel.recyclerview.BaseRecyclerViewModel;
@@ -12,6 +13,8 @@ import com.example.srikar.magic.viewmodel.recyclerview.BaseRecyclerViewModel;
  * Created by Srikar on 6/21/2016.
  */
 public class ViewModelBindings {
+    private static final String TAG = "ViewModelBindings";
+
     /**
      * FRAGMENT_BOARD.XML
      * Called by fragment_board.xml RecyclerView with attribute
@@ -25,17 +28,5 @@ public class ViewModelBindings {
     public static void setRecyclerViewModel(RecyclerView recyclerView,
                                             BaseRecyclerViewModel viewModel) {
         viewModel.setupRecyclerView(recyclerView);
-    }
-
-    /**
-     * CARD.XML, PERMANENT.XML
-     * When card.xml or permanent.xml tries to load image using android:src, instead calls this function
-     * @param view View being loaded into
-     * @param url URL being loaded from, currently not used
-     * @param itemViewModel The View Model performing the loading operation
-     */
-    @BindingAdapter({"android:src", "itemViewModel"})
-    public static void setImageUrl(ImageView view, String url, BaseItemViewModel itemViewModel) {
-        itemViewModel.handleSettingImage(view, url);
     }
 }

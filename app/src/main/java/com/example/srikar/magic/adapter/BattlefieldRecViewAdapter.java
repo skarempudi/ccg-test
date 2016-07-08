@@ -68,10 +68,9 @@ public class BattlefieldRecViewAdapter extends RecyclerView.Adapter<BattlefieldR
                 false //don't attach to parent, handled by RecyclerView
         );
 
-        //create new view model, which takes binding, and set in binding
+        //create new view model, which takes binding
         //the view model handles onClick events and such
         PermanentViewModel permViewModel = new PermanentViewModel(binding);
-        binding.setPermanentViewModel(permViewModel);
 
         //create the view holder
         return new PermanentViewHolder(binding, permViewModel);
@@ -84,6 +83,8 @@ public class BattlefieldRecViewAdapter extends RecyclerView.Adapter<BattlefieldR
     public void onBindViewHolder(PermanentViewHolder holder, int position) {
         //set in the holder's view model the target list for this RecyclerView and the position
         holder.viewModel.setListPosition(mTargetList, position);
+        //load the image
+        holder.viewModel.loadImage();
     }
 
     /**

@@ -62,7 +62,6 @@ public class HandRecViewAdapter extends RecyclerView.Adapter<HandRecViewAdapter.
 
         //create view model that takes binding, will handle onClick and such
         CardViewModel viewModel = new CardViewModel(binding);
-        binding.setCardViewModel(viewModel);
 
         return new HandViewHolder(binding, viewModel);
     }
@@ -75,6 +74,8 @@ public class HandRecViewAdapter extends RecyclerView.Adapter<HandRecViewAdapter.
     public void onBindViewHolder(HandViewHolder holder, int position) {
         //update position of the view model
         holder.viewModel.setListPosition(position);
+        //load the image
+        holder.viewModel.loadImage();
     }
 
     @Override
