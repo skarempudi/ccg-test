@@ -18,13 +18,8 @@ import com.example.srikar.magic.viewmodel.recyclerview.BaseRecyclerViewModel;
  * that created it.
  * Created by Srikar on 5/20/2016.
  */
-public class BattlefieldRecViewAdapter extends RecyclerView.Adapter<BattlefieldRecViewAdapter.PermanentViewHolder> {
+public class BattlefieldRecViewAdapter extends BaseRecViewAdapter {
     protected static final String TAG = "BattlefieldRecViewAdapter";
-    protected final Context mContext;
-    //the RecyclerViewModel that created this
-    protected final BaseRecyclerViewModel mRecyclerViewModel;
-    //which data model list from Battlefield to display
-    protected final RecyclerViewEvent.Target mTargetList;
 
     /**
      * Constructor, takes RecyclerViewModel and Target to make sure data model interaction is handled
@@ -35,24 +30,7 @@ public class BattlefieldRecViewAdapter extends RecyclerView.Adapter<BattlefieldR
      */
     public BattlefieldRecViewAdapter(Context activityContext, BaseRecyclerViewModel recViewModel,
                                      RecyclerViewEvent.Target targetList) {
-        super();
-        mContext = activityContext;
-        mRecyclerViewModel = recViewModel;
-        mTargetList = targetList;
-    }
-
-    /**
-     * Used to hold the layout data for each element of the list
-     */
-    public class PermanentViewHolder extends RecyclerView.ViewHolder {
-        public PermanentBinding binding;
-        public PermanentViewModel viewModel;
-
-        public PermanentViewHolder(PermanentBinding binding, PermanentViewModel viewModel) {
-            super(binding.getRoot());
-            this.binding = binding;
-            this.viewModel = viewModel;
-        }
+        super(activityContext, recViewModel, targetList);
     }
 
     /**
@@ -60,7 +38,7 @@ public class BattlefieldRecViewAdapter extends RecyclerView.Adapter<BattlefieldR
      * When first create a list entry, create a binding to the permanent layout
      */
     @Override
-    public PermanentViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public BaseRecViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         PermanentBinding binding = DataBindingUtil.inflate(
                 LayoutInflater.from(mContext),
                 R.layout.permanent,
@@ -73,25 +51,6 @@ public class BattlefieldRecViewAdapter extends RecyclerView.Adapter<BattlefieldR
         PermanentViewModel permViewModel = new PermanentViewModel(binding);
 
         //create the view holder
-        return new PermanentViewHolder(binding, permViewModel);
-    }
-
-    /**
-     * When list entry becomes visible on screen, store the new position in the view model
-     */
-    @Override
-    public void onBindViewHolder(PermanentViewHolder holder, int position) {
-        //set in the holder's view model the target list for this RecyclerView and the position
-        holder.viewModel.setListPosition(mTargetList, position);
-        //load the image
-        holder.viewModel.loadImage();
-    }
-
-    /**
-     * Used to determine the number of list elements to display
-     */
-    @Override
-    public int getItemCount() {
-        return mRecyclerViewModel.getItemCount();
+        return new BaseRecViewHolder(binding, permViewModel);
     }
 }

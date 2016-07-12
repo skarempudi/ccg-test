@@ -34,7 +34,7 @@ public class BattlefieldRecViewModel extends BaseRecyclerViewModel {
     /**
      * Gets the number of items in the RecyclerView from a list in the Battlefield specified during
      * construction of this class.
-     * @return
+     * @return Number of items in Battlefield list
      */
     @Override
     public int getItemCount() {

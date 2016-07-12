@@ -19,9 +19,9 @@ public class RecyclerViewEvent implements MagicEvent {
         UPDATE
     }
 
-    public Target target;
-    public Action action;
-    public int index;
+    public final Target target;
+    public final Action action;
+    public final int index;
 
     /**
      * An event to update a RecyclerView

@@ -9,7 +9,7 @@ import android.util.Log;
  */
 public class Permanent {
     private static final String TAG = "Permanent";
-    private Card mCard;
+    private final Card mCard;
 
     private boolean tapped = false;
 
@@ -26,35 +26,31 @@ public class Permanent {
     }
 
     /**
-     * Tap the permanent. Returns false if already tapped.
-     * Some cards may care if try to tap already tapped Permanent.
+     * Tap the permanent.
      * @return If tap action succeeded
      */
-    public boolean tap() {
+    public void tap() {
         //if already tapped, tap action doesn't occur
         if (tapped) {
             Log.d(TAG, "tap: Already tapped, no action");
-            return false;
+            return;
         }
 
         tapped = true;
-        return true;
     }
 
     /**
-     * Untap the permanent. Returns false if already untapped.
-     * Some cards may care if try to untap already untapped Permanent.
+     * Untap the permanent.
      * @return If untap action succeeded
      */
-    public boolean untap() {
+    public void untap() {
         //if already untapped, untap action doesn't occur
         if (!tapped) {
             Log.d(TAG, "untap: Already untapped, no action");
-            return false;
+            return;
         }
 
         tapped = false;
-        return true;
     }
 
     public void onClick() {

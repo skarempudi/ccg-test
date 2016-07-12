@@ -7,7 +7,6 @@ import com.example.srikar.magic.AppConstants;
 import com.example.srikar.magic.MagicApplication;
 import com.example.srikar.magic.R;
 import com.example.srikar.magic.databinding.PermanentBinding;
-import com.example.srikar.magic.event.RecyclerViewEvent;
 import com.example.srikar.magic.model.Battlefield;
 import com.example.srikar.magic.model.Permanent;
 import com.jakewharton.rxbinding.view.RxView;
@@ -16,8 +15,6 @@ import com.squareup.picasso.Picasso;
 import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
-
-import rx.Subscription;
 
 /**
  * Tied to permanent.xml
@@ -28,11 +25,7 @@ public class PermanentViewModel extends BaseItemViewModel {
     private static final String TAG = "PermanentViewModel";
 
     //bindings for views in Permanent layout
-    private PermanentBinding mBinding;
-
-    //what list to access and what entry
-    private RecyclerViewEvent.Target mTargetList;
-    private int mPosition;
+    private final PermanentBinding mBinding;
 
     @Inject
     protected Battlefield mBattlefield;
@@ -46,20 +39,9 @@ public class PermanentViewModel extends BaseItemViewModel {
                 .inject(this);
 
         //subscribe to the onClick for the ImageView
-        Subscription sub = RxView.clicks(binding.cardImage)
+        RxView.clicks(binding.cardImage)
                 .throttleFirst(AppConstants.CLICK_DELAY, TimeUnit.MILLISECONDS) //ignore double clicks
                 .subscribe(empty -> onImageClick());
-    }
-
-    /**
-     * When RecyclerView Adapter binds View Holder, set the list and position where can find the
-     * relevant Permanent.
-     * @param targetList Target that maps to a Battlefield list
-     * @param position Position in that list, which should be the same as in the RecyclerView
-     */
-    public void setListPosition(RecyclerViewEvent.Target targetList, int position) {
-        mTargetList = targetList;
-        mPosition = position;
     }
 
     /**

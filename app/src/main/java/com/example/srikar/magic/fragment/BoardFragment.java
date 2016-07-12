@@ -24,7 +24,7 @@ public class BoardFragment extends Fragment {
     /**
      * Model for this Fragment, which handles interactions and communication with the data models.
      */
-    BoardFragmentModel mBoardFragmentModel;
+    private BoardFragmentModel mBoardFragmentModel;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {

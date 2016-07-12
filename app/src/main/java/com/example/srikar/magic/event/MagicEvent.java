@@ -6,5 +6,5 @@ package com.example.srikar.magic.event;
  * Various implementations customize the data provided
  * Created by Srikar on 6/6/2016.
  */
-public interface MagicEvent {
+interface MagicEvent {
 }

@@ -3,9 +3,4 @@
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
-
-    <color name="colorAliceFill">#DFFFFF</color>
-    <color name="colorAliceBorder">#3F51B5</color>
-    <color name="colorBobFill">#FFDDDD</color>
-    <color name="colorBobBorder">#FF0000</color>
 </resources>

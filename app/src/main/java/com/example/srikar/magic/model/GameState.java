@@ -26,7 +26,7 @@ public class GameState {
 
     /**
      * Returns ID of player whose turn it is
-     * @return
+     * @return Player ID
      */
     public int getCurrentPlayer() {
         return mCurrentPlayer;
@@ -43,7 +43,7 @@ public class GameState {
 
     /**
      * Returns what player the view is focusing on
-     * @return
+     * @return Player ID
      */
     public int getViewPlayer() {
         return mViewPlayer;
@@ -58,7 +58,7 @@ public class GameState {
 
     /**
      * Return ID of the other player
-     * @return
+     * @return Player ID
      */
     public int getOtherPlayer() {
         return mCurrentPlayer ^ 1;
@@ -66,7 +66,7 @@ public class GameState {
 
     /**
      * Return ID of player that view not focused on
-     * @return
+     * @return Player ID
      */
     public int getOtherViewPlayer() {
         return mViewPlayer ^ 1;

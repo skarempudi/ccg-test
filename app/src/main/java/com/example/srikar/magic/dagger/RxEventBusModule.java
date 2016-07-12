@@ -13,7 +13,7 @@ import dagger.Provides;
  * Created by Srikar on 6/7/2016.
  */
 @Module
-public class RxEventBusModule {
+class RxEventBusModule {
     @Provides
     @Singleton
     public RxEventBus<RecyclerViewEvent> provideRecyclerViewEventBus() {

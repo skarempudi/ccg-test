@@ -12,20 +12,10 @@ import com.squareup.picasso.Picasso;
  * Created by Srikar on 5/10/2016.
  */
 public class CardViewModel extends BaseItemViewModel {
-    private CardBinding mBinding;
-    private int mPosition;
+    private final CardBinding mBinding;
 
     public CardViewModel(CardBinding binding) {
         mBinding = binding;
-    }
-
-    /**
-     * When RecyclerView Adapter binds View Holder, set the position where can find the relevant
-     * Card
-     * @param position Position in Hand's card list
-     */
-    public void setListPosition(int position) {
-        mPosition = position;
     }
 
     /**

@@ -77,7 +77,7 @@ public class Battlefield {
      * @param playerID Either PlayerID.ALICE or PlayerID.BOB
      * @param land Land
      */
-    protected void addLand(int playerID, Permanent land) {
+    void addLand(int playerID, Permanent land) {
         mLands[playerID].add(land);
     }
 
@@ -95,7 +95,7 @@ public class Battlefield {
      * @param playerID Either PlayerID.ALICE or PlayerID.BOB
      * @param creature Creature
      */
-    protected void addCreature(int playerID, Permanent creature) {
+    void addCreature(int playerID, Permanent creature) {
         mCreatures[playerID].add(creature);
     }
 
@@ -130,7 +130,7 @@ public class Battlefield {
     /**
      * Empties all lists
      */
-    protected void clearLists() {
+    void clearLists() {
         mLands[PlayerID.ALICE].clear();
         mLands[PlayerID.BOB].clear();
 
@@ -163,7 +163,7 @@ public class Battlefield {
      * Right now, just taps or untaps creature.
      * @param position Position in view player creatures list, which matches position in RecyclerView
      */
-    public void onViewPlayerCreatureClicked(int position) {
+    private void onViewPlayerCreatureClicked(int position) {
         //get creature
         Permanent creature = getViewPlayerCreature(position);
 

@@ -11,7 +11,7 @@ import rx.subjects.PublishSubject;
  * Created by Srikar on 6/6/2016.
  */
 public class RxEventBus<T extends MagicEvent> {
-    private PublishSubject<T> subject;
+    private final PublishSubject<T> subject;
 
     public RxEventBus() {
         subject = PublishSubject.create();
@@ -20,7 +20,7 @@ public class RxEventBus<T extends MagicEvent> {
     /**
      * Add an event to the bus
      * Will trigger anything subscribed to the Observable provided by getEvents()
-     * @param t
+     * @param t Event to be put on bus
      */
     public void addEvent(T t) {
         subject.onNext(t);
@@ -29,7 +29,7 @@ public class RxEventBus<T extends MagicEvent> {
     /**
      * Used to subscribe to this Observable
      * When subscribe, will respond every time something is added to the bus
-     * @return
+     * @return Get observable for Events that can subscribe to
      */
     public Observable<T> getEvents() {
         return subject;

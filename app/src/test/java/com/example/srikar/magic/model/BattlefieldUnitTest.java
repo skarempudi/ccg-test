@@ -20,9 +20,9 @@ import static org.junit.Assert.assertTrue;
  * Created by Srikar on 6/9/2016.
  */
 public class BattlefieldUnitTest {
-    final int NUM_LANDS = 0;
-    final int NUM_CREATURES = 3;
-    Battlefield battlefield;
+    private final int NUM_LANDS = 0;
+    private final int NUM_CREATURES = 3;
+    private final Battlefield battlefield;
 
     /**
      * Constructor, make Battlefield object

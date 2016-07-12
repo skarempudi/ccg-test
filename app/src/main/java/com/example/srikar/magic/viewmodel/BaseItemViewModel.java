@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.ImageView;
 
 import com.example.srikar.magic.R;
+import com.example.srikar.magic.event.RecyclerViewEvent;
 import com.squareup.picasso.Picasso;
 
 /**
@@ -16,5 +17,22 @@ import com.squareup.picasso.Picasso;
  * Created by Srikar on 5/20/2016.
  */
 public abstract class BaseItemViewModel extends BaseObservable {
+    RecyclerViewEvent.Target mTargetList;
+    int mPosition;
+
+    /**
+     * Implement loading image.
+     */
     public abstract void loadImage();
+
+    /**
+     * When RecyclerView Adapter binds View Holder, set the list and position where can find the
+     * relevant Card or Permanent.
+     * @param targetList Target that maps to a data model list
+     * @param position Position in that list, which should be the same as in the RecyclerView
+     */
+    public void setListPosition(RecyclerViewEvent.Target targetList, int position) {
+        mTargetList = targetList;
+        mPosition = position;
+    }
 }

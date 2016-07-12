@@ -13,7 +13,7 @@ import dagger.Provides;
  * Created by Srikar on 4/27/2016.
  */
 @Module
-public class HandModule {
+class HandModule {
     @Provides
     @Singleton
     public Hand provideHand(GameState state) {

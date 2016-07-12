@@ -13,7 +13,7 @@ import com.example.srikar.magic.dagger.MainComponent;
 public class MagicApplication extends Application {
     private static MagicApplication INSTANCE;
 
-    MainComponent mainComponent;
+    private MainComponent mainComponent;
 
     @Override
     public void onCreate() {

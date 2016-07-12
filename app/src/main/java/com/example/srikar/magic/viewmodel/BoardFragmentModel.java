@@ -31,20 +31,20 @@ public class BoardFragmentModel extends BaseObservable {
     @Inject
     protected GameState mGameState;
 
-    private Context mContext;
+    private final Context mContext;
     //view bindings for the Fragment
-    private FragmentBoardBinding mBinding;
+    private final FragmentBoardBinding mBinding;
 
     //used to store all onClick subscriptions, so can unsubscribe when destroy
-    private CompositeSubscription mOnClickSubs;
+    private final CompositeSubscription mOnClickSubs;
 
     /**
      * RecyclerView Models, which handle more complex interactions and communicate with the
      * data model classes.
      */
-    HandRecViewModel mHandRecViewModel;
-    BattlefieldRecViewModel mLandsRecViewModel;
-    BattlefieldRecViewModel mCreaturesRecViewModel;
+    private HandRecViewModel mHandRecViewModel;
+    private BattlefieldRecViewModel mLandsRecViewModel;
+    private BattlefieldRecViewModel mCreaturesRecViewModel;
 
     public BoardFragmentModel(Context context, FragmentBoardBinding binding) {
         Log.d(TAG, "BoardFragmentModel: Created");

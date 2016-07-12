@@ -25,25 +25,25 @@ import rx.Subscription;
 public abstract class BaseRecyclerViewModel extends BaseObservable {
     private static final String TAG = "BaseRecyclerViewModel";
 
-    protected final Context mContext;
+    final Context mContext;
     //adapter handles changes to the list, creates view models for Permanents or Cards
-    protected RecyclerView.Adapter mAdapter;
-    protected RecyclerView.LayoutManager mLayoutManager;
+    private RecyclerView.Adapter mAdapter;
+    private RecyclerView.LayoutManager mLayoutManager;
 
     //listens for changes in model so can update display
     @Inject
     protected RxEventBus<RecyclerViewEvent> mEventBus;
-    protected Subscription mRecyclerViewEventSub;
+    private final Subscription mRecyclerViewEventSub;
 
     //used to determine which data model list to populate the RecyclerView with
-    protected final RecyclerViewEvent.Target mTargetList;
+    final RecyclerViewEvent.Target mTargetList;
 
     /**
      * Base View Model for RecyclerView, which will handle interactions with the data model.
      * Subclasses handle which list from data model to use.
      * @param appContext Context used to create the LayoutManager
      */
-    protected BaseRecyclerViewModel(Context appContext, RecyclerViewEvent.Target targetList) {
+    BaseRecyclerViewModel(Context appContext, RecyclerViewEvent.Target targetList) {
         mContext = appContext;
         mTargetList = targetList;
         //injects instance of RecyclerView event bus
@@ -84,7 +84,7 @@ public abstract class BaseRecyclerViewModel extends BaseObservable {
      * By default, linear layout with horizontal orientation.
      * @return New horizontal LinearLayoutManager
      */
-    protected RecyclerView.LayoutManager getLayoutManager() {
+    private RecyclerView.LayoutManager getLayoutManager() {
         LinearLayoutManager manager = new LinearLayoutManager(mContext);
         manager.setOrientation(LinearLayoutManager.HORIZONTAL);
         return manager;
@@ -123,7 +123,7 @@ public abstract class BaseRecyclerViewModel extends BaseObservable {
      * Filtering handled by child implementation of getThisTarget()
      * @return The subscripton
      */
-    protected Subscription registerEventBus() {
+    private Subscription registerEventBus() {
         Log.d(TAG, "registerEventBus: ");
         return mEventBus.getEvents()
                 .filter(e -> e.target == mTargetList)
@@ -135,7 +135,7 @@ public abstract class BaseRecyclerViewModel extends BaseObservable {
      * @param event The event that acting on, either adding or removing element
      */
     @CallSuper
-    protected void actOnEvent(RecyclerViewEvent event) {
+    private void actOnEvent(RecyclerViewEvent event) {
         Log.d(TAG, "actOnEvent: " + event.toString());
         //if adding
         if (event.action == RecyclerViewEvent.Action.ADD) {

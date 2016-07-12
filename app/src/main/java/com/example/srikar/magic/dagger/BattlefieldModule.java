@@ -15,7 +15,7 @@ import dagger.Provides;
  * Created by Srikar on 5/18/2016.
  */
 @Module(includes = RxEventBusModule.class)
-public class BattlefieldModule {
+class BattlefieldModule {
     @Provides
     @Singleton
     public Battlefield provideBattlefield(RxEventBus<RecyclerViewEvent> rvEventBus,
