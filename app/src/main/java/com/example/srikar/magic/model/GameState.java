@@ -1,16 +1,29 @@
 package com.example.srikar.magic.model;
 
+import com.example.srikar.magic.MagicLog;
+import com.example.srikar.magic.event.GameStateChangeEvent;
+import com.example.srikar.magic.event.RxEventBus;
+
 /**
  * Class used to keep track of the general game state, such as whose turn it is, the life totals,
  * and if the game has ended.
  * Created by Srikar on 4/26/2016.
  */
 public class GameState {
+    private static final String TAG = "GameState";
+
+    /**
+     * Used to signal to BoardFragmentModel that game state changed
+     */
+    private final RxEventBus<GameStateChangeEvent> mGameStateChangeEventBus;
+
     private String mName;
     private int mCurrentPlayer; //the player whose turn it is
     private int mViewPlayer; //the player whose view is currently being used
 
-    public GameState() {
+    public GameState(RxEventBus<GameStateChangeEvent> rxEventBus) {
+        mGameStateChangeEventBus = rxEventBus;
+
         mName = "Hello GameState";
         mCurrentPlayer = PlayerID.ALICE; //starting player is Alice
         mViewPlayer = PlayerID.ALICE;
@@ -54,6 +67,8 @@ public class GameState {
      */
     public void switchViewPlayer() {
         mViewPlayer ^= 1; //swaps 0 to 1, and 1 to 0
+        //alert listening BoardFragmentModel that view player switched
+        addGameStateChangeEvent(GameStateChangeEvent.Action.SWITCH_VIEW_PLAYER);
     }
 
     /**
@@ -70,5 +85,20 @@ public class GameState {
      */
     public int getOtherViewPlayer() {
         return mViewPlayer ^ 1;
+    }
+
+    /***********************************************************************************************
+     * EVENT BUS
+     * Listeners access through Dagger injection for bus, not with getter.
+     **********************************************************************************************/
+    /**
+     * Add event to mGameStateChangeEventBus, which alerts the listening BoardFragmentModel
+     * @param action Right now, only action is to switch view player
+     */
+    private void addGameStateChangeEvent(GameStateChangeEvent.Action action) {
+        GameStateChangeEvent event = new GameStateChangeEvent(action);
+        MagicLog.d(TAG, "addGameStateChangeEvent: " + event.toString());
+
+        mGameStateChangeEventBus.addEvent(event);
     }
 }

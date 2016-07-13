@@ -6,8 +6,6 @@ import com.example.srikar.magic.event.RxEventBus;
 
 import java.util.ArrayList;
 
-import rx.Observable;
-
 /**
  * The Battlefield is where Permanents like Creatures get to interact
  * Display separately lands, creatures that are not attacking/blocking,
@@ -16,15 +14,19 @@ import rx.Observable;
  */
 public class Battlefield {
     private static final String TAG = "Battlefield";
-    private final ArrayList<Permanent>[] mLands, mCreatures;
-
     /**
-     * Used to signal to RecyclerViews for above ArrayLists that lists updated
+     * Used to signal to RecyclerViews for below ArrayLists that lists updated
+     * Injected during construction
      */
-    private final RxEventBus<ListChangeEvent> mRecyclerViewEventBus;
+    private final RxEventBus<ListChangeEvent> mListChangeEventBus;
     private final GameState mGameState;
 
+    private final ArrayList<Permanent>[] mLands, mCreatures;
+
     public Battlefield(RxEventBus<ListChangeEvent> rvEventBus, GameState gameState) {
+        mListChangeEventBus = rvEventBus;
+        mGameState = gameState;
+
         mLands = new ArrayList[2];
         mLands[PlayerID.ALICE] = new ArrayList<>();
         mLands[PlayerID.BOB] = new ArrayList<>();
@@ -32,9 +34,6 @@ public class Battlefield {
         mCreatures = new ArrayList[2];
         mCreatures[PlayerID.ALICE] = new ArrayList<>();
         mCreatures[PlayerID.BOB] = new ArrayList<>();
-
-        mRecyclerViewEventBus = rvEventBus;
-        mGameState = gameState;
     }
 
     /**
@@ -88,7 +87,7 @@ public class Battlefield {
      * @param playerID Either PlayerID.ALICE or PlayerID.BOB
      * @param creature Creature
      */
-    void addCreature(int playerID, Permanent creature) {
+    public void addCreature(int playerID, Permanent creature) {
         MagicLog.d(TAG, "addCreature: " + creature.toString() + " for " + playerID);
         mCreatures[playerID].add(creature);
     }
@@ -174,7 +173,7 @@ public class Battlefield {
 
         //alert RecyclerView that position has updated, and Permanent should be drawn tapped or
         //untapped
-        addRecyclerViewEvent(
+        addListChangeEvent(
                 ListChangeEvent.ListName.CREATURES,
                 ListChangeEvent.Action.UPDATE,
                 position
@@ -183,27 +182,18 @@ public class Battlefield {
 
     /***********************************************************************************************
      * EVENT BUS
+     * Listeners access through Dagger injection for bus, not with getter.
      **********************************************************************************************/
-
     /**
-     * Get Observable for event bus for RecyclerViewEvents, which can subscribe to for events that
-     * would update the RecyclerViews for mLands, mCreatures, and mCombat
-     * @return Observable that can subscribe to
-     */
-    public Observable<ListChangeEvent> getRecyclerViewEvents() {
-        return mRecyclerViewEventBus.getEvents();
-    }
-
-    /**
-     * Add event to mRecyclerViewEventBus, which alerts the specified RecyclerView to update
+     * Add event to mListChangeEventBus, which alerts the specified RecyclerView to update
      * @param listName Which RecyclerView, using ListChangeEvent.ListName
-     * @param action Whether to add or remove, using ListChangeEvent.Action
+     * @param action Whether to add, remove, or update, using ListChangeEvent.Action
      * @param index What index to update in list
      */
-    private void addRecyclerViewEvent(ListChangeEvent.ListName listName, ListChangeEvent.Action action, int index) {
+    private void addListChangeEvent(ListChangeEvent.ListName listName, ListChangeEvent.Action action, int index) {
         ListChangeEvent event = new ListChangeEvent(listName, action, index);
-        MagicLog.d(TAG, "addRecyclerViewEvent: " + event.toString());
+        MagicLog.d(TAG, "addListChangeEvent: " + event.toString());
 
-        mRecyclerViewEventBus.addEvent(event);
+        mListChangeEventBus.addEvent(event);
     }
 }

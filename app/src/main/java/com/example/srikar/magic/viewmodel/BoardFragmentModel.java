@@ -8,7 +8,9 @@ import com.example.srikar.magic.MagicApplication;
 import com.example.srikar.magic.MagicLog;
 import com.example.srikar.magic.R;
 import com.example.srikar.magic.databinding.FragmentBoardBinding;
+import com.example.srikar.magic.event.GameStateChangeEvent;
 import com.example.srikar.magic.event.ListChangeEvent;
+import com.example.srikar.magic.event.RxEventBus;
 import com.example.srikar.magic.model.GameState;
 import com.example.srikar.magic.model.PlayerID;
 import com.example.srikar.magic.viewmodel.recyclerview.BattlefieldRecViewModel;
@@ -35,8 +37,10 @@ public class BoardFragmentModel extends BaseObservable {
     //view bindings for the Fragment
     private final FragmentBoardBinding mBinding;
 
-    //used to store all onClick subscriptions, so can unsubscribe when destroy
-    private final CompositeSubscription mOnClickSubs;
+    @Inject
+    protected RxEventBus<GameStateChangeEvent> mGameStateChangeEventBus;
+    //used to store all subscriptions, so can unsubscribe when destroy
+    private final CompositeSubscription mSubscriptions;
 
     /**
      * RecyclerView Models, which handle more complex interactions and communicate with the
@@ -57,7 +61,7 @@ public class BoardFragmentModel extends BaseObservable {
         mBinding = binding;
 
         //used to hold onClick subscriptions
-        mOnClickSubs = new CompositeSubscription();
+        mSubscriptions = new CompositeSubscription();
 
         //set the backgrounds
         setBackgrounds();
@@ -72,6 +76,9 @@ public class BoardFragmentModel extends BaseObservable {
 
         //register on click event handlers
         registerOnClicks();
+
+        //register listener for changes in GameState
+        mSubscriptions.add(registerEventBus());
     }
 
     /**
@@ -136,18 +143,21 @@ public class BoardFragmentModel extends BaseObservable {
                 .throttleFirst(AppConstants.CLICK_DELAY, TimeUnit.MILLISECONDS) //ignore double clicks
                 .subscribe(empty -> switchPlayerOnClick());
 
-        mOnClickSubs.add(switchSub);
+        mSubscriptions.add(switchSub);
     }
 
     /**
-     * When click the switch player button, switches the view player.
-     * Updates the backgrounds.
+     * When click the switch player button, switches the view player in data model
      */
     private void switchPlayerOnClick() {
         //switch the player in the data model
         mGameState.switchViewPlayer();
+    }
 
-        //TODO: Should separate into listener for EventBus
+    /**
+     * When switch view player, change backgrounds and update Adapters
+     */
+    private void handleSwitchViewPlayer() {
         //updates the backgrounds
         setBackgrounds();
 
@@ -161,14 +171,31 @@ public class BoardFragmentModel extends BaseObservable {
      * Call when containing View or Fragment is destroyed, will unregister Subscriptions
      */
     public void onDestroy() {
-        //remove onClick subscriptions
-        if (mOnClickSubs != null) {
-            mOnClickSubs.unsubscribe();
+        //remove all subscriptions
+        if (mSubscriptions != null) {
+            mSubscriptions.unsubscribe();
         }
 
         //for each RecyclerViewModel, remove the subscriptions to RxJava Observables
         mHandRecViewModel.onDestroy();
         mLandsRecViewModel.onDestroy();
         mCreaturesRecViewModel.onDestroy();
+    }
+
+    /***********************************************************************************************
+     * EVENT BUS
+     **********************************************************************************************/
+    private Subscription registerEventBus() {
+        MagicLog.d(TAG, "registerEventBus: ");
+        return mGameStateChangeEventBus.getEvents()
+                .subscribe(this::actOnEvent);
+    }
+
+    private void actOnEvent(GameStateChangeEvent event) {
+        MagicLog.d(TAG, "actOnEvent: " + event.toString());
+        //if switching view player
+        if (event.action == GameStateChangeEvent.Action.SWITCH_VIEW_PLAYER) {
+            handleSwitchViewPlayer();
+        }
     }
 }

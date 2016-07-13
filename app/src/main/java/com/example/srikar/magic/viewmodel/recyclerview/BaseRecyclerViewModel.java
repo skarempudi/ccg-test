@@ -32,7 +32,7 @@ public abstract class BaseRecyclerViewModel extends BaseObservable {
 
     //listens for changes in model so can update display
     @Inject
-    protected RxEventBus<ListChangeEvent> mEventBus;
+    protected RxEventBus<ListChangeEvent> mListChangeEventBus;
     private final Subscription mRecyclerViewEventSub;
 
     //used to determine which data model list to populate the RecyclerView with
@@ -120,12 +120,12 @@ public abstract class BaseRecyclerViewModel extends BaseObservable {
 
     /**
      * Register to event bus for RecyclerView events
-     * Filtering handled by child implementation of getThisTarget()
+     * Filtering handled based on list name given during creation of this view model
      * @return The subscripton
      */
     private Subscription registerEventBus() {
         MagicLog.d(TAG, "registerEventBus: ");
-        return mEventBus.getEvents()
+        return mListChangeEventBus.getEvents()
                 .filter(e -> e.listName == mListName)
                 .subscribe(this::actOnEvent);
     }
@@ -134,9 +134,8 @@ public abstract class BaseRecyclerViewModel extends BaseObservable {
      * When hear of event where relevant list updated, update the view to match
      * @param event The event that acting on, either adding or removing element
      */
-    @CallSuper
     private void actOnEvent(ListChangeEvent event) {
-        MagicLog.d(TAG, "actOnEvent: ");
+        MagicLog.d(TAG, "actOnEvent: " + event.toString());
         //if adding
         if (event.action == ListChangeEvent.Action.ADD) {
             mAdapter.notifyItemInserted(event.index);

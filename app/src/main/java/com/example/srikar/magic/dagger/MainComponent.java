@@ -1,5 +1,7 @@
 package com.example.srikar.magic.dagger;
 
+import com.example.srikar.magic.MagicApplication;
+import com.example.srikar.magic.MainActivity;
 import com.example.srikar.magic.viewmodel.BoardFragmentModel;
 import com.example.srikar.magic.viewmodel.recyclerview.BaseRecyclerViewModel;
 import com.example.srikar.magic.viewmodel.PermanentViewModel;
@@ -22,4 +24,6 @@ public interface MainComponent {
     void inject(BattlefieldRecViewModel viewModel);
     void inject(HandRecViewModel viewModel);
     void inject(PermanentViewModel viewModel);
+    //remove later
+    void inject(MagicApplication app);
 }

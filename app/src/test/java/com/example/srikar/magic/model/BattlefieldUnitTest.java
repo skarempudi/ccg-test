@@ -25,7 +25,7 @@ public class BattlefieldUnitTest {
      * Constructor, make Battlefield object
      */
     public BattlefieldUnitTest() {
-        battlefield = new Battlefield(new RxEventBus<>(), new GameState());
+        battlefield = new Battlefield(new RxEventBus<>(), new GameState(new RxEventBus<>()));
         MagicLog.setLogging(false);
     }
 
