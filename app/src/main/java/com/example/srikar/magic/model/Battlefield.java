@@ -2,6 +2,8 @@ package com.example.srikar.magic.model;
 
 import android.util.Log;
 
+import com.example.srikar.magic.AppConstants;
+import com.example.srikar.magic.MagicLog;
 import com.example.srikar.magic.event.RecyclerViewEvent;
 import com.example.srikar.magic.event.RxEventBus;
 
@@ -33,12 +35,6 @@ public class Battlefield {
         mCreatures = new ArrayList[2];
         mCreatures[PlayerID.ALICE] = new ArrayList<>();
         mCreatures[PlayerID.BOB] = new ArrayList<>();
-
-        //temporary default permanents
-        for (int i = 0; i < 3; i++) {
-            Card card = new Card(i);
-            mCreatures[PlayerID.ALICE].add(new Permanent(card));
-        }
 
         mRecyclerViewEventBus = rvEventBus;
         mGameState = gameState;
@@ -96,6 +92,7 @@ public class Battlefield {
      * @param creature Creature
      */
     void addCreature(int playerID, Permanent creature) {
+        MagicLog.d(TAG, "addCreature: " + creature.toString() + " for " + playerID);
         mCreatures[playerID].add(creature);
     }
 
@@ -169,12 +166,12 @@ public class Battlefield {
 
         //if creature tapped, untap it
         if (creature.isTapped()) {
-            Log.d(TAG, "onViewPlayerCreatureClicked: Creature at position " + position + " tapped, untapping");
+            MagicLog.d(TAG, "onViewPlayerCreatureClicked: Creature at position " + position + " tapped, untapping");
             creature.untap();
         }
         //if creature not tapped, tap it
         else {
-            Log.d(TAG, "onViewPlayerCreatureClicked: Creature at position " + position + " untapped, tapping");
+            MagicLog.d(TAG, "onViewPlayerCreatureClicked: Creature at position " + position + " untapped, tapping");
             creature.tap();
         }
 
@@ -208,7 +205,8 @@ public class Battlefield {
      */
     private void addRecyclerViewEvent(RecyclerViewEvent.Target target, RecyclerViewEvent.Action action, int index) {
         RecyclerViewEvent event = new RecyclerViewEvent(target, action, index);
-//        Log.d(TAG, "addRecyclerViewEvent: " + event.toString());
+        MagicLog.d(TAG, "addRecyclerViewEvent: " + event.toString());
+
         mRecyclerViewEventBus.addEvent(event);
     }
 }

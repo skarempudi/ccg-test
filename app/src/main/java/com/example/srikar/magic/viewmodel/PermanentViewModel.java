@@ -5,6 +5,7 @@ import android.widget.ImageView;
 
 import com.example.srikar.magic.AppConstants;
 import com.example.srikar.magic.MagicApplication;
+import com.example.srikar.magic.MagicLog;
 import com.example.srikar.magic.R;
 import com.example.srikar.magic.databinding.PermanentBinding;
 import com.example.srikar.magic.model.Battlefield;
@@ -66,14 +67,14 @@ public class PermanentViewModel extends BaseItemViewModel {
         //if tapped, rotate 90 degrees
         //in future, will instead have a set of custom transformations that apply
         if (perm.isTapped()) {
-            Log.d(TAG, "loadImage: Drawing tapped");
+            MagicLog.d(TAG, "loadImage: Drawing tapped");
             Picasso.with(view.getContext())
                     .load(R.drawable.ic_launcher)
                     .rotate(90f)
                     .into(view);
         }
         else {
-            Log.d(TAG, "loadImage: Drawing untapped");
+            MagicLog.d(TAG, "loadImage: Drawing untapped");
             Picasso.with(view.getContext())
                     .load(R.drawable.ic_launcher)
                     .into(view);

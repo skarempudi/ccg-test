@@ -7,7 +7,9 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 
+import com.example.srikar.magic.AppConstants;
 import com.example.srikar.magic.MagicApplication;
+import com.example.srikar.magic.MagicLog;
 import com.example.srikar.magic.event.RecyclerViewEvent;
 import com.example.srikar.magic.event.RxEventBus;
 
@@ -124,7 +126,7 @@ public abstract class BaseRecyclerViewModel extends BaseObservable {
      * @return The subscripton
      */
     private Subscription registerEventBus() {
-        Log.d(TAG, "registerEventBus: ");
+        MagicLog.d(TAG, "registerEventBus: ");
         return mEventBus.getEvents()
                 .filter(e -> e.target == mTargetList)
                 .subscribe(this::actOnEvent);
@@ -136,7 +138,7 @@ public abstract class BaseRecyclerViewModel extends BaseObservable {
      */
     @CallSuper
     private void actOnEvent(RecyclerViewEvent event) {
-        Log.d(TAG, "actOnEvent: " + event.toString());
+        MagicLog.d(TAG, "actOnEvent: ");
         //if adding
         if (event.action == RecyclerViewEvent.Action.ADD) {
             mAdapter.notifyItemInserted(event.index);

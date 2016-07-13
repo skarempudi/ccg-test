@@ -2,6 +2,9 @@ package com.example.srikar.magic.model;
 
 import android.util.Log;
 
+import com.example.srikar.magic.AppConstants;
+import com.example.srikar.magic.MagicLog;
+
 /**
  * Used on the Battlefield
  * If a Permanent is not a Token, then it has a Card.
@@ -27,12 +30,11 @@ public class Permanent {
 
     /**
      * Tap the permanent.
-     * @return If tap action succeeded
      */
     public void tap() {
         //if already tapped, tap action doesn't occur
         if (tapped) {
-            Log.d(TAG, "tap: Already tapped, no action");
+            MagicLog.d(TAG, "tap: Already tapped, no action");
             return;
         }
 
@@ -41,12 +43,11 @@ public class Permanent {
 
     /**
      * Untap the permanent.
-     * @return If untap action succeeded
      */
     public void untap() {
         //if already untapped, untap action doesn't occur
         if (!tapped) {
-            Log.d(TAG, "untap: Already untapped, no action");
+            MagicLog.d(TAG, "untap: Already untapped, no action");
             return;
         }
 
@@ -54,7 +55,7 @@ public class Permanent {
     }
 
     public void onClick() {
-        Log.d(TAG, "onClick: " + mCard.mId);
+        MagicLog.d(TAG, "onClick: " + toString());
     }
 
     @Override

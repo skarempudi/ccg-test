@@ -6,6 +6,7 @@ import android.util.Log;
 
 import com.example.srikar.magic.AppConstants;
 import com.example.srikar.magic.MagicApplication;
+import com.example.srikar.magic.MagicLog;
 import com.example.srikar.magic.R;
 import com.example.srikar.magic.databinding.FragmentBoardBinding;
 import com.example.srikar.magic.event.RecyclerViewEvent;
@@ -47,7 +48,7 @@ public class BoardFragmentModel extends BaseObservable {
     private BattlefieldRecViewModel mCreaturesRecViewModel;
 
     public BoardFragmentModel(Context context, FragmentBoardBinding binding) {
-        Log.d(TAG, "BoardFragmentModel: Created");
+        MagicLog.d(TAG, "BoardFragmentModel: Created");
         //get instance of GameState
         MagicApplication.getInstance()
                 .getMainComponent()
@@ -95,11 +96,11 @@ public class BoardFragmentModel extends BaseObservable {
     private void setBackgrounds() {
         int backgroundResource;
         if (mGameState.getViewPlayer() == PlayerID.ALICE) {
-            Log.d(TAG, "setBackgrounds: Alice");
+            MagicLog.d(TAG, "setBackgrounds: Alice");
             backgroundResource = R.drawable.alice_border;
         }
         else {
-            Log.d(TAG, "setBackgrounds: Bob");
+            MagicLog.d(TAG, "setBackgrounds: Bob");
             backgroundResource = R.drawable.bob_border;
         }
 

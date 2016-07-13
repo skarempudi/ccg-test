@@ -1,5 +1,6 @@
 package com.example.srikar.magic.model;
 
+import com.example.srikar.magic.MagicLog;
 import com.example.srikar.magic.event.RecyclerViewEvent;
 import com.example.srikar.magic.event.RxEventBus;
 
@@ -29,6 +30,7 @@ public class BattlefieldUnitTest {
      */
     public BattlefieldUnitTest() {
         battlefield = new Battlefield(new RxEventBus<>(), new GameState());
+        MagicLog.setLogging(false);
     }
 
     @Before
@@ -70,7 +72,7 @@ public class BattlefieldUnitTest {
         for (int i = 0; i < NUM_CREATURES; i++) {
             Permanent creature = battlefield.getViewPlayerCreature(i);
             assertTrue("The id is " + creature.toString(),
-                    creature.toString().compareTo("" + i) == 0);
+                    creature.toString().compareTo(i + " untapped") == 0);
         }
     }
 
@@ -97,7 +99,7 @@ public class BattlefieldUnitTest {
 
         Permanent land = battlefield.getViewPlayerLand(NUM_LANDS);
         assertTrue("The id is " + land.toString(),
-                land.toString().compareTo("" + 0) == 0);
+                land.toString().compareTo("0 untapped") == 0);
     }
 
 //    @Test

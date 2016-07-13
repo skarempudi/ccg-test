@@ -19,7 +19,7 @@ import com.example.srikar.magic.viewmodel.recyclerview.BaseRecyclerViewModel;
  * Created by Srikar on 5/20/2016.
  */
 public class BattlefieldRecViewAdapter extends BaseRecViewAdapter {
-    protected static final String TAG = "BattlefieldRecViewAdapter";
+    private static final String TAG = "BattlefieldRecViewAdapter";
 
     /**
      * Constructor, takes RecyclerViewModel and Target to make sure data model interaction is handled
