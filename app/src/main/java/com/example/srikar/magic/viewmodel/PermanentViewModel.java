@@ -1,6 +1,5 @@
 package com.example.srikar.magic.viewmodel;
 
-import android.util.Log;
 import android.widget.ImageView;
 
 import com.example.srikar.magic.AppConstants;
@@ -51,7 +50,7 @@ public class PermanentViewModel extends BaseItemViewModel {
      * RecyclerViewModel, which tells the RecyclerView Adapter to update at this position
      */
     private void onImageClick() {
-        mBattlefield.onViewPlayerPermanentClicked(mTargetList, mPosition);
+        mBattlefield.onViewPlayerPermanentClicked(mListName, mPosition);
     }
 
     /**
@@ -82,11 +81,11 @@ public class PermanentViewModel extends BaseItemViewModel {
     }
 
     /**
-     * Using the target list and the position in that list, get the Permanent that matches to this
+     * Using the listName list and the position in that list, get the Permanent that matches to this
      * position in the RecyclerView
      * @return Permanent
      */
     private Permanent retrievePermanent() {
-        return mBattlefield.getViewPlayerPermanent(mTargetList, mPosition);
+        return mBattlefield.getViewPlayerPermanent(mListName, mPosition);
     }
 }

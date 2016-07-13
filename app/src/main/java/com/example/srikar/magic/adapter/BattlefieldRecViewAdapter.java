@@ -2,13 +2,12 @@ package com.example.srikar.magic.adapter;
 
 import android.content.Context;
 import android.databinding.DataBindingUtil;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
 import com.example.srikar.magic.R;
 import com.example.srikar.magic.databinding.PermanentBinding;
-import com.example.srikar.magic.event.RecyclerViewEvent;
+import com.example.srikar.magic.event.ListChangeEvent;
 import com.example.srikar.magic.viewmodel.PermanentViewModel;
 import com.example.srikar.magic.viewmodel.recyclerview.BaseRecyclerViewModel;
 
@@ -22,15 +21,15 @@ public class BattlefieldRecViewAdapter extends BaseRecViewAdapter {
     private static final String TAG = "BattlefieldRecViewAdapter";
 
     /**
-     * Constructor, takes RecyclerViewModel and Target to make sure data model interaction is handled
+     * Constructor, takes RecyclerViewModel and ListName to make sure data model interaction is handled
      * by view models instead of this
      * @param activityContext Context used to inflate layout
      * @param recViewModel RecyclerViewModel that created this Adapter
-     * @param targetList Target that maps to a list in Battlefield, used to populate this RecyclerView
+     * @param listName ListName that maps to a list in Battlefield, used to populate this RecyclerView
      */
     public BattlefieldRecViewAdapter(Context activityContext, BaseRecyclerViewModel recViewModel,
-                                     RecyclerViewEvent.Target targetList) {
-        super(activityContext, recViewModel, targetList);
+                                     ListChangeEvent.ListName listName) {
+        super(activityContext, recViewModel, listName);
     }
 
     /**

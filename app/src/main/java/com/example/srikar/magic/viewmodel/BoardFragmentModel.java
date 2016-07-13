@@ -2,14 +2,13 @@ package com.example.srikar.magic.viewmodel;
 
 import android.content.Context;
 import android.databinding.BaseObservable;
-import android.util.Log;
 
 import com.example.srikar.magic.AppConstants;
 import com.example.srikar.magic.MagicApplication;
 import com.example.srikar.magic.MagicLog;
 import com.example.srikar.magic.R;
 import com.example.srikar.magic.databinding.FragmentBoardBinding;
-import com.example.srikar.magic.event.RecyclerViewEvent;
+import com.example.srikar.magic.event.ListChangeEvent;
 import com.example.srikar.magic.model.GameState;
 import com.example.srikar.magic.model.PlayerID;
 import com.example.srikar.magic.viewmodel.recyclerview.BattlefieldRecViewModel;
@@ -83,10 +82,10 @@ public class BoardFragmentModel extends BaseObservable {
             mHandRecViewModel = new HandRecViewModel(mContext);
         }
         if (mLandsRecViewModel == null) {
-            mLandsRecViewModel = new BattlefieldRecViewModel(mContext, RecyclerViewEvent.Target.LANDS);
+            mLandsRecViewModel = new BattlefieldRecViewModel(mContext, ListChangeEvent.ListName.LANDS);
         }
         if (mCreaturesRecViewModel == null) {
-            mCreaturesRecViewModel = new BattlefieldRecViewModel(mContext, RecyclerViewEvent.Target.CREATURES);
+            mCreaturesRecViewModel = new BattlefieldRecViewModel(mContext, ListChangeEvent.ListName.CREATURES);
         }
     }
 

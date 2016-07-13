@@ -1,6 +1,6 @@
 package com.example.srikar.magic.dagger;
 
-import com.example.srikar.magic.event.RecyclerViewEvent;
+import com.example.srikar.magic.event.ListChangeEvent;
 import com.example.srikar.magic.event.RxEventBus;
 import com.example.srikar.magic.model.Battlefield;
 import com.example.srikar.magic.model.GameState;
@@ -18,7 +18,7 @@ import dagger.Provides;
 class BattlefieldModule {
     @Provides
     @Singleton
-    public Battlefield provideBattlefield(RxEventBus<RecyclerViewEvent> rvEventBus,
+    public Battlefield provideBattlefield(RxEventBus<ListChangeEvent> rvEventBus,
                                           GameState state) {
         return new Battlefield(rvEventBus, state);
     }

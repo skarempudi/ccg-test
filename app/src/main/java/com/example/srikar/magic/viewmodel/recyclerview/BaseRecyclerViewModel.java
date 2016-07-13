@@ -5,12 +5,10 @@ import android.databinding.BaseObservable;
 import android.support.annotation.CallSuper;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 
-import com.example.srikar.magic.AppConstants;
 import com.example.srikar.magic.MagicApplication;
 import com.example.srikar.magic.MagicLog;
-import com.example.srikar.magic.event.RecyclerViewEvent;
+import com.example.srikar.magic.event.ListChangeEvent;
 import com.example.srikar.magic.event.RxEventBus;
 
 import javax.inject.Inject;
@@ -34,20 +32,20 @@ public abstract class BaseRecyclerViewModel extends BaseObservable {
 
     //listens for changes in model so can update display
     @Inject
-    protected RxEventBus<RecyclerViewEvent> mEventBus;
+    protected RxEventBus<ListChangeEvent> mEventBus;
     private final Subscription mRecyclerViewEventSub;
 
     //used to determine which data model list to populate the RecyclerView with
-    final RecyclerViewEvent.Target mTargetList;
+    final ListChangeEvent.ListName mListName;
 
     /**
      * Base View Model for RecyclerView, which will handle interactions with the data model.
      * Subclasses handle which list from data model to use.
      * @param appContext Context used to create the LayoutManager
      */
-    BaseRecyclerViewModel(Context appContext, RecyclerViewEvent.Target targetList) {
+    BaseRecyclerViewModel(Context appContext, ListChangeEvent.ListName listName) {
         mContext = appContext;
-        mTargetList = targetList;
+        mListName = listName;
         //injects instance of RecyclerView event bus
         MagicApplication.getInstance()
                 .getMainComponent()
@@ -128,7 +126,7 @@ public abstract class BaseRecyclerViewModel extends BaseObservable {
     private Subscription registerEventBus() {
         MagicLog.d(TAG, "registerEventBus: ");
         return mEventBus.getEvents()
-                .filter(e -> e.target == mTargetList)
+                .filter(e -> e.listName == mListName)
                 .subscribe(this::actOnEvent);
     }
 
@@ -137,18 +135,18 @@ public abstract class BaseRecyclerViewModel extends BaseObservable {
      * @param event The event that acting on, either adding or removing element
      */
     @CallSuper
-    private void actOnEvent(RecyclerViewEvent event) {
+    private void actOnEvent(ListChangeEvent event) {
         MagicLog.d(TAG, "actOnEvent: ");
         //if adding
-        if (event.action == RecyclerViewEvent.Action.ADD) {
+        if (event.action == ListChangeEvent.Action.ADD) {
             mAdapter.notifyItemInserted(event.index);
         }
         //if removing
-        else if (event.action == RecyclerViewEvent.Action.REMOVE) {
+        else if (event.action == ListChangeEvent.Action.REMOVE) {
             mAdapter.notifyItemRemoved(event.index);
         }
         //if updating
-        else if (event.action == RecyclerViewEvent.Action.UPDATE) {
+        else if (event.action == ListChangeEvent.Action.UPDATE) {
             mAdapter.notifyItemChanged(event.index);
         }
     }

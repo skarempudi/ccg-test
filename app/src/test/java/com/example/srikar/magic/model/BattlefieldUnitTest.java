@@ -1,16 +1,12 @@
 package com.example.srikar.magic.model;
 
 import com.example.srikar.magic.MagicLog;
-import com.example.srikar.magic.event.RecyclerViewEvent;
 import com.example.srikar.magic.event.RxEventBus;
 
 
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-
-import rx.Subscription;
-import rx.schedulers.Schedulers;
 
 import static org.junit.Assert.assertTrue;
 
@@ -195,15 +191,15 @@ public class BattlefieldUnitTest {
 //     * For testMoveToAttack_RecyclerViewEventBus(), listen for the Events on RxEventBus
 //     * @param event Event used to update RecyclerView in response to change in list
 //     */
-//    private void testMoveToAttack_RecyclerViewEventBus_Sub(RecyclerViewEvent event) {
-//        if (event.action == RecyclerViewEvent.Action.ADD) {
+//    private void testMoveToAttack_RecyclerViewEventBus_Sub(ListChangeEvent event) {
+//        if (event.action == ListChangeEvent.Action.ADD) {
 //            testMoveToAttack_RecyclerViewEventBus_add =
-//                    event.target == RecyclerViewEvent.Target.COMBAT
+//                    event.listName == ListChangeEvent.ListName.COMBAT
 //                    && event.index == NUM_COMBAT;
 //        }
-//        else if (event.action == RecyclerViewEvent.Action.REMOVE) {
+//        else if (event.action == ListChangeEvent.Action.REMOVE) {
 //            testMoveToAttack_RecyclerViewEventBus_remove =
-//                    event.target == RecyclerViewEvent.Target.CREATURES
+//                    event.listName == ListChangeEvent.ListName.CREATURES
 //                    && event.index == 0;
 //        }
 //    }
@@ -240,15 +236,15 @@ public class BattlefieldUnitTest {
 //     * For testUndoAttackDeclaration_RecyclerViewEventBus(), listen for the Events on RxEventBus
 //     * @param event Event used to update RecyclerView in response to change in list
 //     */
-//    private void testUndoAttackDeclaration_RecyclerViewEventBus_Sub(RecyclerViewEvent event) {
-//        if (event.action == RecyclerViewEvent.Action.ADD) {
+//    private void testUndoAttackDeclaration_RecyclerViewEventBus_Sub(ListChangeEvent event) {
+//        if (event.action == ListChangeEvent.Action.ADD) {
 //            testUndoAttackDeclaration_RecyclerViewEventBus_add =
-//                    event.target == RecyclerViewEvent.Target.CREATURES
+//                    event.listName == ListChangeEvent.ListName.CREATURES
 //                            && event.index == NUM_CREATURES;
 //        }
-//        else if (event.action == RecyclerViewEvent.Action.REMOVE) {
+//        else if (event.action == ListChangeEvent.Action.REMOVE) {
 //            testUndoAttackDeclaration_RecyclerViewEventBus_remove =
-//                    event.target == RecyclerViewEvent.Target.COMBAT
+//                    event.listName == ListChangeEvent.ListName.COMBAT
 //                            && event.index == NUM_COMBAT;
 //        }
 //    }

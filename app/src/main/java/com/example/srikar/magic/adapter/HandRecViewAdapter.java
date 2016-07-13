@@ -2,14 +2,12 @@ package com.example.srikar.magic.adapter;
 
 import android.content.Context;
 import android.databinding.DataBindingUtil;
-import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
 import com.example.srikar.magic.databinding.CardBinding;
 import com.example.srikar.magic.R;
-import com.example.srikar.magic.event.RecyclerViewEvent;
+import com.example.srikar.magic.event.ListChangeEvent;
 import com.example.srikar.magic.viewmodel.CardViewModel;
 import com.example.srikar.magic.viewmodel.recyclerview.BaseRecyclerViewModel;
 
@@ -25,7 +23,7 @@ public class HandRecViewAdapter extends BaseRecViewAdapter {
      * @param activityContext Used to inflate views
      */
     public HandRecViewAdapter(Context activityContext, BaseRecyclerViewModel recyclerViewModel) {
-        super(activityContext, recyclerViewModel, RecyclerViewEvent.Target.HAND);
+        super(activityContext, recyclerViewModel, ListChangeEvent.ListName.HAND);
     }
 
     @Override

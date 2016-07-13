@@ -1,10 +1,7 @@
 package com.example.srikar.magic.model;
 
-import android.util.Log;
-
-import com.example.srikar.magic.AppConstants;
 import com.example.srikar.magic.MagicLog;
-import com.example.srikar.magic.event.RecyclerViewEvent;
+import com.example.srikar.magic.event.ListChangeEvent;
 import com.example.srikar.magic.event.RxEventBus;
 
 import java.util.ArrayList;
@@ -24,10 +21,10 @@ public class Battlefield {
     /**
      * Used to signal to RecyclerViews for above ArrayLists that lists updated
      */
-    private final RxEventBus<RecyclerViewEvent> mRecyclerViewEventBus;
+    private final RxEventBus<ListChangeEvent> mRecyclerViewEventBus;
     private final GameState mGameState;
 
-    public Battlefield(RxEventBus<RecyclerViewEvent> rvEventBus, GameState gameState) {
+    public Battlefield(RxEventBus<ListChangeEvent> rvEventBus, GameState gameState) {
         mLands = new ArrayList[2];
         mLands[PlayerID.ALICE] = new ArrayList<>();
         mLands[PlayerID.BOB] = new ArrayList<>();
@@ -42,12 +39,12 @@ public class Battlefield {
 
     /**
      * Get a permanent from the specified list for the player that is viewing
-     * @param targetList The list that is being targeted
+     * @param listName The list that is being targeted
      * @param position The position in the list
      * @return The permanent
      */
-    public Permanent getViewPlayerPermanent(RecyclerViewEvent.Target targetList, int position) {
-        switch(targetList) {
+    public Permanent getViewPlayerPermanent(ListChangeEvent.ListName listName, int position) {
+        switch(listName) {
             case LANDS:
                 return getViewPlayerLand(position);
 
@@ -100,12 +97,12 @@ public class Battlefield {
      * Methods to return size of list
      */
     /**
-     * Gets the size of the list that matches to the given target.
-     * @param targetList The list being targeted
+     * Gets the size of the list that matches to the given listName.
+     * @param listName The list being targeted
      * @return The size of that list
      */
-    public int getViewPlayerListSize(RecyclerViewEvent.Target targetList) {
-        switch(targetList) {
+    public int getViewPlayerListSize(ListChangeEvent.ListName listName) {
+        switch(listName) {
             case LANDS:
                 return getViewPlayerLandsSize();
 
@@ -141,8 +138,8 @@ public class Battlefield {
      * Right now, just taps or untaps creature.
      * @param position Position in view player creatures list, which matches position in RecyclerView
      */
-    public void onViewPlayerPermanentClicked(RecyclerViewEvent.Target targetList, int position) {
-        switch(targetList) {
+    public void onViewPlayerPermanentClicked(ListChangeEvent.ListName listName, int position) {
+        switch(listName) {
             case LANDS:
                 return;
 
@@ -178,8 +175,8 @@ public class Battlefield {
         //alert RecyclerView that position has updated, and Permanent should be drawn tapped or
         //untapped
         addRecyclerViewEvent(
-                RecyclerViewEvent.Target.CREATURES,
-                RecyclerViewEvent.Action.UPDATE,
+                ListChangeEvent.ListName.CREATURES,
+                ListChangeEvent.Action.UPDATE,
                 position
         );
     }
@@ -193,18 +190,18 @@ public class Battlefield {
      * would update the RecyclerViews for mLands, mCreatures, and mCombat
      * @return Observable that can subscribe to
      */
-    public Observable<RecyclerViewEvent> getRecyclerViewEvents() {
+    public Observable<ListChangeEvent> getRecyclerViewEvents() {
         return mRecyclerViewEventBus.getEvents();
     }
 
     /**
      * Add event to mRecyclerViewEventBus, which alerts the specified RecyclerView to update
-     * @param target Which RecyclerView, using RecyclerViewEvent.Target
-     * @param action Whether to add or remove, using RecyclerViewEvent.Action
+     * @param listName Which RecyclerView, using ListChangeEvent.ListName
+     * @param action Whether to add or remove, using ListChangeEvent.Action
      * @param index What index to update in list
      */
-    private void addRecyclerViewEvent(RecyclerViewEvent.Target target, RecyclerViewEvent.Action action, int index) {
-        RecyclerViewEvent event = new RecyclerViewEvent(target, action, index);
+    private void addRecyclerViewEvent(ListChangeEvent.ListName listName, ListChangeEvent.Action action, int index) {
+        ListChangeEvent event = new ListChangeEvent(listName, action, index);
         MagicLog.d(TAG, "addRecyclerViewEvent: " + event.toString());
 
         mRecyclerViewEventBus.addEvent(event);

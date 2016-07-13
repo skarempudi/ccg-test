@@ -5,7 +5,7 @@ import android.databinding.ViewDataBinding;
 import android.support.v7.widget.RecyclerView;
 import android.view.ViewGroup;
 
-import com.example.srikar.magic.event.RecyclerViewEvent;
+import com.example.srikar.magic.event.ListChangeEvent;
 import com.example.srikar.magic.viewmodel.BaseItemViewModel;
 import com.example.srikar.magic.viewmodel.recyclerview.BaseRecyclerViewModel;
 
@@ -19,20 +19,20 @@ public abstract class BaseRecViewAdapter extends RecyclerView.Adapter<BaseRecVie
     //the RecyclerViewModel that created this
     private final BaseRecyclerViewModel mRecyclerViewModel;
     //which data model list to display
-    private final RecyclerViewEvent.Target mTargetList;
+    private final ListChangeEvent.ListName mListName;
 
     /**
      * Constructor
      * @param activityContext Context used to inflate views
      * @param recyclerViewModel View model for the RecyclerView, interacts with data model
-     * @param targetList Target that maps to a data model list, used to populate this RecyclerView
+     * @param listName ListName that maps to a data model list, used to populate this RecyclerView
      */
     BaseRecViewAdapter(Context activityContext, BaseRecyclerViewModel recyclerViewModel,
-                       RecyclerViewEvent.Target targetList) {
+                       ListChangeEvent.ListName listName) {
         super();
         mContext = activityContext;
         mRecyclerViewModel = recyclerViewModel;
-        mTargetList = targetList;
+        mListName = listName;
     }
 
     /**
@@ -62,7 +62,7 @@ public abstract class BaseRecViewAdapter extends RecyclerView.Adapter<BaseRecVie
     @Override
     public void onBindViewHolder(BaseRecViewHolder holder, int position) {
         //update position of the view model
-        holder.viewModel.setListPosition(mTargetList, position);
+        holder.viewModel.setListPosition(mListName, position);
         //load the image
         holder.viewModel.loadImage();
     }

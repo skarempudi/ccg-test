@@ -5,7 +5,7 @@ import android.support.v7.widget.RecyclerView;
 
 import com.example.srikar.magic.MagicApplication;
 import com.example.srikar.magic.adapter.BattlefieldRecViewAdapter;
-import com.example.srikar.magic.event.RecyclerViewEvent;
+import com.example.srikar.magic.event.ListChangeEvent;
 import com.example.srikar.magic.model.Battlefield;
 
 import javax.inject.Inject;
@@ -18,8 +18,8 @@ public class BattlefieldRecViewModel extends BaseRecyclerViewModel {
     @Inject
     protected Battlefield mBattlefield;
 
-    public BattlefieldRecViewModel(Context appContext, RecyclerViewEvent.Target targetList) {
-        super(appContext, targetList);
+    public BattlefieldRecViewModel(Context appContext, ListChangeEvent.ListName listName) {
+        super(appContext, listName);
         //injects singleton instance of Battlefield
         MagicApplication.getInstance()
                 .getMainComponent()
@@ -28,7 +28,7 @@ public class BattlefieldRecViewModel extends BaseRecyclerViewModel {
 
     @Override
     protected RecyclerView.Adapter getAdapter() {
-        return new BattlefieldRecViewAdapter(mContext, this, mTargetList);
+        return new BattlefieldRecViewAdapter(mContext, this, mListName);
     }
 
     /**
@@ -38,6 +38,6 @@ public class BattlefieldRecViewModel extends BaseRecyclerViewModel {
      */
     @Override
     public int getItemCount() {
-        return mBattlefield.getViewPlayerListSize(mTargetList);
+        return mBattlefield.getViewPlayerListSize(mListName);
     }
 }

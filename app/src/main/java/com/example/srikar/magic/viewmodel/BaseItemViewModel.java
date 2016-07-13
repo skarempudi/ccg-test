@@ -1,14 +1,8 @@
 package com.example.srikar.magic.viewmodel;
 
-import android.content.Context;
 import android.databinding.BaseObservable;
-import android.databinding.BindingAdapter;
-import android.view.View;
-import android.widget.ImageView;
 
-import com.example.srikar.magic.R;
-import com.example.srikar.magic.event.RecyclerViewEvent;
-import com.squareup.picasso.Picasso;
+import com.example.srikar.magic.event.ListChangeEvent;
 
 /**
  * Base View Model for item views, CardViewModel and PermanentViewModel
@@ -17,7 +11,7 @@ import com.squareup.picasso.Picasso;
  * Created by Srikar on 5/20/2016.
  */
 public abstract class BaseItemViewModel extends BaseObservable {
-    RecyclerViewEvent.Target mTargetList;
+    ListChangeEvent.ListName mListName;
     int mPosition;
 
     /**
@@ -28,11 +22,11 @@ public abstract class BaseItemViewModel extends BaseObservable {
     /**
      * When RecyclerView Adapter binds View Holder, set the list and position where can find the
      * relevant Card or Permanent.
-     * @param targetList Target that maps to a data model list
+     * @param listName ListName that maps to a data model list
      * @param position Position in that list, which should be the same as in the RecyclerView
      */
-    public void setListPosition(RecyclerViewEvent.Target targetList, int position) {
-        mTargetList = targetList;
+    public void setListPosition(ListChangeEvent.ListName listName, int position) {
+        mListName = listName;
         mPosition = position;
     }
 }

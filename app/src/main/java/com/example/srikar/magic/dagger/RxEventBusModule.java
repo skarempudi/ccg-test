@@ -1,6 +1,6 @@
 package com.example.srikar.magic.dagger;
 
-import com.example.srikar.magic.event.RecyclerViewEvent;
+import com.example.srikar.magic.event.ListChangeEvent;
 import com.example.srikar.magic.event.RxEventBus;
 
 import javax.inject.Singleton;
@@ -16,7 +16,7 @@ import dagger.Provides;
 class RxEventBusModule {
     @Provides
     @Singleton
-    public RxEventBus<RecyclerViewEvent> provideRecyclerViewEventBus() {
+    public RxEventBus<ListChangeEvent> provideRecyclerViewEventBus() {
         return new RxEventBus<>();
     }
 }
