@@ -6,18 +6,20 @@ package com.example.srikar.magic.event;
  * Created by Srikar on 7/12/2016.
  */
 public class GameStateChangeEvent implements MagicEvent {
-    public enum Action {
-        SWITCH_VIEW_PLAYER
-    }
+    /**
+     * Action
+     */
+    public static final int SWITCH_VIEW_PLAYER = 0;
 
-    public final Action action;
+    public final int action;
 
-    public GameStateChangeEvent(Action updateAction) {
+    public GameStateChangeEvent(int updateAction) {
         action = updateAction;
     }
 
     @Override
     public String toString() {
-        return action + "";
+        String actions[] = {"switch view player"};
+        return actions[action];
     }
 }

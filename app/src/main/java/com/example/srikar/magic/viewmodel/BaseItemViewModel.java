@@ -11,7 +11,7 @@ import com.example.srikar.magic.event.ListChangeEvent;
  * Created by Srikar on 5/20/2016.
  */
 public abstract class BaseItemViewModel extends BaseObservable {
-    ListChangeEvent.ListName mListName;
+    int mListName;
     int mPosition;
 
     /**
@@ -22,10 +22,10 @@ public abstract class BaseItemViewModel extends BaseObservable {
     /**
      * When RecyclerView Adapter binds View Holder, set the list and position where can find the
      * relevant Card or Permanent.
-     * @param listName ListName that maps to a data model list
+     * @param listName ListName constant from DataModelConstants that maps to a data model list
      * @param position Position in that list, which should be the same as in the RecyclerView
      */
-    public void setListPosition(ListChangeEvent.ListName listName, int position) {
+    public void setListPosition(int listName, int position) {
         mListName = listName;
         mPosition = position;
     }

@@ -3,7 +3,7 @@ package com.example.srikar.magic.viewmodel;
 import android.content.Context;
 import android.databinding.BaseObservable;
 
-import com.example.srikar.magic.AppConstants;
+import com.example.srikar.magic.UiConstants;
 import com.example.srikar.magic.MagicApplication;
 import com.example.srikar.magic.MagicLog;
 import com.example.srikar.magic.R;
@@ -11,8 +11,8 @@ import com.example.srikar.magic.databinding.FragmentBoardBinding;
 import com.example.srikar.magic.event.GameStateChangeEvent;
 import com.example.srikar.magic.event.ListChangeEvent;
 import com.example.srikar.magic.event.RxEventBus;
+import com.example.srikar.magic.model.DataModelConstants;
 import com.example.srikar.magic.model.GameState;
-import com.example.srikar.magic.model.PlayerID;
 import com.example.srikar.magic.viewmodel.recyclerview.BattlefieldRecViewModel;
 import com.example.srikar.magic.viewmodel.recyclerview.HandRecViewModel;
 import com.jakewharton.rxbinding.view.RxView;
@@ -89,10 +89,10 @@ public class BoardFragmentModel extends BaseObservable {
             mHandRecViewModel = new HandRecViewModel(mContext);
         }
         if (mLandsRecViewModel == null) {
-            mLandsRecViewModel = new BattlefieldRecViewModel(mContext, ListChangeEvent.ListName.LANDS);
+            mLandsRecViewModel = new BattlefieldRecViewModel(mContext, DataModelConstants.LIST_LANDS);
         }
         if (mCreaturesRecViewModel == null) {
-            mCreaturesRecViewModel = new BattlefieldRecViewModel(mContext, ListChangeEvent.ListName.CREATURES);
+            mCreaturesRecViewModel = new BattlefieldRecViewModel(mContext, DataModelConstants.LIST_CREATURES);
         }
     }
 
@@ -101,7 +101,7 @@ public class BoardFragmentModel extends BaseObservable {
      */
     private void setBackgrounds() {
         int backgroundResource;
-        if (mGameState.getViewPlayer() == PlayerID.ALICE) {
+        if (mGameState.getViewPlayer() == DataModelConstants.PLAYER_ALICE) {
             MagicLog.d(TAG, "setBackgrounds: Alice");
             backgroundResource = R.drawable.alice_border;
         }
@@ -140,7 +140,7 @@ public class BoardFragmentModel extends BaseObservable {
     private void registerOnClicks() {
         //subscribe to onClick for player switch button
         Subscription switchSub = RxView.clicks(mBinding.switchPlayer)
-                .throttleFirst(AppConstants.CLICK_DELAY, TimeUnit.MILLISECONDS) //ignore double clicks
+                .throttleFirst(UiConstants.CLICK_DELAY, TimeUnit.MILLISECONDS) //ignore double clicks
                 .subscribe(empty -> switchPlayerOnClick());
 
         mSubscriptions.add(switchSub);
@@ -194,7 +194,7 @@ public class BoardFragmentModel extends BaseObservable {
     private void actOnEvent(GameStateChangeEvent event) {
         MagicLog.d(TAG, "actOnEvent: " + event.toString());
         //if switching view player
-        if (event.action == GameStateChangeEvent.Action.SWITCH_VIEW_PLAYER) {
+        if (event.action == GameStateChangeEvent.SWITCH_VIEW_PLAYER) {
             handleSwitchViewPlayer();
         }
     }

@@ -25,8 +25,8 @@ public class GameState {
         mGameStateChangeEventBus = rxEventBus;
 
         mName = "Hello GameState";
-        mCurrentPlayer = PlayerID.ALICE; //starting player is Alice
-        mViewPlayer = PlayerID.ALICE;
+        mCurrentPlayer = DataModelConstants.PLAYER_ALICE; //starting player is Alice
+        mViewPlayer = DataModelConstants.PLAYER_ALICE;
     }
 
     public String getName() {
@@ -68,7 +68,7 @@ public class GameState {
     public void switchViewPlayer() {
         mViewPlayer ^= 1; //swaps 0 to 1, and 1 to 0
         //alert listening BoardFragmentModel that view player switched
-        addGameStateChangeEvent(GameStateChangeEvent.Action.SWITCH_VIEW_PLAYER);
+        addGameStateChangeEvent(GameStateChangeEvent.SWITCH_VIEW_PLAYER);
     }
 
     /**
@@ -93,9 +93,9 @@ public class GameState {
      **********************************************************************************************/
     /**
      * Add event to mGameStateChangeEventBus, which alerts the listening BoardFragmentModel
-     * @param action Right now, only action is to switch view player
+     * @param action From GameStateChangeEvent. Right now, only action is to switch view player
      */
-    private void addGameStateChangeEvent(GameStateChangeEvent.Action action) {
+    private void addGameStateChangeEvent(int action) {
         GameStateChangeEvent event = new GameStateChangeEvent(action);
         MagicLog.d(TAG, "addGameStateChangeEvent: " + event.toString());
 

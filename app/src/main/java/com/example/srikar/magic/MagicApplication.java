@@ -7,7 +7,7 @@ import com.example.srikar.magic.dagger.MainComponent;
 import com.example.srikar.magic.model.Battlefield;
 import com.example.srikar.magic.model.Card;
 import com.example.srikar.magic.model.Permanent;
-import com.example.srikar.magic.model.PlayerID;
+import com.example.srikar.magic.model.DataModelConstants;
 
 import javax.inject.Inject;
 
@@ -37,7 +37,7 @@ public class MagicApplication extends Application {
         mainComponent.inject(this);
         for (int i = 0; i < 3; i++) {
             Card card = new Card(i);
-            mBattlefield.addCreature(PlayerID.ALICE, new Permanent(card));
+            mBattlefield.addCreature(DataModelConstants.PLAYER_ALICE, new Permanent(card));
         }
     }
 

@@ -2,7 +2,7 @@ package com.example.srikar.magic.viewmodel;
 
 import android.widget.ImageView;
 
-import com.example.srikar.magic.AppConstants;
+import com.example.srikar.magic.UiConstants;
 import com.example.srikar.magic.MagicApplication;
 import com.example.srikar.magic.MagicLog;
 import com.example.srikar.magic.R;
@@ -40,7 +40,7 @@ public class PermanentViewModel extends BaseItemViewModel {
 
         //subscribe to the onClick for the ImageView
         RxView.clicks(binding.cardImage)
-                .throttleFirst(AppConstants.CLICK_DELAY, TimeUnit.MILLISECONDS) //ignore double clicks
+                .throttleFirst(UiConstants.CLICK_DELAY, TimeUnit.MILLISECONDS) //ignore double clicks
                 .subscribe(empty -> onImageClick());
     }
 

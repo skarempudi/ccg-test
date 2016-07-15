@@ -17,8 +17,7 @@ import rx.Subscription;
 
 /**
  * Using data binding, the layout uses this View Model to interact with the rest of the code.
- * This is the base class used for RecyclerView View Models. Subclasses determine which data model
- * list to use.
+ * This is the base class used for RecyclerView View Models. List to use determined by constructor.
  * The Adapter and LayoutManager are set here.
  * Created by Srikar on 6/21/2016.
  */
@@ -36,14 +35,15 @@ public abstract class BaseRecyclerViewModel extends BaseObservable {
     private final Subscription mRecyclerViewEventSub;
 
     //used to determine which data model list to populate the RecyclerView with
-    final ListChangeEvent.ListName mListName;
+    final int mListName;
 
     /**
      * Base View Model for RecyclerView, which will handle interactions with the data model.
      * Subclasses handle which list from data model to use.
      * @param appContext Context used to create the LayoutManager
+     * @param listName Which data model list is being used, using DataModelConstants
      */
-    BaseRecyclerViewModel(Context appContext, ListChangeEvent.ListName listName) {
+    BaseRecyclerViewModel(Context appContext, int listName) {
         mContext = appContext;
         mListName = listName;
         //injects instance of RecyclerView event bus
@@ -137,15 +137,15 @@ public abstract class BaseRecyclerViewModel extends BaseObservable {
     private void actOnEvent(ListChangeEvent event) {
         MagicLog.d(TAG, "actOnEvent: " + event.toString());
         //if adding
-        if (event.action == ListChangeEvent.Action.ADD) {
+        if (event.action == ListChangeEvent.ADD) {
             mAdapter.notifyItemInserted(event.index);
         }
         //if removing
-        else if (event.action == ListChangeEvent.Action.REMOVE) {
+        else if (event.action == ListChangeEvent.REMOVE) {
             mAdapter.notifyItemRemoved(event.index);
         }
         //if updating
-        else if (event.action == ListChangeEvent.Action.UPDATE) {
+        else if (event.action == ListChangeEvent.UPDATE) {
             mAdapter.notifyItemChanged(event.index);
         }
     }

@@ -1,9 +1,5 @@
 package com.example.srikar.magic.model;
 
-import android.util.Log;
-
-import com.example.srikar.magic.model.Card;
-
 import java.util.ArrayList;
 
 /**
@@ -25,12 +21,12 @@ public class Hand {
         mGameState = state;
 
         mCards = new ArrayList[2];
-        mCards[PlayerID.ALICE] = new ArrayList<>();
-        mCards[PlayerID.BOB] = new ArrayList<>();
+        mCards[DataModelConstants.PLAYER_ALICE] = new ArrayList<>();
+        mCards[DataModelConstants.PLAYER_BOB] = new ArrayList<>();
 
         //default values
         for (int i = 0; i < CARD_COUNT; i++) {
-            mCards[PlayerID.ALICE].add(new Card(i));
+            mCards[DataModelConstants.PLAYER_ALICE].add(new Card(i));
         }
     }
 

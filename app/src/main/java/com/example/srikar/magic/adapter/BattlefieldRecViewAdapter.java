@@ -28,7 +28,7 @@ public class BattlefieldRecViewAdapter extends BaseRecViewAdapter {
      * @param listName ListName that maps to a list in Battlefield, used to populate this RecyclerView
      */
     public BattlefieldRecViewAdapter(Context activityContext, BaseRecyclerViewModel recViewModel,
-                                     ListChangeEvent.ListName listName) {
+                                     int listName) {
         super(activityContext, recViewModel, listName);
     }
 

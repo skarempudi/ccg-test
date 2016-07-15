@@ -6,6 +6,7 @@ import android.support.v7.widget.RecyclerView;
 import com.example.srikar.magic.MagicApplication;
 import com.example.srikar.magic.adapter.HandRecViewAdapter;
 import com.example.srikar.magic.event.ListChangeEvent;
+import com.example.srikar.magic.model.DataModelConstants;
 import com.example.srikar.magic.model.Hand;
 
 import javax.inject.Inject;
@@ -20,7 +21,7 @@ public class HandRecViewModel extends BaseRecyclerViewModel {
     protected Hand mHand;
 
     public HandRecViewModel(Context appContext) {
-        super(appContext, ListChangeEvent.ListName.HAND);
+        super(appContext, DataModelConstants.LIST_HAND);
         //gets singleton Hand instance
         MagicApplication.getInstance()
                 .getMainComponent()

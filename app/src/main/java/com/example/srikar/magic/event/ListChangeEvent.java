@@ -6,20 +6,13 @@ package com.example.srikar.magic.event;
  * Created by Srikar on 6/6/2016.
  */
 public class ListChangeEvent implements MagicEvent {
-    public enum ListName {
-        HAND,
-        LANDS,
-        CREATURES
-    }
+    /**
+     * Action
+     */
+    public static final int ADD = 0, REMOVE = 1, UPDATE = 2;
 
-    public enum Action {
-        ADD,
-        REMOVE,
-        UPDATE
-    }
-
-    public final ListName listName;
-    public final Action action;
+    public final int listName;
+    public final int action;
     public final int index;
 
     /**
@@ -28,7 +21,7 @@ public class ListChangeEvent implements MagicEvent {
      * @param updateAction Whether to add, remove, or update, using ListChangeEvent.Action
      * @param listIndex What index of the list to update
      */
-    public ListChangeEvent(ListName changedList, Action updateAction, int listIndex) {
+    public ListChangeEvent(int changedList, int updateAction, int listIndex) {
         listName = changedList;
         action = updateAction;
         index = listIndex;
@@ -36,6 +29,9 @@ public class ListChangeEvent implements MagicEvent {
 
     @Override
     public String toString() {
-        return listName + ", " + action + ", " + index;
+        String listNames[] = {"hand", "lands", "creatures"};
+        String actions[] = {"add", "remove", "update"};
+
+        return listNames[listName] + ", " + actions[action] + ", " + index;
     }
 }

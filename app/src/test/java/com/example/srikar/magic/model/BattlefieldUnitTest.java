@@ -36,7 +36,7 @@ public class BattlefieldUnitTest {
     public void setUp() {
         for (int i = 0; i < NUM_CREATURES; i++) {
             Card card = new Card(i);
-            battlefield.addCreature(PlayerID.ALICE, new Permanent(card));
+            battlefield.addCreature(DataModelConstants.PLAYER_ALICE, new Permanent(card));
         }
     }
 
@@ -79,7 +79,7 @@ public class BattlefieldUnitTest {
      */
     public void testAddLand() {
         Card card = new Card(0);
-        battlefield.addLand(PlayerID.ALICE, new Permanent(card));
+        battlefield.addLand(DataModelConstants.PLAYER_ALICE, new Permanent(card));
 
         int numLands = battlefield.getViewPlayerLandsSize();
         assertTrue("Number of lands is " + numLands, numLands == NUM_LANDS + 1);
@@ -91,7 +91,7 @@ public class BattlefieldUnitTest {
      */
     public void testGetViewPlayerLand() {
         Card card = new Card(0);
-        battlefield.addLand(PlayerID.ALICE, new Permanent(card));
+        battlefield.addLand(DataModelConstants.PLAYER_ALICE, new Permanent(card));
 
         Permanent land = battlefield.getViewPlayerLand(NUM_LANDS);
         assertTrue("The id is " + land.toString(),
@@ -105,7 +105,7 @@ public class BattlefieldUnitTest {
 //     */
 //    public void testAddCombatCreature() {
 //        Card card = new Card(0);
-//        battlefield.addCombatCreature(PlayerID.ALICE, new Permanent(card));
+//        battlefield.addCombatCreature(DataModelConstants.PLAYER_ALICE, new Permanent(card));
 //
 //        int numCombat = battlefield.getViewPlayerCombatSize();
 //        assertTrue("Number of lands is " + numCombat, numCombat == NUM_COMBAT + 1);
@@ -117,7 +117,7 @@ public class BattlefieldUnitTest {
 //     */
 //    public void testGetViewPlayerCombatCreature() {
 //        Card card = new Card(0);
-//        battlefield.addCombatCreature(PlayerID.ALICE, new Permanent(card));
+//        battlefield.addCombatCreature(DataModelConstants.PLAYER_ALICE, new Permanent(card));
 //
 //        Permanent combat = battlefield.getViewPlayerCombatCreature(NUM_COMBAT);
 //        assertTrue("The id is " + combat.toString(),
@@ -131,7 +131,7 @@ public class BattlefieldUnitTest {
 //     */
 //    public void testPutCreatureOnBattlefield() {
 //        Card card = new Card(0);
-//        battlefield.putCreatureOnBattlefield(PlayerID.ALICE, new Permanent(card));
+//        battlefield.putCreatureOnBattlefield(DataModelConstants.PLAYER_ALICE, new Permanent(card));
 //
 //        //assert number of creatures
 //        int numCreatures = battlefield.getViewPlayerCreaturesSize();
@@ -171,7 +171,7 @@ public class BattlefieldUnitTest {
 //    public void testUndoAttackDeclaration() {
 //        Card card = new Card(0);
 //        Permanent combatCreature = new Permanent(card);
-//        battlefield.addCombatCreature(PlayerID.ALICE, combatCreature);
+//        battlefield.addCombatCreature(DataModelConstants.PLAYER_ALICE, combatCreature);
 //
 //        //get the one that just added
 //        battlefield.undoAttackDeclaration(NUM_COMBAT);
@@ -199,7 +199,7 @@ public class BattlefieldUnitTest {
 //        }
 //        else if (event.action == ListChangeEvent.Action.REMOVE) {
 //            testMoveToAttack_RecyclerViewEventBus_remove =
-//                    event.listName == ListChangeEvent.ListName.CREATURES
+//                    event.listName == ListChangeEvent.ListName.LIST_CREATURES
 //                    && event.index == 0;
 //        }
 //    }
@@ -239,7 +239,7 @@ public class BattlefieldUnitTest {
 //    private void testUndoAttackDeclaration_RecyclerViewEventBus_Sub(ListChangeEvent event) {
 //        if (event.action == ListChangeEvent.Action.ADD) {
 //            testUndoAttackDeclaration_RecyclerViewEventBus_add =
-//                    event.listName == ListChangeEvent.ListName.CREATURES
+//                    event.listName == ListChangeEvent.ListName.LIST_CREATURES
 //                            && event.index == NUM_CREATURES;
 //        }
 //        else if (event.action == ListChangeEvent.Action.REMOVE) {
@@ -263,7 +263,7 @@ public class BattlefieldUnitTest {
 //
 //        Card card = new Card(0);
 //        Permanent combatCreature = new Permanent(card);
-//        battlefield.addCombatCreature(PlayerID.ALICE, combatCreature);
+//        battlefield.addCombatCreature(DataModelConstants.PLAYER_ALICE, combatCreature);
 //
 //        //will put two Events on RxEventBus
 //        //get the one that just added

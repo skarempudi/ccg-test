@@ -28,26 +28,26 @@ public class Battlefield {
         mGameState = gameState;
 
         mLands = new ArrayList[2];
-        mLands[PlayerID.ALICE] = new ArrayList<>();
-        mLands[PlayerID.BOB] = new ArrayList<>();
+        mLands[DataModelConstants.PLAYER_ALICE] = new ArrayList<>();
+        mLands[DataModelConstants.PLAYER_BOB] = new ArrayList<>();
 
         mCreatures = new ArrayList[2];
-        mCreatures[PlayerID.ALICE] = new ArrayList<>();
-        mCreatures[PlayerID.BOB] = new ArrayList<>();
+        mCreatures[DataModelConstants.PLAYER_ALICE] = new ArrayList<>();
+        mCreatures[DataModelConstants.PLAYER_BOB] = new ArrayList<>();
     }
 
     /**
      * Get a permanent from the specified list for the player that is viewing
-     * @param listName The list that is being targeted
+     * @param listName The list being retrieved from, using list name constants
      * @param position The position in the list
      * @return The permanent
      */
-    public Permanent getViewPlayerPermanent(ListChangeEvent.ListName listName, int position) {
+    public Permanent getViewPlayerPermanent(int listName, int position) {
         switch(listName) {
-            case LANDS:
+            case DataModelConstants.LIST_LANDS:
                 return getViewPlayerLand(position);
 
-            case CREATURES:
+            case DataModelConstants.LIST_CREATURES:
                 return getViewPlayerCreature(position);
 
             default:
@@ -66,7 +66,7 @@ public class Battlefield {
 
     /**
      * Add land for the specified player
-     * @param playerID Either PlayerID.ALICE or PlayerID.BOB
+     * @param playerID Either DataModelConstants.PLAYER_ALICE or DataModelConstants.PLAYER_BOB
      * @param land Land
      */
     void addLand(int playerID, Permanent land) {
@@ -84,7 +84,7 @@ public class Battlefield {
 
     /**
      * Add creature for specified player
-     * @param playerID Either PlayerID.ALICE or PlayerID.BOB
+     * @param playerID Either DataModelConstants.PLAYER_ALICE or DataModelConstants.PLAYER_BOB
      * @param creature Creature
      */
     public void addCreature(int playerID, Permanent creature) {
@@ -97,15 +97,15 @@ public class Battlefield {
      */
     /**
      * Gets the size of the list that matches to the given listName.
-     * @param listName The list being targeted
+     * @param listName The list being targeted, using list name constants
      * @return The size of that list
      */
-    public int getViewPlayerListSize(ListChangeEvent.ListName listName) {
+    public int getViewPlayerListSize(int listName) {
         switch(listName) {
-            case LANDS:
+            case DataModelConstants.LIST_LANDS:
                 return getViewPlayerLandsSize();
 
-            case CREATURES:
+            case DataModelConstants.LIST_CREATURES:
                 return getViewPlayerCreaturesSize();
 
             default:
@@ -124,25 +124,26 @@ public class Battlefield {
      * Empties all lists
      */
     void clearLists() {
-        mLands[PlayerID.ALICE].clear();
-        mLands[PlayerID.BOB].clear();
+        mLands[DataModelConstants.PLAYER_ALICE].clear();
+        mLands[DataModelConstants.PLAYER_BOB].clear();
 
-        mCreatures[PlayerID.ALICE].clear();
-        mCreatures[PlayerID.BOB].clear();
+        mCreatures[DataModelConstants.PLAYER_ALICE].clear();
+        mCreatures[DataModelConstants.PLAYER_BOB].clear();
     }
 
     /**
      * When a creature Permanent is clicked from the view player creature RecyclerView, determine
      * what to do.
      * Right now, just taps or untaps creature.
+     * @param listName Which list this event came from, using list name constants
      * @param position Position in view player creatures list, which matches position in RecyclerView
      */
-    public void onViewPlayerPermanentClicked(ListChangeEvent.ListName listName, int position) {
+    public void onViewPlayerPermanentClicked(int listName, int position) {
         switch(listName) {
-            case LANDS:
+            case DataModelConstants.LIST_LANDS:
                 return;
 
-            case CREATURES:
+            case DataModelConstants.LIST_CREATURES:
                 onViewPlayerCreatureClicked(position);
                 return;
 
@@ -174,8 +175,8 @@ public class Battlefield {
         //alert RecyclerView that position has updated, and Permanent should be drawn tapped or
         //untapped
         addListChangeEvent(
-                ListChangeEvent.ListName.CREATURES,
-                ListChangeEvent.Action.UPDATE,
+                DataModelConstants.LIST_CREATURES,
+                ListChangeEvent.UPDATE,
                 position
         );
     }
@@ -186,11 +187,11 @@ public class Battlefield {
      **********************************************************************************************/
     /**
      * Add event to mListChangeEventBus, which alerts the specified RecyclerView to update
-     * @param listName Which RecyclerView, using ListChangeEvent.ListName
-     * @param action Whether to add, remove, or update, using ListChangeEvent.Action
+     * @param listName Which RecyclerView, using DataModelConstants list names
+     * @param action Whether to add, remove, or update, using ListChangeEvent actions
      * @param index What index to update in list
      */
-    private void addListChangeEvent(ListChangeEvent.ListName listName, ListChangeEvent.Action action, int index) {
+    private void addListChangeEvent(int listName, int action, int index) {
         ListChangeEvent event = new ListChangeEvent(listName, action, index);
         MagicLog.d(TAG, "addListChangeEvent: " + event.toString());
 

@@ -1,9 +1,5 @@
 package com.example.srikar.magic.model;
 
-import android.util.Log;
-import android.view.View;
-
-import com.example.srikar.magic.AppConstants;
 import com.example.srikar.magic.MagicLog;
 
 /**

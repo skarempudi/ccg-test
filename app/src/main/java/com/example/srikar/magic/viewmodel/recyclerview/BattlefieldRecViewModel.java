@@ -18,7 +18,7 @@ public class BattlefieldRecViewModel extends BaseRecyclerViewModel {
     @Inject
     protected Battlefield mBattlefield;
 
-    public BattlefieldRecViewModel(Context appContext, ListChangeEvent.ListName listName) {
+    public BattlefieldRecViewModel(Context appContext, int listName) {
         super(appContext, listName);
         //injects singleton instance of Battlefield
         MagicApplication.getInstance()
