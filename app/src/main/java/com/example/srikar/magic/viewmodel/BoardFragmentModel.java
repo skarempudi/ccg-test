@@ -140,7 +140,6 @@ public class BoardFragmentModel extends BaseObservable {
     private void registerOnClicks() {
         //subscribe to onClick for player switch button
         Subscription switchSub = RxView.clicks(mBinding.switchPlayer)
-                .throttleFirst(UiConstants.CLICK_DELAY, TimeUnit.MILLISECONDS) //ignore double clicks
                 .subscribe(empty -> switchPlayerOnClick());
 
         mSubscriptions.add(switchSub);
@@ -150,6 +149,9 @@ public class BoardFragmentModel extends BaseObservable {
      * When click the switch player button, switches the view player in data model
      */
     private void switchPlayerOnClick() {
+        //disable switch button
+        mBinding.switchPlayer.setEnabled(false);
+
         //switch the player in the data model
         mGameState.switchViewPlayer();
     }
@@ -165,6 +167,9 @@ public class BoardFragmentModel extends BaseObservable {
         mHandRecViewModel.onViewPlayerSwitched();
         mLandsRecViewModel.onViewPlayerSwitched();
         mCreaturesRecViewModel.onViewPlayerSwitched();
+
+        //enable switch button
+        mBinding.switchPlayer.setEnabled(true);
     }
 
     /**
