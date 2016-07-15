@@ -8,13 +8,13 @@ import com.example.srikar.magic.MagicLog;
  */
 public class Card {
     private static final String TAG = "Card";
-    public final int mId;
+    public final int id;
 
     public Card(int id) {
-        mId = id;
+        this.id = id;
     }
 
     public void onClick() {
-        MagicLog.d(TAG, "onClick: " + mId);
+        MagicLog.d(TAG, "onClick: " + id);
     }
 }

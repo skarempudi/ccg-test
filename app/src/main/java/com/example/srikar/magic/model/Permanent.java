@@ -9,12 +9,12 @@ import com.example.srikar.magic.MagicLog;
  */
 public class Permanent {
     private static final String TAG = "Permanent";
-    private final Card mCard;
+    private final Card card;
 
     private boolean tapped = false;
 
     public Permanent(Card card) {
-        mCard = card;
+        this.card = card;
     }
 
     /**
@@ -57,6 +57,6 @@ public class Permanent {
 
     @Override
     public String toString() {
-        return mCard.mId + " " + (tapped? "tapped" : "untapped");
+        return card.id + " " + (tapped? "tapped" : "untapped");
     }
 }

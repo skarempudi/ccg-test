@@ -33,17 +33,18 @@ android {
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
 
+    //for dependency injection
     apt 'com.google.dagger:dagger-compiler:2.2'
     provided 'javax.annotation:jsr250-api:1.0'
     compile 'com.google.dagger:dagger:2.2'
 
+    //for use of RxJava subscriptions
     compile 'io.reactivex:rxandroid:1.2.0'
     // Because RxAndroid releases are few and far between, it is recommended you also
     // explicitly depend on RxJava's latest version for bug fixes and new features.
     compile 'io.reactivex:rxjava:1.1.5'
+    //for accessing UI elements using RxJava
     compile 'com.jakewharton.rxbinding:rxbinding:0.4.0'
-    compile 'com.jakewharton.rxbinding:rxbinding-appcompat-v7:0.4.0'
-    compile 'com.jakewharton.rxbinding:rxbinding-recyclerview-v7:0.4.0'
 
     compile 'com.android.support:appcompat-v7:24.0.0'
     compile 'com.android.support:recyclerview-v7:24.0.0'
@@ -52,9 +53,12 @@ dependencies {
     compile 'com.squareup.picasso:picasso:2.5.2'
 
     compile 'com.android.support:support-v4:24.0.0'
-    compile 'com.android.support:support-annotations:24.0.0'
 
+    //for PercentRelativeLayout
     compile 'com.android.support:percent:24.0.0'
+
+    //for JSON
+    compile 'com.google.code.gson:gson:2.6.2'
 
     testCompile 'junit:junit:4.12'
 }
