@@ -28,8 +28,6 @@ public class MagicApplication extends Application {
 
     private MainComponent mainComponent;
 
-    private CompositeSubscription subscriptions;
-
     @Inject
     protected Battlefield mBattlefield;
     @Inject
@@ -45,17 +43,16 @@ public class MagicApplication extends Application {
                                 .build();
         mainComponent.inject(this);
 
-        subscriptions = new CompositeSubscription();
-
         //temporary start state, remove later
-        for (int i = 0; i < 3; i++) {
-            Card card = new Card(i);
-            mBattlefield.addCreature(DataModelConstants.PLAYER_ALICE, new Permanent(card));
-        }
-        //loads from JSON in main thread, but in later versions, will do in separate thread
-//        mHand.setCards(AssetLoader.loadCards(this), DataModelConstants.PLAYER_ALICE);
+//        for (int i = 0; i < 3; i++) {
+//            Card card = new Card(i);
+//            mBattlefield.addCreature(DataModelConstants.PLAYER_ALICE, new Permanent(card));
+//        }
 
-        subscriptions.add(loadInitialHandState());
+        //load initial hand state, loading done in new thread, UI updating done on UI thread by listener
+        loadInitialHandState();
+        //load initial battlefield state, loading done in new thread, UI updating done on UI thread by listener
+        loadInitialBattlefieldState();
     }
 
     public static MagicApplication getInstance() {
@@ -72,10 +69,17 @@ public class MagicApplication extends Application {
      * aren't any at that point
      * @return Subscription, which add to group of Subscriptions
      */
-    private Subscription loadInitialHandState() {
-        return Observable.just(this)
+    private void loadInitialHandState() {
+        Observable.just(this)
                 .subscribeOn(Schedulers.newThread()) //performs actions on new thread
                 .map(AssetLoader::loadCards) //loads cards from JSON asset file
-                .subscribe(list -> mHand.setCards(list, DataModelConstants.PLAYER_ALICE));
+                .subscribe(list -> mHand.setCards(DataModelConstants.PLAYER_ALICE, list));
+    }
+
+    private void loadInitialBattlefieldState() {
+        Observable.just(this)
+                .subscribeOn(Schedulers.newThread()) //performs actions on new thread
+                .map(AssetLoader::loadCreatures) //loads permanents from JSON asset file
+                .subscribe(list -> mBattlefield.setCreatures(DataModelConstants.PLAYER_ALICE, list));
     }
 }

@@ -93,6 +93,22 @@ public class Battlefield {
     }
 
     /**
+     * Sets creatures for player to new list, alerts listening RecyclerViewModels to change.
+     * Fine even if there aren't any listening.
+     * @param playerID Either DataModelConstants.PLAYER_ALICE or PLAYER_BOB
+     * @param creatures List of creatures
+     */
+    public void setCreatures(int playerID, ArrayList<Permanent> creatures) {
+        MagicLog.d(TAG, "setCreatures: " + creatures.toString() + " for " + playerID);
+        mCreatures[playerID] = creatures;
+        addListChangeEvent(
+                DataModelConstants.LIST_CREATURES,
+                ListChangeEvent.UPDATE_ALL,
+                0
+        );
+    }
+
+    /**
      * Methods to return size of list
      */
     /**

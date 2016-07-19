@@ -36,10 +36,10 @@ public class Hand {
 
     /**
      * Used to initialize the set of Cards
-     * @param cards Cards
      * @param playerID Either DataModelConstants.PLAYER_ALICE or PLAYER_BOB
+     * @param cards Cards
      */
-    public void setCards(ArrayList<Card> cards, int playerID) {
+    public void setCards(int playerID, ArrayList<Card> cards) {
         MagicLog.d(TAG, "setCards: " + cards.toString() + " for " + playerID);
         mCards[playerID] = cards;
 
