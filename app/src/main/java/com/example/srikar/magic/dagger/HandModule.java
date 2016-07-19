@@ -1,5 +1,7 @@
 package com.example.srikar.magic.dagger;
 
+import com.example.srikar.magic.event.ListChangeEvent;
+import com.example.srikar.magic.event.RxEventBus;
 import com.example.srikar.magic.model.GameState;
 import com.example.srikar.magic.model.Hand;
 
@@ -16,7 +18,7 @@ import dagger.Provides;
 class HandModule {
     @Provides
     @Singleton
-    public Hand provideHand(GameState state) {
-        return new Hand(state);
+    public Hand provideHand(RxEventBus<ListChangeEvent> rvEventBus, GameState state) {
+        return new Hand(rvEventBus, state);
     }
 }

@@ -8,6 +8,7 @@ import com.example.srikar.magic.MagicLog;
  */
 public class Card {
     private static final String TAG = "Card";
+    //maps to JSON "id"
     public final int id;
 
     public Card(int id) {
@@ -16,5 +17,10 @@ public class Card {
 
     public void onClick() {
         MagicLog.d(TAG, "onClick: " + id);
+    }
+
+    @Override
+    public String toString() {
+        return "" + id;
     }
 }

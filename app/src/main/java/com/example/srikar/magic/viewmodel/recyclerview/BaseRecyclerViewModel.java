@@ -148,5 +148,9 @@ public abstract class BaseRecyclerViewModel extends BaseObservable {
         else if (event.action == ListChangeEvent.UPDATE) {
             mAdapter.notifyItemChanged(event.index);
         }
+        //if updating all
+        else if (event.action == ListChangeEvent.UPDATE_ALL) {
+            mAdapter.notifyDataSetChanged();
+        }
     }
 }

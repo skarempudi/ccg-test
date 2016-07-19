@@ -9,7 +9,7 @@ public class ListChangeEvent implements MagicEvent {
     /**
      * Action
      */
-    public static final int ADD = 0, REMOVE = 1, UPDATE = 2;
+    public static final int ADD = 0, REMOVE = 1, UPDATE = 2, UPDATE_ALL = 3;
 
     public final int listName;
     public final int action;
@@ -18,8 +18,8 @@ public class ListChangeEvent implements MagicEvent {
     /**
      * An event to notify that a list changed, listened to by RecyclerViews
      * @param changedList Which list was updated, using ListChangeEvent.ListName
-     * @param updateAction Whether to add, remove, or update, using ListChangeEvent.Action
-     * @param listIndex What index of the list to update
+     * @param updateAction Whether to add, remove, update, or update all, using ListChangeEvent.Action
+     * @param listIndex What index of the list to update, not used in update all
      */
     public ListChangeEvent(int changedList, int updateAction, int listIndex) {
         listName = changedList;
@@ -30,7 +30,7 @@ public class ListChangeEvent implements MagicEvent {
     @Override
     public String toString() {
         String listNames[] = {"hand", "lands", "creatures"};
-        String actions[] = {"add", "remove", "update"};
+        String actions[] = {"add", "remove", "update", "update all"};
 
         return listNames[listName] + ", " + actions[action] + ", " + index;
     }
