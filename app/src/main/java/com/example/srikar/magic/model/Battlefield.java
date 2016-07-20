@@ -8,24 +8,23 @@ import java.util.ArrayList;
 
 /**
  * The Battlefield is where Permanents like Creatures get to interact
- * Display separately lands, creatures that are not attacking/blocking,
- * and creatures that are attacking/blocking
+ * Display separately lands and creatures.
+ * Stores data for both players.
  * Created by Srikar on 5/18/2016.
  */
-public class Battlefield {
+public class Battlefield extends BaseGameZone {
     private static final String TAG = "Battlefield";
-    /**
-     * Used to signal to RecyclerViews for below ArrayLists that lists updated
-     * Injected during construction
-     */
-    private final RxEventBus<ListChangeEvent> mListChangeEventBus;
-    private final GameState mGameState;
 
     private final ArrayList<Permanent>[] mLands, mCreatures;
 
+    /**
+     * Holds the lands and creatures used by both players.
+     * Constructed by dependency injection.
+     * @param rvEventBus Event bus used to pass information to listening RecyclerViewModels
+     * @param gameState Used to determine who the current player is
+     */
     public Battlefield(RxEventBus<ListChangeEvent> rvEventBus, GameState gameState) {
-        mListChangeEventBus = rvEventBus;
-        mGameState = gameState;
+        super(rvEventBus, gameState);
 
         mLands = new ArrayList[2];
         mLands[DataModelConstants.PLAYER_ALICE] = new ArrayList<>();
@@ -34,6 +33,31 @@ public class Battlefield {
         mCreatures = new ArrayList[2];
         mCreatures[DataModelConstants.PLAYER_ALICE] = new ArrayList<>();
         mCreatures[DataModelConstants.PLAYER_BOB] = new ArrayList<>();
+    }
+
+    /**
+     * Add land for the specified player
+     * @param playerID Either DataModelConstants.PLAYER_ALICE or DataModelConstants.PLAYER_BOB
+     * @param land Land
+     */
+    void addLand(int playerID, Permanent land) {
+        mLands[playerID].add(land);
+    }
+
+    /**
+     * Sets creatures for player to new list, alerts listening RecyclerViewModels to change.
+     * Fine even if there aren't any listening.
+     * @param playerID Either DataModelConstants.PLAYER_ALICE or PLAYER_BOB
+     * @param creatures List of creatures
+     */
+    public void setCreatures(int playerID, ArrayList<Permanent> creatures) {
+        MagicLog.d(TAG, "setCreatures: " + creatures.toString() + " for " + playerID);
+        mCreatures[playerID] = creatures;
+        addListChangeEvent(
+                DataModelConstants.LIST_CREATURES,
+                ListChangeEvent.UPDATE_ALL,
+                0
+        );
     }
 
     /**
@@ -65,47 +89,12 @@ public class Battlefield {
     }
 
     /**
-     * Add land for the specified player
-     * @param playerID Either DataModelConstants.PLAYER_ALICE or DataModelConstants.PLAYER_BOB
-     * @param land Land
-     */
-    void addLand(int playerID, Permanent land) {
-        mLands[playerID].add(land);
-    }
-
-    /**
      * Get a creature for player that viewing
      * @param position Position in list
      * @return Creature
      */
     public Permanent getViewPlayerCreature(int position) {
         return mCreatures[mGameState.getViewPlayer()].get(position);
-    }
-
-    /**
-     * Add creature for specified player
-     * @param playerID Either DataModelConstants.PLAYER_ALICE or DataModelConstants.PLAYER_BOB
-     * @param creature Creature
-     */
-    public void addCreature(int playerID, Permanent creature) {
-        MagicLog.d(TAG, "addCreature: " + creature.toString() + " for " + playerID);
-        mCreatures[playerID].add(creature);
-    }
-
-    /**
-     * Sets creatures for player to new list, alerts listening RecyclerViewModels to change.
-     * Fine even if there aren't any listening.
-     * @param playerID Either DataModelConstants.PLAYER_ALICE or PLAYER_BOB
-     * @param creatures List of creatures
-     */
-    public void setCreatures(int playerID, ArrayList<Permanent> creatures) {
-        MagicLog.d(TAG, "setCreatures: " + creatures.toString() + " for " + playerID);
-        mCreatures[playerID] = creatures;
-        addListChangeEvent(
-                DataModelConstants.LIST_CREATURES,
-                ListChangeEvent.UPDATE_ALL,
-                0
-        );
     }
 
     /**
@@ -134,17 +123,6 @@ public class Battlefield {
     }
     public int getViewPlayerCreaturesSize() {
         return mCreatures[mGameState.getViewPlayer()].size();
-    }
-
-    /**
-     * Empties all lists
-     */
-    void clearLists() {
-        mLands[DataModelConstants.PLAYER_ALICE].clear();
-        mLands[DataModelConstants.PLAYER_BOB].clear();
-
-        mCreatures[DataModelConstants.PLAYER_ALICE].clear();
-        mCreatures[DataModelConstants.PLAYER_BOB].clear();
     }
 
     /**
@@ -197,20 +175,12 @@ public class Battlefield {
         );
     }
 
-    /***********************************************************************************************
-     * EVENT BUS
-     * Listeners access through Dagger injection for bus, not with getter.
-     **********************************************************************************************/
-    /**
-     * Add event to mListChangeEventBus, which alerts the specified RecyclerView to update
-     * @param listName Which RecyclerView, using DataModelConstants list names
-     * @param action Whether to add, remove, or update, using ListChangeEvent actions
-     * @param index What index to update in list
-     */
-    private void addListChangeEvent(int listName, int action, int index) {
-        ListChangeEvent event = new ListChangeEvent(listName, action, index);
-        MagicLog.d(TAG, "addListChangeEvent: " + event.toString());
+    @Override
+    protected void clearLists() {
+        mLands[DataModelConstants.PLAYER_ALICE].clear();
+        mLands[DataModelConstants.PLAYER_BOB].clear();
 
-        mListChangeEventBus.addEvent(event);
+        mCreatures[DataModelConstants.PLAYER_ALICE].clear();
+        mCreatures[DataModelConstants.PLAYER_BOB].clear();
     }
 }

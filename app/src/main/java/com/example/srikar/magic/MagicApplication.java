@@ -6,17 +6,13 @@ import com.example.srikar.magic.dagger.DaggerMainComponent;
 import com.example.srikar.magic.dagger.MainComponent;
 import com.example.srikar.magic.json.AssetLoader;
 import com.example.srikar.magic.model.Battlefield;
-import com.example.srikar.magic.model.Card;
 import com.example.srikar.magic.model.Hand;
-import com.example.srikar.magic.model.Permanent;
 import com.example.srikar.magic.model.DataModelConstants;
 
 import javax.inject.Inject;
 
 import rx.Observable;
-import rx.Subscription;
 import rx.schedulers.Schedulers;
-import rx.subscriptions.CompositeSubscription;
 
 /**
  * Application class created before everything else and acts independently of Activities.
@@ -43,16 +39,9 @@ public class MagicApplication extends Application {
                                 .build();
         mainComponent.inject(this);
 
-        //temporary start state, remove later
-//        for (int i = 0; i < 3; i++) {
-//            Card card = new Card(i);
-//            mBattlefield.addCreature(DataModelConstants.PLAYER_ALICE, new Permanent(card));
-//        }
-
-        //load initial hand state, loading done in new thread, UI updating done on UI thread by listener
-        loadInitialHandState();
-        //load initial battlefield state, loading done in new thread, UI updating done on UI thread by listener
-        loadInitialBattlefieldState();
+        //load initial hand and battlefield state, loading done in new thread,
+        //UI updating done on UI thread by listener
+        loadInitialDataModelState();
     }
 
     public static MagicApplication getInstance() {
@@ -64,19 +53,18 @@ public class MagicApplication extends Application {
     }
 
     /**
-     * Loads initial Hand state in a separate thread.
-     * When updates Hand model, will alert any listening RecyclerViews. Doesn't matter if there
+     * Loads initial data model states in a separate thread.
+     * When updates model, will alert any listening RecyclerViews. Doesn't matter if there
      * aren't any at that point
-     * @return Subscription, which add to group of Subscriptions
      */
-    private void loadInitialHandState() {
+    private void loadInitialDataModelState() {
+        //hand
         Observable.just(this)
                 .subscribeOn(Schedulers.newThread()) //performs actions on new thread
                 .map(AssetLoader::loadCards) //loads cards from JSON asset file
                 .subscribe(list -> mHand.setCards(DataModelConstants.PLAYER_ALICE, list));
-    }
 
-    private void loadInitialBattlefieldState() {
+        //battlefield
         Observable.just(this)
                 .subscribeOn(Schedulers.newThread()) //performs actions on new thread
                 .map(AssetLoader::loadCreatures) //loads permanents from JSON asset file

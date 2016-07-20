@@ -7,27 +7,25 @@ import com.example.srikar.magic.event.RxEventBus;
 import java.util.ArrayList;
 
 /**
- * Stores the cards in hand for each player
+ * Stores the cards in hand for each player.
  * Created by Srikar on 4/27/2016.
  */
-public class Hand {
+public class Hand extends BaseGameZone {
     private static final String TAG = "Hand";
 
-    private final GameState mGameState;
-
     /**
-     * Used to signal to RecyclerViews for below ArrayLists that lists updated
-     * Injected during construction
+     * Holds the Cards in Hand. Initial state passed in by MagicApplication calling setCards().
      */
-    private final RxEventBus<ListChangeEvent> mListChangeEventBus;
     private final ArrayList<Card>[] mCards;
 
     /**
-     * Initial state passed in by MagicApplication
+     * Data model for each player's hand of cards.
+     * Constructed by dependency injection.
+     * @param rvEventBus Event bus used to pass information to listening RecyclerViewModels
+     * @param gameState Used to determine who the current player is
      */
-    public Hand(RxEventBus<ListChangeEvent> rvEventBus, GameState state) {
-        mListChangeEventBus = rvEventBus;
-        mGameState = state;
+    public Hand(RxEventBus<ListChangeEvent> rvEventBus, GameState gameState) {
+        super(rvEventBus, gameState);
 
         mCards = new ArrayList[2];
         mCards[DataModelConstants.PLAYER_ALICE] = new ArrayList<>();
@@ -66,21 +64,9 @@ public class Hand {
         return mCards[mGameState.getViewPlayer()].size();
     }
 
-    /***********************************************************************************************
-     * EVENT BUS
-     * Listeners access through Dagger injection for bus, not with getter.
-     **********************************************************************************************/
-    /**
-     * Add event to mListChangeEventBus, which alerts the specified RecyclerView to update
-     * @param listName Which RecyclerView, using DataModelConstants list names
-     * @param action Whether to add, remove, or update, using ListChangeEvent actions
-     * @param index What index to update in list
-     */
-    private void addListChangeEvent(int listName, int action, int index) {
-        ListChangeEvent event = new ListChangeEvent(listName, action, index);
-        MagicLog.d(TAG, "addListChangeEvent: " + event.toString());
-
-        mListChangeEventBus.addEvent(event);
+    @Override
+    protected void clearLists() {
+        mCards[DataModelConstants.PLAYER_ALICE].clear();
+        mCards[DataModelConstants.PLAYER_BOB].clear();
     }
-
 }

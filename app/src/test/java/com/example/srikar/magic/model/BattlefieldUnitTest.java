@@ -8,6 +8,8 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.ArrayList;
+
 import static org.junit.Assert.assertTrue;
 
 /**
@@ -34,10 +36,12 @@ public class BattlefieldUnitTest {
      * Starts with three creatures on battlefield on Alice's side
      */
     public void setUp() {
+        ArrayList<Permanent> list = new ArrayList<>();
         for (int i = 0; i < NUM_CREATURES; i++) {
             Card card = new Card(i);
-            battlefield.addCreature(DataModelConstants.PLAYER_ALICE, new Permanent(card));
+            list.add(new Permanent(card));
         }
+        battlefield.setCreatures(DataModelConstants.PLAYER_ALICE, list);
     }
 
     @After
