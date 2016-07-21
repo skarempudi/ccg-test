@@ -14,8 +14,6 @@ import static org.junit.Assert.assertTrue;
 
 /**
  * Test the Battlefield class
- * Note that at this point, there is no interaction between Alice and Bob's parts of the Battlefield,
- * and no way to switch between them, so won't test Bob's side at this point.
  * Created by Srikar on 6/9/2016.
  */
 public class BattlefieldUnitTest {
