@@ -69,8 +69,15 @@ public class AssetLoader {
             //since Permanent holds custom Cards, have to do mixed read
             jsonReader.beginArray();
             while (jsonReader.hasNext()) {
+                //{"card":{"id":"#"}}
+                jsonReader.beginObject();
+                //"card":{"id":"#"}
+                jsonReader.nextName();
+                //{"id":"#"}
                 Card card = gson.fromJson(jsonReader, Card.class);
+                MagicLog.d(TAG, "loadCreatures: loaded card " + card.toString());
                 list.add(new Permanent(card));
+                jsonReader.endObject();
             }
             jsonReader.endArray();
             jsonReader.close();
