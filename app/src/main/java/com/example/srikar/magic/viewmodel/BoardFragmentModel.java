@@ -66,6 +66,9 @@ public class BoardFragmentModel extends BaseObservable {
         //set the backgrounds
         setBackgrounds();
 
+        //set the game action log starting text
+        setLogText();
+
         //create the RecyclerViewModels
         createRecyclerViewModels();
 
@@ -135,21 +138,39 @@ public class BoardFragmentModel extends BaseObservable {
     }
 
     /**
+     * Set text in game action log based on current step in game state data model
+     */
+    private void setLogText() {
+        //get current step
+        int step = mGameState.getCurrentStep();
+        //get the string resource ID
+        int stringId = DataModelConstants.getStepLogText(step);
+
+        //set the text in log
+        mBinding.gameActionLog.setText(stringId);
+    }
+
+    /**
      * Register onClick event handling for views other than RecyclerViews
      * RecyclerView onClicks handled by Permanent
      */
     private void registerOnClicks() {
         //subscribe to onClick for player switch button
         Subscription switchSub = RxView.clicks(mBinding.switchPlayer)
-                .subscribe(empty -> switchPlayerOnClick());
-
+                .subscribe(this::switchPlayerOnClick);
         mSubscriptions.add(switchSub);
+
+        //subscribe to onClick for next step button
+        Subscription nextStepSub = RxView.clicks(mBinding.nextStep)
+                .subscribe(this::nextStepOnClick);
+        mSubscriptions.add(nextStepSub);
     }
 
     /**
      * When click the switch player button, switches the view player in data model
+     * @param empty Handles void passed by Observable
      */
-    private void switchPlayerOnClick() {
+    private void switchPlayerOnClick(Void empty) {
         //disable switch button
         mBinding.switchPlayer.setEnabled(false);
 
@@ -158,7 +179,20 @@ public class BoardFragmentModel extends BaseObservable {
     }
 
     /**
+     * When click the next step button, goes to the next step in the turn in the data model
+     * @param empty Handles void passed by Observable
+     */
+    private void nextStepOnClick(Void empty) {
+        //disable next step button
+        mBinding.nextStep.setEnabled(false);
+
+        //go to next step in the data model
+        mGameState.nextStep();
+    }
+
+    /**
      * When switch view player, change backgrounds and update Adapters
+     * Triggered by change in game state data model
      */
     private void handleSwitchViewPlayer() {
         //updates the backgrounds
@@ -175,11 +209,14 @@ public class BoardFragmentModel extends BaseObservable {
 
     /**
      * When go to next step, update display on game log
-     * @param step What the next step is, taken from DataModelConstants
+     * Triggered by change in game state data model
      */
-    private void handleNextStep(int step) {
-        //get the string
-        int stringId = DataModelConstants.getStepLogText(step);
+    private void handleNextStep() {
+        //set log text based on current step listed in game state
+        setLogText();
+
+        //enable next step button
+        mBinding.nextStep.setEnabled(true);
     }
 
     /**
@@ -200,17 +237,31 @@ public class BoardFragmentModel extends BaseObservable {
     /***********************************************************************************************
      * EVENT BUS
      **********************************************************************************************/
+
+    /**
+     * After get event bus from Dagger injection, subscribe to it. Returns subscription so can
+     * reference it to unregister later.
+     * @return Subscription to event bus
+     */
     private Subscription registerEventBus() {
         MagicLog.d(TAG, "registerEventBus: ");
         return mGameStateChangeEventBus.getEvents()
                 .subscribe(this::actOnEvent);
     }
 
+    /**
+     * When receive event from event bus, handle by calling another method depending on event type.
+     * @param event Event received from event bus
+     */
     private void actOnEvent(GameStateChangeEvent event) {
         MagicLog.d(TAG, "actOnEvent: " + event.toString());
         //if switching view player
         if (event.action == GameStateChangeEvent.SWITCH_VIEW_PLAYER) {
             handleSwitchViewPlayer();
+        }
+        //if going to next step in turn
+        else if (event.action == GameStateChangeEvent.NEXT_STEP) {
+            handleNextStep();
         }
     }
 }

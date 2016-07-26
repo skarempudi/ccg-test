@@ -17,7 +17,7 @@
     <string name="step_precombat_main">Precombat main phase - you can cast spells and play lands now</string>
     <string name="step_start_of_combat">Start of combat step - last chance for your opponent to act before your creatures attack</string>
     <string name="step_declare_attackers">Declare attackers step - select creatures to attack your opponent</string>
-    <string name="step_declare_blockers">Declare blockers step - your opponent selects creaturs to block</string>
+    <string name="step_declare_blockers">Declare blockers step - your opponent selects creatures to block</string>
     <string name="step_combat_damage">Combat damage step - creatures deal damage</string>
     <string name="step_end_of_combat">End of combat step - last chance for your opponent to act before your next main phase</string>
     <string name="step_postcombat_main">Postcombat main phase - you can cast spells and play lands</string>

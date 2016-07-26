@@ -20,7 +20,7 @@ public class GameStateChangeEvent implements MagicEvent {
 
     @Override
     public String toString() {
-        String actions[] = {"switch view player"};
+        String actions[] = {"switch view player", "next step"};
         return actions[action];
     }
 }

@@ -99,6 +99,14 @@ public class GameState {
         addGameStateChangeEvent(GameStateChangeEvent.NEXT_STEP);
     }
 
+    /**
+     * Get the current step, returning a value from DataModelConstants (STEP_)
+     * @return The current step, as an int
+     */
+    public int getCurrentStep() {
+        return mStep;
+    }
+
     /***********************************************************************************************
      * EVENT BUS
      * Listeners access through Dagger injection for bus, not with getter.
