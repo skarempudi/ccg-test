@@ -17,24 +17,18 @@ public class GameState {
      */
     private final RxEventBus<GameStateChangeEvent> mGameStateChangeEventBus;
 
-    private String mName;
     private int mCurrentPlayer; //the player whose turn it is
     private int mViewPlayer; //the player whose view is currently being used
+
+    private int mStep; //what step in the turn it currently is
 
     public GameState(RxEventBus<GameStateChangeEvent> rxEventBus) {
         mGameStateChangeEventBus = rxEventBus;
 
-        mName = "Hello GameState";
         mCurrentPlayer = DataModelConstants.PLAYER_ALICE; //starting player is Alice
         mViewPlayer = DataModelConstants.PLAYER_ALICE;
-    }
 
-    public String getName() {
-        return mName;
-    }
-
-    public void setName(String name) {
-        mName = name;
+        mStep = DataModelConstants.STEP_UNTAP; //first step is untap
     }
 
     /**
@@ -85,6 +79,24 @@ public class GameState {
      */
     public int getOtherViewPlayer() {
         return mViewPlayer ^ 1;
+    }
+
+    /**
+     * Goes to the next step in the turn.
+     * When it reaches the end of the steps, it goes to the next player
+     */
+    public void nextStep() {
+        //next step will be in same turn
+        if (mStep < DataModelConstants.STEP_END) {
+            mStep++;
+        }
+        //next step will be in next turn
+        //don't switch players yet
+        else {
+            mStep = DataModelConstants.STEP_UNTAP;
+        }
+        //either way, add to event bus
+        addGameStateChangeEvent(GameStateChangeEvent.NEXT_STEP);
     }
 
     /***********************************************************************************************

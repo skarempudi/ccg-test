@@ -28,7 +28,7 @@
 
         <!-- Though will show errors due to not having android:layout_height and such, will build -->
 
-        <!--First row: turn, life, switch -->
+        <!--First row: turn, life, switch player button -->
         <TextView
             android:id="@+id/turn_counter"
             android:text="@string/turn"
@@ -57,12 +57,22 @@
             app:layout_heightPercent="@fraction/first_row_percent"
             />
         
-        <!--Second row: log -->
+        <!--Second row: log, next step button -->
         <TextView
             android:id="@+id/game_action_log"
             android:text="@string/log"
             android:layout_below="@id/turn_counter"
-            android:layout_width="match_parent"
+            app:layout_widthPercent="@fraction/log_width_percent"
+            app:layout_heightPercent="@fraction/second_row_percent"
+            android:gravity="center"
+            />
+
+        <Button
+            android:id="@+id/next_step"
+            android:text="@string/next_step"
+            android:layout_below="@id/switch_player"
+            android:layout_toRightOf="@id/game_action_log"
+            app:layout_widthPercent="@fraction/next_step_width_percent"
             app:layout_heightPercent="@fraction/second_row_percent"
             android:gravity="center"
             />

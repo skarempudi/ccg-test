@@ -7,9 +7,10 @@ package com.example.srikar.magic.event;
  */
 public class GameStateChangeEvent implements MagicEvent {
     /**
-     * Action
+     * Actions
      */
-    public static final int SWITCH_VIEW_PLAYER = 0;
+    public static final int SWITCH_VIEW_PLAYER = 0; //changes backgrounds
+    public static final int NEXT_STEP = 1; //next step, updates game log
 
     public final int action;
 

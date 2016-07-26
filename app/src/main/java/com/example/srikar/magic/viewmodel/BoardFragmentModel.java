@@ -115,8 +115,9 @@ public class BoardFragmentModel extends BaseObservable {
         mBinding.lifeCounter.setBackgroundResource(backgroundResource);
         mBinding.switchPlayer.setBackgroundResource(backgroundResource);
 
-        //second row - game action log
+        //second row - game action log, next step
         mBinding.gameActionLog.setBackgroundResource(backgroundResource);
+        mBinding.nextStep.setBackgroundResource(backgroundResource);
 
         //third row - opposing creatures
         mBinding.oppCreatures.setBackgroundResource(backgroundResource);
@@ -170,6 +171,15 @@ public class BoardFragmentModel extends BaseObservable {
 
         //enable switch button
         mBinding.switchPlayer.setEnabled(true);
+    }
+
+    /**
+     * When go to next step, update display on game log
+     * @param step What the next step is, taken from DataModelConstants
+     */
+    private void handleNextStep(int step) {
+        //get the string
+        int stringId = DataModelConstants.getStepLogText(step);
     }
 
     /**
