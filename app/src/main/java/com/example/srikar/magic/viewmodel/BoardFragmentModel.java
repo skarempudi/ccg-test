@@ -2,22 +2,20 @@ package com.example.srikar.magic.viewmodel;
 
 import android.content.Context;
 import android.databinding.BaseObservable;
+import android.os.Build;
+import android.text.Html;
 
-import com.example.srikar.magic.UiConstants;
 import com.example.srikar.magic.MagicApplication;
 import com.example.srikar.magic.MagicLog;
 import com.example.srikar.magic.R;
 import com.example.srikar.magic.databinding.FragmentBoardBinding;
 import com.example.srikar.magic.event.GameStateChangeEvent;
-import com.example.srikar.magic.event.ListChangeEvent;
 import com.example.srikar.magic.event.RxEventBus;
 import com.example.srikar.magic.model.DataModelConstants;
 import com.example.srikar.magic.model.GameState;
 import com.example.srikar.magic.viewmodel.recyclerview.BattlefieldRecViewModel;
 import com.example.srikar.magic.viewmodel.recyclerview.HandRecViewModel;
 import com.jakewharton.rxbinding.view.RxView;
-
-import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
 
@@ -66,6 +64,9 @@ public class BoardFragmentModel extends BaseObservable {
         //set the backgrounds
         setBackgrounds();
 
+        //set the turn text
+        setTurnText();
+
         //set the game action log starting text
         setLogText();
 
@@ -113,8 +114,20 @@ public class BoardFragmentModel extends BaseObservable {
             backgroundResource = R.drawable.bob_border;
         }
 
+        //turn background based on current player, not view player
+        int turnBackgroundResource;
+        if (mGameState.getCurrentPlayer() == DataModelConstants.PLAYER_ALICE) {
+            MagicLog.d(TAG, "setBackgrounds: Current player is Alice");
+            turnBackgroundResource = R.drawable.alice_border;
+        }
+        else {
+            MagicLog.d(TAG, "setBackgrounds: Current player is Bob");
+            turnBackgroundResource = R.drawable.bob_border;
+        }
+
         //first row - turns, life, switch player
-        mBinding.turnCounter.setBackgroundResource(backgroundResource);
+        //turn's background is based on current player, not view player
+        mBinding.turnCounter.setBackgroundResource(turnBackgroundResource);
         mBinding.lifeCounter.setBackgroundResource(backgroundResource);
         mBinding.switchPlayer.setBackgroundResource(backgroundResource);
 
@@ -135,6 +148,41 @@ public class BoardFragmentModel extends BaseObservable {
 
         //sixth row - hand
         mBinding.handRecyclerview.setBackgroundResource(backgroundResource);
+    }
+
+    /**
+     * Set the current turn number and current player in the turn display
+     */
+    private void setTurnText() {
+        //get unformatted string
+        String unformatted = mContext.getResources().getString(R.string.unformat_turn_display);
+
+        //get turn number
+        int turn = mGameState.getTurnNumber();
+
+        //get current player name
+        int currentPlayer = mGameState.getCurrentPlayer();
+        String name;
+        if (currentPlayer == DataModelConstants.PLAYER_ALICE) {
+            name = mContext.getResources().getString(R.string.alice);
+        }
+        else {
+            name = mContext.getResources().getString(R.string.bob);
+        }
+
+        //format the string
+        String partial = String.format(unformatted, turn, name);
+        CharSequence formatted;
+        //uses HTML to bold player name
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            formatted = Html.fromHtml(partial, Html.FROM_HTML_MODE_LEGACY);
+        }
+        else {
+            formatted = Html.fromHtml(partial);
+        }
+
+        //set in turn display
+        mBinding.turnCounter.setText(formatted);
     }
 
     /**

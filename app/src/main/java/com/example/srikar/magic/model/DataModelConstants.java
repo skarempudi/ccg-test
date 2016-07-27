@@ -20,6 +20,11 @@ public class DataModelConstants {
     public static final int PLAYER_ALICE = 0, PLAYER_BOB = 1;
 
     /**
+     * To prevent from creating an instance
+     */
+    private DataModelConstants(){}
+
+    /**
      * Game steps
      * All of the steps in a turn
      */

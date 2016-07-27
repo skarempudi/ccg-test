@@ -20,6 +20,7 @@ public class GameState {
     private int mCurrentPlayer; //the player whose turn it is
     private int mViewPlayer; //the player whose view is currently being used
 
+    private int mTurn; //what turn it currently is
     private int mStep; //what step in the turn it currently is
 
     public GameState(RxEventBus<GameStateChangeEvent> rxEventBus) {
@@ -28,6 +29,7 @@ public class GameState {
         mCurrentPlayer = DataModelConstants.PLAYER_ALICE; //starting player is Alice
         mViewPlayer = DataModelConstants.PLAYER_ALICE;
 
+        mTurn = 1; //first turn is 1
         mStep = DataModelConstants.STEP_UNTAP; //first step is untap
     }
 
@@ -79,6 +81,14 @@ public class GameState {
      */
     public int getOtherViewPlayer() {
         return mViewPlayer ^ 1;
+    }
+
+    /**
+     * Get the current turn number, which is incremented by going through all steps in a turn
+     * @return Turn number
+     */
+    public int getTurnNumber() {
+        return mTurn;
     }
 
     /**

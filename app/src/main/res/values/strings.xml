@@ -10,6 +10,13 @@
     <string name="library">Library</string>
     <string name="graveyard">Graveyard</string>
 
+    <!-- Player names -->
+    <string name="alice">Alice</string>
+    <string name="bob">Bob</string>
+
+    <!-- ex: Turn 1 (newline) <b>Alice</b> -->
+    <string name="unformat_turn_display">Turn %1$d&lt;br>&lt;b>%2$s&lt;/b></string>
+
     <!-- Step names -->
     <string name="step_untap">Untap step - your permanents untap</string>
     <string name="step_upkeep">Upkeep step - things stated to happen during upkeep, happen</string>
