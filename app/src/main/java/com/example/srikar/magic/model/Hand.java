@@ -1,6 +1,7 @@
 package com.example.srikar.magic.model;
 
 import com.example.srikar.magic.MagicLog;
+import com.example.srikar.magic.event.GameStateChangeEvent;
 import com.example.srikar.magic.event.ListChangeEvent;
 import com.example.srikar.magic.event.RxEventBus;
 
@@ -23,9 +24,11 @@ public class Hand extends BaseGameZone {
      * Constructed by dependency injection.
      * @param rvEventBus Event bus used to pass information to listening RecyclerViewModels
      * @param gameState Used to determine who the current player is
+     * @param gscEventBus Event bus used to listen for changes in gameState
      */
-    public Hand(RxEventBus<ListChangeEvent> rvEventBus, GameState gameState) {
-        super(rvEventBus, gameState);
+    public Hand(RxEventBus<ListChangeEvent> rvEventBus, GameState gameState,
+                RxEventBus<GameStateChangeEvent> gscEventBus) {
+        super(rvEventBus, gameState, gscEventBus);
 
         mCards = new ArrayList[2];
         mCards[DataModelConstants.PLAYER_ALICE] = new ArrayList<>();
@@ -68,5 +71,19 @@ public class Hand extends BaseGameZone {
     protected void clearLists() {
         mCards[DataModelConstants.PLAYER_ALICE].clear();
         mCards[DataModelConstants.PLAYER_BOB].clear();
+    }
+
+    /***********************************************************************************************
+     * GAME STATE CHANGE EVENT BUS
+     * Listen for changes to GameState
+     **********************************************************************************************/
+    /**
+     * Act on changes to GameState
+     * Doesn't do anything yet, but will draw a card at draw step later
+     * @param event GameState change event
+     */
+    @Override
+    protected void actOnGameStateChangeEvent(GameStateChangeEvent event) {
+
     }
 }

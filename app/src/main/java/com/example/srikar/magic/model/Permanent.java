@@ -27,28 +27,32 @@ public class Permanent {
 
     /**
      * Tap the permanent.
+     * @return If tap action actually occurred
      */
-    public void tap() {
+    public boolean tap() {
         //if already tapped, tap action doesn't occur
         if (tapped) {
             MagicLog.d(TAG, "tap: Already tapped, no action");
-            return;
+            return false;
         }
 
         tapped = true;
+        return true;
     }
 
     /**
      * Untap the permanent.
+     * @return If untap action actually occurred
      */
-    public void untap() {
+    public boolean untap() {
         //if already untapped, untap action doesn't occur
         if (!tapped) {
             MagicLog.d(TAG, "untap: Already untapped, no action");
-            return;
+            return false;
         }
 
         tapped = false;
+        return true;
     }
 
     public void onClick() {
