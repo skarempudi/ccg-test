@@ -99,14 +99,29 @@ public class GameState {
         //next step will be in same turn
         if (mStep < DataModelConstants.STEP_END) {
             mStep++;
+
+            //add to event bus
+            addGameStateChangeEvent(GameStateChangeEvent.NEXT_STEP);
         }
         //next step will be in next turn
-        //don't switch players yet
         else {
-            mStep = DataModelConstants.STEP_UNTAP;
+            nextTurn();
         }
-        //either way, add to event bus
-        addGameStateChangeEvent(GameStateChangeEvent.NEXT_STEP);
+    }
+
+    /**
+     * Start the next turn
+     */
+    private void nextTurn() {
+        //next turn
+        mTurn++;
+        //go to untap step
+        mStep = DataModelConstants.STEP_UNTAP;
+        //switch current player and change view player to it
+        switchCurrentPlayer();
+
+        //alert listening BoardFragmentModel to handle change in turn
+        addGameStateChangeEvent(GameStateChangeEvent.NEXT_TURN);
     }
 
     /**

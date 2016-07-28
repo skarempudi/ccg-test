@@ -268,6 +268,21 @@ public class BoardFragmentModel extends BaseObservable {
     }
 
     /**
+     * When go to next turn, update turn, game log, and background
+     * Triggered by change in game state data model
+     */
+    private void handleNextTurn() {
+        //since next turn, update turn text
+        setTurnText();
+
+        //update the backgrounds and lists
+        handleSwitchViewPlayer();
+
+        //do normal stuff affiliated with handling next step
+        handleNextStep();
+    }
+
+    /**
      * Call when containing View or Fragment is destroyed, will unregister Subscriptions
      */
     public void onDestroy() {
@@ -310,6 +325,10 @@ public class BoardFragmentModel extends BaseObservable {
         //if going to next step in turn
         else if (event.action == GameStateChangeEvent.NEXT_STEP) {
             handleNextStep();
+        }
+        //if going to next turn
+        else if (event.action == GameStateChangeEvent.NEXT_TURN) {
+            handleNextTurn();
         }
     }
 }

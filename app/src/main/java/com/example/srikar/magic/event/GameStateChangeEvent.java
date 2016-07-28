@@ -11,6 +11,7 @@ public class GameStateChangeEvent implements MagicEvent {
      */
     public static final int SWITCH_VIEW_PLAYER = 0; //changes backgrounds
     public static final int NEXT_STEP = 1; //next step, updates game log
+    public static final int NEXT_TURN = 2; //next turn, updates game log and changes backgrounds
 
     public final int action;
 
@@ -20,7 +21,7 @@ public class GameStateChangeEvent implements MagicEvent {
 
     @Override
     public String toString() {
-        String actions[] = {"switch view player", "next step"};
+        String actions[] = {"switch view player", "next step", "next turn"};
         return actions[action];
     }
 }
