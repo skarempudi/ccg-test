@@ -5,8 +5,8 @@ import android.app.Application;
 import com.example.srikar.magic.dagger.DaggerMainComponent;
 import com.example.srikar.magic.dagger.MainComponent;
 import com.example.srikar.magic.json.AssetLoader;
-import com.example.srikar.magic.model.Battlefield;
-import com.example.srikar.magic.model.Hand;
+import com.example.srikar.magic.model.zone.Battlefield;
+import com.example.srikar.magic.model.zone.Hand;
 import com.example.srikar.magic.model.DataModelConstants;
 
 import javax.inject.Inject;

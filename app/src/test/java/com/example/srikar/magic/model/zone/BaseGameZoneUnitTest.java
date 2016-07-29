@@ -1,8 +1,11 @@
-package com.example.srikar.magic.model;
+package com.example.srikar.magic.model.zone;
 
 import com.example.srikar.magic.MagicLog;
+import com.example.srikar.magic.event.GameStateChangeEvent;
 import com.example.srikar.magic.event.ListChangeEvent;
 import com.example.srikar.magic.event.RxEventBus;
+import com.example.srikar.magic.model.DataModelConstants;
+import com.example.srikar.magic.model.zone.BaseGameZone;
 
 import org.junit.Test;
 
@@ -20,15 +23,21 @@ public class BaseGameZoneUnitTest {
     private final BaseGameZone baseGameZone;
 
     public BaseGameZoneUnitTest() {
+        MagicLog.setLogging(false);
+
         eventBus = new RxEventBus<>();
         //create implementation that can test
-        baseGameZone = new BaseGameZone(eventBus, null) {
+        baseGameZone = new BaseGameZone(eventBus, null, new RxEventBus<>()) {
             @Override
             protected void clearLists() {
                 //there are no lists to clear
             }
+
+            @Override
+            protected void actOnGameStateChangeEvent(GameStateChangeEvent event) {
+                //not testing response to changes in GameState
+            }
         };
-        MagicLog.setLogging(false);
     }
 
     /**

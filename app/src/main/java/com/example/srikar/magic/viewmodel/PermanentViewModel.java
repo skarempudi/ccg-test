@@ -7,7 +7,7 @@ import com.example.srikar.magic.MagicApplication;
 import com.example.srikar.magic.MagicLog;
 import com.example.srikar.magic.R;
 import com.example.srikar.magic.databinding.PermanentBinding;
-import com.example.srikar.magic.model.Battlefield;
+import com.example.srikar.magic.model.zone.Battlefield;
 import com.example.srikar.magic.model.Permanent;
 import com.jakewharton.rxbinding.view.RxView;
 import com.squareup.picasso.Picasso;

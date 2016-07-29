@@ -1,9 +1,12 @@
-package com.example.srikar.magic.model;
+package com.example.srikar.magic.model.zone;
 
 import com.example.srikar.magic.MagicLog;
 import com.example.srikar.magic.event.GameStateChangeEvent;
 import com.example.srikar.magic.event.ListChangeEvent;
 import com.example.srikar.magic.event.RxEventBus;
+import com.example.srikar.magic.model.DataModelConstants;
+import com.example.srikar.magic.model.GameState;
+import com.example.srikar.magic.model.Permanent;
 
 import java.util.ArrayList;
 

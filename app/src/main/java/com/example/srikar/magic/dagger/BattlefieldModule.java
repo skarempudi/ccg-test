@@ -3,7 +3,7 @@ package com.example.srikar.magic.dagger;
 import com.example.srikar.magic.event.GameStateChangeEvent;
 import com.example.srikar.magic.event.ListChangeEvent;
 import com.example.srikar.magic.event.RxEventBus;
-import com.example.srikar.magic.model.Battlefield;
+import com.example.srikar.magic.model.zone.Battlefield;
 import com.example.srikar.magic.model.GameState;
 
 import javax.inject.Singleton;

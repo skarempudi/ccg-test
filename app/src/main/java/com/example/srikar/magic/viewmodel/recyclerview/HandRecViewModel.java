@@ -5,9 +5,8 @@ import android.support.v7.widget.RecyclerView;
 
 import com.example.srikar.magic.MagicApplication;
 import com.example.srikar.magic.adapter.HandRecViewAdapter;
-import com.example.srikar.magic.event.ListChangeEvent;
 import com.example.srikar.magic.model.DataModelConstants;
-import com.example.srikar.magic.model.Hand;
+import com.example.srikar.magic.model.zone.Hand;
 
 import javax.inject.Inject;
 

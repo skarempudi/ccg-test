@@ -5,8 +5,7 @@ import android.support.v7.widget.RecyclerView;
 
 import com.example.srikar.magic.MagicApplication;
 import com.example.srikar.magic.adapter.BattlefieldRecViewAdapter;
-import com.example.srikar.magic.event.ListChangeEvent;
-import com.example.srikar.magic.model.Battlefield;
+import com.example.srikar.magic.model.zone.Battlefield;
 
 import javax.inject.Inject;
 

@@ -1,9 +1,10 @@
-package com.example.srikar.magic.model;
+package com.example.srikar.magic.model.zone;
 
 import com.example.srikar.magic.MagicLog;
 import com.example.srikar.magic.event.GameStateChangeEvent;
 import com.example.srikar.magic.event.ListChangeEvent;
 import com.example.srikar.magic.event.RxEventBus;
+import com.example.srikar.magic.model.GameState;
 
 /**
  * Base class for Battlefield and Hand. Covers data models for game zones a card may travel between.
