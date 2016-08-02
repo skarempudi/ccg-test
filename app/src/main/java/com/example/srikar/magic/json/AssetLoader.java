@@ -5,6 +5,7 @@ import android.content.res.AssetManager;
 
 import com.example.srikar.magic.MagicLog;
 import com.example.srikar.magic.model.Card;
+import com.example.srikar.magic.model.detail.CreatureDetails;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.google.gson.stream.JsonReader;
@@ -67,7 +68,11 @@ public class AssetLoader {
 
             Type arrayListType = new TypeToken<ArrayList<Card>>(){}.getType();
 
-            return gson.fromJson(reader, arrayListType);
+            ArrayList<Card> list =  gson.fromJson(reader, arrayListType);
+            for (Card card : list) {
+                card.details = new CreatureDetails();
+            }
+            return list;
 
             //since Permanent holds custom Cards, have to do mixed read
 //            jsonReader.beginArray();

@@ -1,6 +1,7 @@
 package com.example.srikar.magic.model;
 
 import com.example.srikar.magic.MagicLog;
+import com.example.srikar.magic.model.detail.CreatureDetails;
 
 /**
  * Data model for Cards in Hand
@@ -10,6 +11,9 @@ public class Card {
     private static final String TAG = "Card";
     //maps to JSON "id"
     public final int id;
+
+    //for now, defaults to 3/3
+    public CreatureDetails details;
 
     private boolean tapped = false;
 

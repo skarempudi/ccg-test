@@ -8,6 +8,7 @@ import com.example.srikar.magic.MagicLog;
 import com.example.srikar.magic.R;
 import com.example.srikar.magic.databinding.PermanentBinding;
 import com.example.srikar.magic.model.Card;
+import com.example.srikar.magic.model.detail.CreatureDetails;
 import com.example.srikar.magic.model.zone.Battlefield;
 import com.jakewharton.rxbinding.view.RxView;
 import com.squareup.picasso.Picasso;
@@ -38,10 +39,10 @@ public class PermanentViewModel extends BaseItemViewModel {
                 .getMainComponent()
                 .inject(this);
 
-        //subscribe to the onClick for the ImageView
-        RxView.clicks(binding.cardImage)
+        //subscribe to the onClick for the FrameLayout
+        RxView.clicks(binding.card)
                 .throttleFirst(UiConstants.CLICK_DELAY, TimeUnit.MILLISECONDS) //ignore double clicks
-                .subscribe(empty -> onImageClick());
+                .subscribe(empty -> onCardClick());
     }
 
     /**
@@ -49,8 +50,17 @@ public class PermanentViewModel extends BaseItemViewModel {
      * Right now, just taps or untaps in data model, which will use an event bus to alert a listening
      * RecyclerViewModel, which tells the RecyclerView Adapter to update at this position
      */
-    private void onImageClick() {
+    private void onCardClick() {
         mBattlefield.onViewPlayerPermanentClicked(mListName, mPosition);
+    }
+
+    /**
+     * Used by DataBinding in permanent.xml to display the creature's power and toughness
+     * @return String in format "power/toughness"
+     */
+    public String getPTText() {
+        CreatureDetails details = retrievePermanent().details;
+        return details.power + "/" + details.toughness;
     }
 
     /**

@@ -49,6 +49,9 @@ public class BattlefieldRecViewAdapter extends BaseRecViewAdapter {
         //the view model handles onClick events and such
         PermanentViewModel permViewModel = new PermanentViewModel(binding);
 
+        //bind view model to binding
+        binding.setPermanentViewModel(permViewModel);
+
         //create the view holder
         return new BaseRecViewHolder(binding, permViewModel);
     }
