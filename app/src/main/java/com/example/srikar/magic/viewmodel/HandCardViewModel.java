@@ -11,10 +11,10 @@ import com.squareup.picasso.Picasso;
  * Instead of directly handling the card views, work with this model that uses data binding
  * Created by Srikar on 5/10/2016.
  */
-public class CardViewModel extends BaseItemViewModel {
+public class HandCardViewModel extends BaseItemViewModel {
     private final CardBinding mBinding;
 
-    public CardViewModel(CardBinding binding) {
+    public HandCardViewModel(CardBinding binding) {
         mBinding = binding;
     }
 

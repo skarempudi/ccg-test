@@ -5,7 +5,7 @@ import android.databinding.BaseObservable;
 import com.example.srikar.magic.event.ListChangeEvent;
 
 /**
- * Base View Model for item views, CardViewModel and PermanentViewModel
+ * Base View Model for item views, HandCardViewModel and BattlefieldCardViewModel
  * Instead of directly working with the views, act through View Models, which are created by the
  * XML layout files
  * Created by Srikar on 5/20/2016.

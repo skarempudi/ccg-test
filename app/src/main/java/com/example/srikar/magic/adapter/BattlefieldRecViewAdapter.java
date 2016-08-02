@@ -7,13 +7,12 @@ import android.view.ViewGroup;
 
 import com.example.srikar.magic.R;
 import com.example.srikar.magic.databinding.PermanentBinding;
-import com.example.srikar.magic.event.ListChangeEvent;
-import com.example.srikar.magic.viewmodel.PermanentViewModel;
+import com.example.srikar.magic.viewmodel.BattlefieldCardViewModel;
 import com.example.srikar.magic.viewmodel.recyclerview.BaseRecyclerViewModel;
 
 /**
  * Base adapter for the RecyclerViews that represent the Battlefield
- * Data model interaction is handled by the PermanentViewModel it creates and the RecyclerViewModel
+ * Data model interaction is handled by the BattlefieldCardViewModel it creates and the RecyclerViewModel
  * that created it.
  * Created by Srikar on 5/20/2016.
  */
@@ -47,12 +46,12 @@ public class BattlefieldRecViewAdapter extends BaseRecViewAdapter {
 
         //create new view model, which takes binding
         //the view model handles onClick events and such
-        PermanentViewModel permViewModel = new PermanentViewModel(binding);
+        BattlefieldCardViewModel battlefieldCardViewModel = new BattlefieldCardViewModel(binding);
 
         //bind view model to binding
-        binding.setPermanentViewModel(permViewModel);
+        binding.setBattlefieldCardViewModel(battlefieldCardViewModel);
 
         //create the view holder
-        return new BaseRecViewHolder(binding, permViewModel);
+        return new BaseRecViewHolder(binding, battlefieldCardViewModel);
     }
 }

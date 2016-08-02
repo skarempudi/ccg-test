@@ -22,8 +22,8 @@ import javax.inject.Inject;
  * Instead of directly handling the permanent views, work with this model that uses data binding
  * Created by Srikar on 5/20/2016.
  */
-public class PermanentViewModel extends BaseItemViewModel {
-    private static final String TAG = "PermanentViewModel";
+public class BattlefieldCardViewModel extends BaseItemViewModel {
+    private static final String TAG = "BattlefieldCardViewModel";
 
     //bindings for views in Permanent layout
     private final PermanentBinding mBinding;
@@ -31,7 +31,7 @@ public class PermanentViewModel extends BaseItemViewModel {
     @Inject
     protected Battlefield mBattlefield;
 
-    public PermanentViewModel(PermanentBinding binding) {
+    public BattlefieldCardViewModel(PermanentBinding binding) {
         mBinding = binding;
 
         //get instance of Battlefield

@@ -7,9 +7,8 @@ import android.view.ViewGroup;
 
 import com.example.srikar.magic.databinding.CardBinding;
 import com.example.srikar.magic.R;
-import com.example.srikar.magic.event.ListChangeEvent;
 import com.example.srikar.magic.model.DataModelConstants;
-import com.example.srikar.magic.viewmodel.CardViewModel;
+import com.example.srikar.magic.viewmodel.HandCardViewModel;
 import com.example.srikar.magic.viewmodel.recyclerview.BaseRecyclerViewModel;
 
 /**
@@ -41,7 +40,7 @@ public class HandRecViewAdapter extends BaseRecViewAdapter {
         );
 
         //create view model that takes binding, will handle onClick and such
-        CardViewModel viewModel = new CardViewModel(binding);
+        HandCardViewModel viewModel = new HandCardViewModel(binding);
 
         return new BaseRecViewHolder(binding, viewModel);
     }
