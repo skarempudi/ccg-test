@@ -4,9 +4,9 @@ import com.example.srikar.magic.MagicLog;
 import com.example.srikar.magic.event.GameStateChangeEvent;
 import com.example.srikar.magic.event.ListChangeEvent;
 import com.example.srikar.magic.event.RxEventBus;
+import com.example.srikar.magic.model.Card;
 import com.example.srikar.magic.model.DataModelConstants;
 import com.example.srikar.magic.model.GameState;
-import com.example.srikar.magic.model.Permanent;
 
 import java.util.ArrayList;
 
@@ -19,7 +19,7 @@ import java.util.ArrayList;
 public class Battlefield extends BaseGameZone {
     private static final String TAG = "Battlefield";
 
-    private final ArrayList<Permanent>[] mLands, mCreatures;
+    private final ArrayList<Card>[] mLands, mCreatures;
 
     /**
      * Holds the lands and creatures used by both players.
@@ -46,7 +46,7 @@ public class Battlefield extends BaseGameZone {
      * @param playerID Either DataModelConstants.PLAYER_ALICE or DataModelConstants.PLAYER_BOB
      * @param land Land
      */
-    void addLand(int playerID, Permanent land) {
+    void addLand(int playerID, Card land) {
         mLands[playerID].add(land);
     }
 
@@ -56,7 +56,7 @@ public class Battlefield extends BaseGameZone {
      * @param playerID Either DataModelConstants.PLAYER_ALICE or PLAYER_BOB
      * @param creatures List of creatures
      */
-    public void setCreatures(int playerID, ArrayList<Permanent> creatures) {
+    public void setCreatures(int playerID, ArrayList<Card> creatures) {
         MagicLog.d(TAG, "setCreatures: " + creatures.toString() + " for " + playerID);
         mCreatures[playerID] = creatures;
         addListChangeEvent(
@@ -72,7 +72,7 @@ public class Battlefield extends BaseGameZone {
      * @param position The position in the list
      * @return The permanent
      */
-    public Permanent getViewPlayerPermanent(int listName, int position) {
+    public Card getViewPlayerPermanent(int listName, int position) {
         switch(listName) {
             case DataModelConstants.LIST_LANDS:
                 return getViewPlayerLand(position);
@@ -90,7 +90,7 @@ public class Battlefield extends BaseGameZone {
      * @param position Position in list
      * @return Land
      */
-    public Permanent getViewPlayerLand(int position) {
+    public Card getViewPlayerLand(int position) {
         return mLands[mGameState.getViewPlayer()].get(position);
     }
 
@@ -99,7 +99,7 @@ public class Battlefield extends BaseGameZone {
      * @param position Position in list
      * @return Creature
      */
-    public Permanent getViewPlayerCreature(int position) {
+    public Card getViewPlayerCreature(int position) {
         return mCreatures[mGameState.getViewPlayer()].get(position);
     }
 
@@ -159,7 +159,7 @@ public class Battlefield extends BaseGameZone {
      */
     private void onViewPlayerCreatureClicked(int position) {
         //get creature
-        Permanent creature = getViewPlayerCreature(position);
+        Card creature = getViewPlayerCreature(position);
 
         //if creature tapped, untap it
         if (creature.isTapped()) {

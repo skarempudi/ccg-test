@@ -7,8 +7,8 @@ import com.example.srikar.magic.MagicApplication;
 import com.example.srikar.magic.MagicLog;
 import com.example.srikar.magic.R;
 import com.example.srikar.magic.databinding.PermanentBinding;
+import com.example.srikar.magic.model.Card;
 import com.example.srikar.magic.model.zone.Battlefield;
-import com.example.srikar.magic.model.Permanent;
 import com.jakewharton.rxbinding.view.RxView;
 import com.squareup.picasso.Picasso;
 
@@ -61,7 +61,7 @@ public class PermanentViewModel extends BaseItemViewModel {
         //get the view
         ImageView view = mBinding.cardImage;
         //get the Permanent
-        Permanent perm = retrievePermanent();
+        Card perm = retrievePermanent();
 
         //if tapped, rotate 90 degrees
         //in future, will instead have a set of custom transformations that apply
@@ -81,11 +81,11 @@ public class PermanentViewModel extends BaseItemViewModel {
     }
 
     /**
-     * Using the listName list and the position in that list, get the Permanent that matches to this
+     * Using the listName list and the position in that list, get the Permanent Card that matches to this
      * position in the RecyclerView
      * @return Permanent
      */
-    private Permanent retrievePermanent() {
+    private Card retrievePermanent() {
         return mBattlefield.getViewPlayerPermanent(mListName, mPosition);
     }
 }

@@ -5,7 +5,6 @@ import android.content.res.AssetManager;
 
 import com.example.srikar.magic.MagicLog;
 import com.example.srikar.magic.model.Card;
-import com.example.srikar.magic.model.Permanent;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.google.gson.stream.JsonReader;
@@ -53,7 +52,7 @@ public class AssetLoader {
         return null;
     }
 
-    public static ArrayList<Permanent> loadCreatures(Context context) {
+    public static ArrayList<Card> loadCreatures(Context context) {
         MagicLog.d(TAG, "loadCreatures: Staring load");
 
         AssetManager assetManager = context.getAssets();
@@ -62,27 +61,31 @@ public class AssetLoader {
         try {
             InputStream in = assetManager.open(ASSET_CREATURES_FILE);
             Reader reader = new InputStreamReader(in);
-            JsonReader jsonReader = new JsonReader(reader);
+//            JsonReader jsonReader = new JsonReader(reader);
+//
+//            ArrayList<Card> list = new ArrayList<>();
 
-            ArrayList<Permanent> list = new ArrayList<>();
+            Type arrayListType = new TypeToken<ArrayList<Card>>(){}.getType();
+
+            return gson.fromJson(reader, arrayListType);
 
             //since Permanent holds custom Cards, have to do mixed read
-            jsonReader.beginArray();
-            while (jsonReader.hasNext()) {
-                //{"card":{"id":"#"}}
-                jsonReader.beginObject();
-                //"card":{"id":"#"}
-                jsonReader.nextName();
-                //{"id":"#"}
-                Card card = gson.fromJson(jsonReader, Card.class);
-                MagicLog.d(TAG, "loadCreatures: loaded card " + card.toString());
-                list.add(new Permanent(card));
-                jsonReader.endObject();
-            }
-            jsonReader.endArray();
-            jsonReader.close();
-
-            return list;
+//            jsonReader.beginArray();
+//            while (jsonReader.hasNext()) {
+//                //{"card":{"id":"#"}}
+//                jsonReader.beginObject();
+//                //"card":{"id":"#"}
+//                jsonReader.nextName();
+//                //{"id":"#"}
+//                Card card = gson.fromJson(jsonReader, Card.class);
+//                MagicLog.d(TAG, "loadCreatures: loaded card " + card.toString());
+//                list.add(new Permanent(card));
+//                jsonReader.endObject();
+//            }
+//            jsonReader.endArray();
+//            jsonReader.close();
+//
+//            return list;
         }
         catch (IOException e) {
             e.printStackTrace();

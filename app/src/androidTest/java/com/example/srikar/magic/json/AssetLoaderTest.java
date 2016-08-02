@@ -1,20 +1,14 @@
 package com.example.srikar.magic.json;
 
 import android.content.Context;
-import android.content.res.AssetManager;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.runner.AndroidJUnit4;
 
 import com.example.srikar.magic.model.Card;
-import com.example.srikar.magic.model.Permanent;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.Reader;
 import java.util.ArrayList;
 
 import static org.junit.Assert.assertTrue;
@@ -59,7 +53,7 @@ public class AssetLoaderTest {
         int TEST_SIZE = 3;
 
         //method being tested
-        ArrayList<Permanent> creatures = AssetLoader.loadCreatures(context);
+        ArrayList<Card> creatures = AssetLoader.loadCreatures(context);
 
         //assert that not null
         assertTrue("Creature list is null", creatures != null);

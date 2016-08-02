@@ -6,8 +6,6 @@ import com.example.srikar.magic.event.RxEventBus;
 import com.example.srikar.magic.model.Card;
 import com.example.srikar.magic.model.DataModelConstants;
 import com.example.srikar.magic.model.GameState;
-import com.example.srikar.magic.model.Permanent;
-import com.example.srikar.magic.model.zone.Battlefield;
 
 
 import org.junit.After;
@@ -44,10 +42,9 @@ public class BattlefieldUnitTest {
      * Starts with three creatures on battlefield on Alice's side
      */
     public void setUp() {
-        ArrayList<Permanent> list = new ArrayList<>();
+        ArrayList<Card> list = new ArrayList<>();
         for (int i = 0; i < NUM_CREATURES; i++) {
-            Card card = new Card(i);
-            list.add(new Permanent(card));
+            list.add(new Card(i));
         }
         battlefield.setCreatures(DataModelConstants.PLAYER_ALICE, list);
     }
@@ -78,7 +75,7 @@ public class BattlefieldUnitTest {
      */
     public void testGetViewPlayerCreature() {
         for (int i = 0; i < NUM_CREATURES; i++) {
-            Permanent creature = battlefield.getViewPlayerCreature(i);
+            Card creature = battlefield.getViewPlayerCreature(i);
             assertTrue("The id is " + creature.toString(),
                     creature.toString().compareTo(i + " untapped") == 0);
         }
@@ -90,8 +87,7 @@ public class BattlefieldUnitTest {
      * lists
      */
     public void testAddLand() {
-        Card card = new Card(0);
-        battlefield.addLand(DataModelConstants.PLAYER_ALICE, new Permanent(card));
+        battlefield.addLand(DataModelConstants.PLAYER_ALICE, new Card(0));
 
         int numLands = battlefield.getViewPlayerLandsSize();
         assertTrue("Number of lands is " + numLands, numLands == NUM_LANDS + 1);
@@ -102,10 +98,9 @@ public class BattlefieldUnitTest {
      * Assert that after add land, getViewPlayerLand() returns the expected Permanent
      */
     public void testGetViewPlayerLand() {
-        Card card = new Card(0);
-        battlefield.addLand(DataModelConstants.PLAYER_ALICE, new Permanent(card));
+        battlefield.addLand(DataModelConstants.PLAYER_ALICE, new Card(0));
 
-        Permanent land = battlefield.getViewPlayerLand(NUM_LANDS);
+        Card land = battlefield.getViewPlayerLand(NUM_LANDS);
         assertTrue("The id is " + land.toString(),
                 land.toString().compareTo("0 untapped") == 0);
     }
