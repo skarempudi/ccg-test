@@ -8,7 +8,7 @@ At this point, this is best viewed as a showcase of my experimenting with RxJava
 
 ## Usage
 
-The bottom row represents the hand, the row above land resource cards, and the row above creature cards. Above that is your opponent's creatures (not implemented), then a game log and a button to progress through the turn, then finally the turn counter, life tracker (not implemented), and a button to switch what player you are viewing as.
+The bottom row represents the hand, the row above land resource cards, and the row above creature cards. Above that is your opponent's creatures (not implemented), then a game log and a button to progress through the turn, then finally the turn counter, life tracker for each player, and a button to switch what player you are viewing as.
 
 Touching the creature cards will result in them rotating 90 degrees (tapping), and returning to normal (untapping) on a second touch.
 

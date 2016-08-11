@@ -11,6 +11,7 @@ import com.example.srikar.magic.event.RxEventBus;
  */
 public class GameState {
     private static final String TAG = "GameState";
+    private static final int STARTING_LIFE = 20;
 
     /**
      * Used to signal to BoardFragmentModel that game state changed
@@ -22,6 +23,8 @@ public class GameState {
 
     private int mTurn; //what turn it currently is
     private int mStep; //what step in the turn it currently is
+
+    private int[] lifeTotals = {STARTING_LIFE, STARTING_LIFE};
 
     public GameState(RxEventBus<GameStateChangeEvent> rxEventBus) {
         mGameStateChangeEventBus = rxEventBus;
@@ -130,6 +133,15 @@ public class GameState {
      */
     public int getCurrentStep() {
         return mStep;
+    }
+
+    /**
+     * Get the current life total for the given player
+     * @param playerID Either DataModelConstants.PLAYER_ALICE or PLAYER_BOB
+     * @return Life total
+     */
+    public int getLifeTotal(int playerID) {
+        return lifeTotals[playerID];
     }
 
     /***********************************************************************************************

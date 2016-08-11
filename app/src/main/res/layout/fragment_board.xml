@@ -39,10 +39,20 @@
             />
         
         <TextView
-            android:id="@+id/life_counter"
+            android:id="@+id/life_counter_alice"
             android:text="@string/life"
             android:layout_alignParentTop="true"
             android:layout_toRightOf="@id/turn_counter"
+            app:layout_widthPercent="@fraction/life_counter_width_percent"
+            app:layout_heightPercent="@fraction/first_row_percent"
+            android:gravity="center"
+            />
+
+        <TextView
+            android:id="@+id/life_counter_bob"
+            android:text="@string/life"
+            android:layout_alignParentTop="true"
+            android:layout_toRightOf="@id/life_counter_alice"
             app:layout_widthPercent="@fraction/life_counter_width_percent"
             app:layout_heightPercent="@fraction/first_row_percent"
             android:gravity="center"
@@ -52,7 +62,7 @@
             android:id="@+id/switch_player"
             android:text="@string/switch_player"
             android:layout_alignParentTop="true"
-            android:layout_toRightOf="@id/life_counter"
+            android:layout_toRightOf="@id/life_counter_bob"
             app:layout_widthPercent="@fraction/switch_player_width_percent"
             app:layout_heightPercent="@fraction/first_row_percent"
             />

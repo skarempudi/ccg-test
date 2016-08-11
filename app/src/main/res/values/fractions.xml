@@ -10,7 +10,7 @@
 
     <!-- Percentage widths -->
     <fraction name="turn_width_percent">25%</fraction>
-    <fraction name="life_counter_width_percent">50%</fraction>
+    <fraction name="life_counter_width_percent">25%</fraction>
     <fraction name="switch_player_width_percent">25%</fraction>
     <fraction name="log_width_percent">75%</fraction>
     <fraction name="next_step_width_percent">25%</fraction>

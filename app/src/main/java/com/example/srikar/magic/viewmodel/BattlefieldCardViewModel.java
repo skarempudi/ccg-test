@@ -2,7 +2,7 @@ package com.example.srikar.magic.viewmodel;
 
 import android.widget.ImageView;
 
-import com.example.srikar.magic.UiConstants;
+import com.example.srikar.magic.UiUtil;
 import com.example.srikar.magic.MagicApplication;
 import com.example.srikar.magic.MagicLog;
 import com.example.srikar.magic.R;
@@ -41,7 +41,7 @@ public class BattlefieldCardViewModel extends BaseItemViewModel {
 
         //subscribe to the onClick for the FrameLayout
         RxView.clicks(binding.card)
-                .throttleFirst(UiConstants.CLICK_DELAY, TimeUnit.MILLISECONDS) //ignore double clicks
+                .throttleFirst(UiUtil.CLICK_DELAY, TimeUnit.MILLISECONDS) //ignore double clicks
                 .subscribe(empty -> onCardClick());
     }
 

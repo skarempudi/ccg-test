@@ -14,8 +14,14 @@
     <string name="alice">Alice</string>
     <string name="bob">Bob</string>
 
+    <!-- For life total display, text colors for HTML -->
+    <string name="alice_color">blue</string>
+    <string name="bob_color">red</string>
+
     <!-- ex: Turn 1 (newline) <b>Alice</b> -->
     <string name="unformat_turn_display">Turn %1$d&lt;br>&lt;b>%2$s&lt;/b></string>
+    <!-- ex: <font color='blue'>Alice</font> (newline) <b>20</b> -->
+    <string name="unformat_life">&lt;font color=\'%1$s\'>%2$s&lt;/font>&lt;br>&lt;b>%3$d&lt;/b></string>
 
     <!-- Step names -->
     <string name="step_untap">Untap step - your permanents untap</string>

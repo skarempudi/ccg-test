@@ -4,10 +4,12 @@ import android.content.Context;
 import android.databinding.BaseObservable;
 import android.os.Build;
 import android.text.Html;
+import android.widget.TextView;
 
 import com.example.srikar.magic.MagicApplication;
 import com.example.srikar.magic.MagicLog;
 import com.example.srikar.magic.R;
+import com.example.srikar.magic.UiUtil;
 import com.example.srikar.magic.databinding.FragmentBoardBinding;
 import com.example.srikar.magic.event.GameStateChangeEvent;
 import com.example.srikar.magic.event.RxEventBus;
@@ -66,6 +68,9 @@ public class BoardFragmentModel extends BaseObservable {
 
         //set the turn text
         setTurnText();
+
+        //set the life total texts
+        setLifeText();
 
         //set the game action log starting text
         setLogText();
@@ -128,7 +133,8 @@ public class BoardFragmentModel extends BaseObservable {
         //first row - turns, life, switch player
         //turn's background is based on current player, not view player
         mBinding.turnCounter.setBackgroundResource(turnBackgroundResource);
-        mBinding.lifeCounter.setBackgroundResource(backgroundResource);
+        mBinding.lifeCounterAlice.setBackgroundResource(backgroundResource);
+        mBinding.lifeCounterBob.setBackgroundResource(backgroundResource);
         mBinding.switchPlayer.setBackgroundResource(backgroundResource);
 
         //second row - game action log, next step
@@ -172,17 +178,43 @@ public class BoardFragmentModel extends BaseObservable {
 
         //format the string
         String partial = String.format(unformatted, turn, name);
-        CharSequence formatted;
         //uses HTML to bold player name
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            formatted = Html.fromHtml(partial, Html.FROM_HTML_MODE_LEGACY);
-        }
-        else {
-            formatted = Html.fromHtml(partial);
-        }
+        CharSequence formatted = UiUtil.formatHTML(partial);
 
         //set in turn display
         mBinding.turnCounter.setText(formatted);
+    }
+
+    /**
+     * Set text for life total displays based on information in game state data model
+     */
+    private void setLifeText() {
+        //get names
+        String aliceName = mContext.getResources().getString(R.string.alice);
+        String bobName = mContext.getResources().getString(R.string.bob);
+
+        //get colors
+        String aliceColor = mContext.getResources().getString(R.string.alice_color);
+        String bobColor = mContext.getResources().getString(R.string.bob_color);
+
+        //get life totals
+        int aliceLife = mGameState.getLifeTotal(DataModelConstants.PLAYER_ALICE);
+        int bobLife = mGameState.getLifeTotal(DataModelConstants.PLAYER_BOB);
+
+        //get unformatted strings
+        String unformat = mContext.getResources().getString(R.string.unformat_life);
+
+        //format the strings: color, name, life total
+        String partialAlice = String.format(unformat, aliceColor, aliceName, aliceLife);
+        String partialBob = String.format(unformat, bobColor, bobName, bobLife);
+
+        //use HTML to finalize
+        CharSequence formatAlice = UiUtil.formatHTML(partialAlice);
+        CharSequence formatBob = UiUtil.formatHTML(partialBob);
+
+        //put in life total displays
+        mBinding.lifeCounterAlice.setText(formatAlice, TextView.BufferType.SPANNABLE);
+        mBinding.lifeCounterBob.setText(formatBob, TextView.BufferType.SPANNABLE);
     }
 
     /**
