@@ -22,19 +22,9 @@ public abstract class BaseGameZone {
      */
     protected final GameState mGameState;
 
-    /**
-     * Used to listen for changes in the GameState, such as the untap and draw steps starting.
-     */
-    protected final RxEventBus<GameStateChangeEvent> mGameStateChangeEventBus;
-
-    public BaseGameZone(RxEventBus<ListChangeEvent> rvEventBus, GameState gameState,
-                        RxEventBus<GameStateChangeEvent> gscEventBus) {
+    public BaseGameZone(RxEventBus<ListChangeEvent> rvEventBus, GameState gameState) {
         mListChangeEventBus = rvEventBus;
         mGameState = gameState;
-        mGameStateChangeEventBus = gscEventBus;
-
-        //subscribe to mGameStateChangeEventBus
-        registerGameStateChangeEventBus();
     }
 
     /**
@@ -58,25 +48,4 @@ public abstract class BaseGameZone {
 
         mListChangeEventBus.addEvent(event);
     }
-
-
-    /***********************************************************************************************
-     * GAME STATE CHANGE EVENT BUS
-     * Game zones listen for changes to GameState
-     **********************************************************************************************/
-
-    /**
-     * After get GameState change event bus, register to it. Event handling done by subclasses.
-     */
-    private void registerGameStateChangeEventBus() {
-        MagicLog.d(TAG, "registerGameStateChangeEventBus: ");
-        mGameStateChangeEventBus.getEvents()
-                .subscribe(this::actOnGameStateChangeEvent);
-    }
-
-    /**
-     * Implemented by subclasses. Handles events received from GameState when it changes.
-     * @param event GameState change event
-     */
-    protected abstract void actOnGameStateChangeEvent(GameStateChangeEvent event);
 }

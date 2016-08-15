@@ -3,6 +3,8 @@ package com.example.srikar.magic.model;
 import com.example.srikar.magic.MagicLog;
 import com.example.srikar.magic.event.GameStateChangeEvent;
 import com.example.srikar.magic.event.RxEventBus;
+import com.example.srikar.magic.model.zone.Battlefield;
+import com.example.srikar.magic.model.zone.Hand;
 
 /**
  * Class used to keep track of the general game state, such as whose turn it is, the life totals,
@@ -17,6 +19,11 @@ public class GameState {
      * Used to signal to BoardFragmentModel that game state changed
      */
     private final RxEventBus<GameStateChangeEvent> mGameStateChangeEventBus;
+    /**
+     * Not injected, due to dependency chain. Depend on GameState.
+     */
+    private Hand mHand;
+    private Battlefield mBattlefield;
 
     private int mCurrentPlayer; //the player whose turn it is
     private int mViewPlayer; //the player whose view is currently being used
@@ -34,6 +41,24 @@ public class GameState {
 
         mTurn = 1; //first turn is 1
         mStep = DataModelConstants.STEP_UNTAP; //first step is untap
+    }
+
+    /**
+     * Called by Hand constructor to create linkage
+     * Not done through dependency injection because Hand depends on GameState
+     * @param hand Hand singleton
+     */
+    public void setHand(Hand hand) {
+        mHand = hand;
+    }
+
+    /**
+     * Called by Battlefield constructor to create linkage
+     * Not done through dependency injection because Battlefield depends on GameState
+     * @param battlefield Battlefield singleton
+     */
+    public void setBattlefield(Battlefield battlefield) {
+        mBattlefield = battlefield;
     }
 
     /**
@@ -122,6 +147,9 @@ public class GameState {
         mStep = DataModelConstants.STEP_UNTAP;
         //switch current player and change view player to it
         switchCurrentPlayer();
+
+        //have permanents untap for now current player
+        mBattlefield.onUntapStep();
 
         //alert listening BoardFragmentModel to handle change in turn
         addGameStateChangeEvent(GameStateChangeEvent.NEXT_TURN);

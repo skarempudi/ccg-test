@@ -26,11 +26,11 @@ public class Battlefield extends BaseGameZone {
      * Constructed by dependency injection.
      * @param rvEventBus Event bus used to pass information to listening RecyclerViewModels
      * @param gameState Used to determine who the current player is
-     * @param gscEventBus Event bus used to listen for changes in gameState
      */
-    public Battlefield(RxEventBus<ListChangeEvent> rvEventBus, GameState gameState,
-                       RxEventBus<GameStateChangeEvent> gscEventBus) {
-        super(rvEventBus, gameState, gscEventBus);
+    public Battlefield(RxEventBus<ListChangeEvent> rvEventBus, GameState gameState) {
+        super(rvEventBus, gameState);
+
+        mGameState.setBattlefield(this);
 
         mLands = new ArrayList[2];
         mLands[DataModelConstants.PLAYER_ALICE] = new ArrayList<>();
@@ -210,23 +210,5 @@ public class Battlefield extends BaseGameZone {
 
         mCreatures[DataModelConstants.PLAYER_ALICE].clear();
         mCreatures[DataModelConstants.PLAYER_BOB].clear();
-    }
-
-
-    /***********************************************************************************************
-     * GAME STATE CHANGE EVENT BUS
-     * Listen for changes to GameState
-     **********************************************************************************************/
-    /**
-     * Act on changes to GameState
-     * When new turn starts, untap at start of untap step
-     * @param event GameState change event
-     */
-    @Override
-    protected void actOnGameStateChangeEvent(GameStateChangeEvent event) {
-        //if starting next turn, then starting untap step
-        if (event.action == GameStateChangeEvent.NEXT_TURN) {
-            onUntapStep();
-        }
     }
 }

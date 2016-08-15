@@ -20,8 +20,7 @@ class BattlefieldModule {
     @Provides
     @Singleton
     public Battlefield provideBattlefield(RxEventBus<ListChangeEvent> rvEventBus,
-                                          GameState state,
-                                          RxEventBus<GameStateChangeEvent> gscEventBus) {
-        return new Battlefield(rvEventBus, state, gscEventBus);
+                                          GameState state) {
+        return new Battlefield(rvEventBus, state);
     }
 }

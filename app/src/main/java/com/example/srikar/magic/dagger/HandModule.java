@@ -19,8 +19,7 @@ import dagger.Provides;
 class HandModule {
     @Provides
     @Singleton
-    public Hand provideHand(RxEventBus<ListChangeEvent> rvEventBus, GameState state,
-                            RxEventBus<GameStateChangeEvent> gscEventBus) {
-        return new Hand(rvEventBus, state, gscEventBus);
+    public Hand provideHand(RxEventBus<ListChangeEvent> rvEventBus, GameState state) {
+        return new Hand(rvEventBus, state);
     }
 }
