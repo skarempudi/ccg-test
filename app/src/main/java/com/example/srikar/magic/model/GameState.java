@@ -128,6 +128,22 @@ public class GameState {
         if (mStep < DataModelConstants.STEP_END) {
             mStep++;
 
+            //if starting combat with no creatures, instead go to second main phase
+            if (mStep == DataModelConstants.STEP_DECLARE_ATTACKERS && mBattlefield.getCurrentPlayerCreaturesSize() == 0) {
+                mStep = DataModelConstants.STEP_POSTCOMBAT_MAIN;
+            }
+
+            //trigger Battlefield listeners
+            switch (mStep) {
+                case DataModelConstants.STEP_START_OF_COMBAT:
+                    mBattlefield.onStartOfCombatStep();
+                    break;
+
+                case DataModelConstants.STEP_POSTCOMBAT_MAIN:
+                    mBattlefield.onPostcombatMainStep();
+                    break;
+            }
+
             //add to event bus
             addGameStateChangeEvent(GameStateChangeEvent.NEXT_STEP);
         }

@@ -15,6 +15,7 @@ import com.example.srikar.magic.event.GameStateChangeEvent;
 import com.example.srikar.magic.event.RxEventBus;
 import com.example.srikar.magic.model.DataModelConstants;
 import com.example.srikar.magic.model.GameState;
+import com.example.srikar.magic.model.zone.Battlefield;
 import com.example.srikar.magic.viewmodel.recyclerview.BattlefieldRecViewModel;
 import com.example.srikar.magic.viewmodel.recyclerview.HandRecViewModel;
 import com.jakewharton.rxbinding.view.RxView;
@@ -30,6 +31,8 @@ import rx.subscriptions.CompositeSubscription;
  */
 public class BoardFragmentModel extends BaseObservable {
     private static final String TAG = "BoardFragmentModel";
+    @Inject
+    protected Battlefield mBattlefield;
     @Inject
     protected GameState mGameState;
 
@@ -74,6 +77,9 @@ public class BoardFragmentModel extends BaseObservable {
 
         //set the game action log starting text
         setLogText();
+
+        //set next step button text
+        setNextStepButtonText();
 
         //create the RecyclerViewModels
         createRecyclerViewModels();
@@ -230,6 +236,20 @@ public class BoardFragmentModel extends BaseObservable {
         mBinding.gameActionLog.setText(stringId);
     }
 
+    private void setNextStepButtonText() {
+        //if during declare attackers
+        if (mBattlefield.getCombat() != null && mGameState.getCurrentStep() == DataModelConstants.STEP_DECLARE_ATTACKERS) {
+            //if attack not confirmed, then change text to "Confirm Attack"
+            if (!mBattlefield.getCombat().isAttackConfirmed()) {
+                mBinding.nextStep.setText(R.string.confirm_attack);
+                return;
+            }
+        }
+
+        //not during declare attackers, or don't need to confirm
+        mBinding.nextStep.setText(R.string.next_step);
+    }
+
     /**
      * Register onClick event handling for views other than RecyclerViews
      * RecyclerView onClicks handled by Permanent
@@ -294,6 +314,8 @@ public class BoardFragmentModel extends BaseObservable {
     private void handleNextStep() {
         //set log text based on current step listed in game state
         setLogText();
+        //set next step text, which can change during combat
+        setNextStepButtonText();
 
         //enable next step button
         mBinding.nextStep.setEnabled(true);

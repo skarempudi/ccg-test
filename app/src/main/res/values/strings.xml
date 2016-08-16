@@ -1,14 +1,18 @@
 <resources>
     <string name="app_name">Magic</string>
 
+    <!-- Placeholders -->
     <string name="turn">Turn</string>
     <string name="life">Life</string>
-    <string name="switch_player">Switch</string>
     <string name="log">Game action log</string>
-    <string name="next_step">Next Step</string>
     <string name="opp_creatures">Opposing creatures</string>
     <string name="library">Library</string>
     <string name="graveyard">Graveyard</string>
+
+    <!-- Buttons -->
+    <string name="switch_player">Switch</string>
+    <string name="next_step">Next Step</string>
+    <string name="confirm_attack">Confirm Attack</string>
 
     <!-- Player names -->
     <string name="alice">Alice</string>
@@ -35,5 +39,11 @@
     <string name="step_end_of_combat">End of combat step - last chance for your opponent to act before your next main phase</string>
     <string name="step_postcombat_main">Postcombat main phase - you can cast spells and play lands</string>
     <string name="step_end">End step - last chance for your opponent to act this turn</string>
+
+    <!-- Alert dialog strings -->
+    <string name="dialog_attackers">Confirm attackers?</string>
+    <string name="dialog_positive">Yes, go to declare blockers</string>
+    <string name="dialog_neutral">Yes, stay in this step</string>
+    <string name="dialog_negative">Cancel</string>
 
 </resources>

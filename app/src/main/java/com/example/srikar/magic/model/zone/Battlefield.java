@@ -1,5 +1,7 @@
 package com.example.srikar.magic.model.zone;
 
+import android.support.annotation.Nullable;
+
 import com.example.srikar.magic.MagicLog;
 import com.example.srikar.magic.event.GameStateChangeEvent;
 import com.example.srikar.magic.event.ListChangeEvent;
@@ -7,6 +9,7 @@ import com.example.srikar.magic.event.RxEventBus;
 import com.example.srikar.magic.model.Card;
 import com.example.srikar.magic.model.DataModelConstants;
 import com.example.srikar.magic.model.GameState;
+import com.example.srikar.magic.model.action.Combat;
 
 import java.util.ArrayList;
 
@@ -20,6 +23,8 @@ public class Battlefield extends BaseGameZone {
     private static final String TAG = "Battlefield";
 
     private final ArrayList<Card>[] mLands, mCreatures;
+
+    private Combat mCombat;
 
     /**
      * Holds the lands and creatures used by both players.
@@ -39,6 +44,8 @@ public class Battlefield extends BaseGameZone {
         mCreatures = new ArrayList[2];
         mCreatures[DataModelConstants.PLAYER_ALICE] = new ArrayList<>();
         mCreatures[DataModelConstants.PLAYER_BOB] = new ArrayList<>();
+
+        mCombat = null;
     }
 
     /**
@@ -132,6 +139,24 @@ public class Battlefield extends BaseGameZone {
     }
 
     /**
+     * Used to determine if should skip combat for this player or not, since can't attack with no creatures
+     * Used by GameState.nextStep() after start of combat, since stuff could still happen in that step
+     * @return Number of creatures current player controls
+     */
+    public int getCurrentPlayerCreaturesSize() {
+        return mCreatures[mGameState.getCurrentPlayer()].size();
+    }
+
+    /**
+     * Used to get object representing actions related to combat phase
+     * @return Combat object, will be null before start of combat and after end of combat
+     */
+    @Nullable
+    public Combat getCombat() {
+        return mCombat;
+    }
+
+    /**
      * When a creature Permanent is clicked from the view player creature RecyclerView, determine
      * what to do.
      * Right now, just taps or untaps creature.
@@ -181,6 +206,19 @@ public class Battlefield extends BaseGameZone {
         );
     }
 
+    @Override
+    protected void clearLists() {
+        mLands[DataModelConstants.PLAYER_ALICE].clear();
+        mLands[DataModelConstants.PLAYER_BOB].clear();
+
+        mCreatures[DataModelConstants.PLAYER_ALICE].clear();
+        mCreatures[DataModelConstants.PLAYER_BOB].clear();
+    }
+
+    /***********************************************************************************************
+     * ON STEP LISTENERS
+     * Listeners for changes in steps in the turn
+     **********************************************************************************************/
     /**
      * At start of untap step, untap all permanents current player controls.
      */
@@ -203,12 +241,17 @@ public class Battlefield extends BaseGameZone {
         }
     }
 
-    @Override
-    protected void clearLists() {
-        mLands[DataModelConstants.PLAYER_ALICE].clear();
-        mLands[DataModelConstants.PLAYER_BOB].clear();
+    /**
+     * At start of start of combat step, create Combat object
+     */
+    public void onStartOfCombatStep() {
+        mCombat = new Combat();
+    }
 
-        mCreatures[DataModelConstants.PLAYER_ALICE].clear();
-        mCreatures[DataModelConstants.PLAYER_BOB].clear();
+    /**
+     * At start of second main phase, nullify Combat object
+     */
+    public void onPostcombatMainStep() {
+        mCombat = null;
     }
 }
