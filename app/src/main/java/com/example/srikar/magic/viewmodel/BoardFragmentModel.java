@@ -1,9 +1,9 @@
 package com.example.srikar.magic.viewmodel;
 
-import android.content.Context;
+import android.app.Activity;
+import android.content.DialogInterface;
 import android.databinding.BaseObservable;
-import android.os.Build;
-import android.text.Html;
+import android.support.v7.app.AppCompatActivity;
 import android.widget.TextView;
 
 import com.example.srikar.magic.MagicApplication;
@@ -13,6 +13,7 @@ import com.example.srikar.magic.UiUtil;
 import com.example.srikar.magic.databinding.FragmentBoardBinding;
 import com.example.srikar.magic.event.GameStateChangeEvent;
 import com.example.srikar.magic.event.RxEventBus;
+import com.example.srikar.magic.fragment.CombatDialogFragment;
 import com.example.srikar.magic.model.DataModelConstants;
 import com.example.srikar.magic.model.GameState;
 import com.example.srikar.magic.model.zone.Battlefield;
@@ -36,7 +37,7 @@ public class BoardFragmentModel extends BaseObservable {
     @Inject
     protected GameState mGameState;
 
-    private final Context mContext;
+    private final Activity mActivity;
     //view bindings for the Fragment
     private final FragmentBoardBinding mBinding;
 
@@ -53,14 +54,14 @@ public class BoardFragmentModel extends BaseObservable {
     private BattlefieldRecViewModel mLandsRecViewModel;
     private BattlefieldRecViewModel mCreaturesRecViewModel;
 
-    public BoardFragmentModel(Context context, FragmentBoardBinding binding) {
+    public BoardFragmentModel(Activity context, FragmentBoardBinding binding) {
         MagicLog.d(TAG, "BoardFragmentModel: Created");
         //get instance of GameState
         MagicApplication.getInstance()
                 .getMainComponent()
                 .inject(this);
 
-        mContext = context;
+        mActivity = context;
         mBinding = binding;
 
         //used to hold onClick subscriptions
@@ -101,13 +102,13 @@ public class BoardFragmentModel extends BaseObservable {
      */
     private void createRecyclerViewModels() {
         if (mHandRecViewModel == null) {
-            mHandRecViewModel = new HandRecViewModel(mContext);
+            mHandRecViewModel = new HandRecViewModel(mActivity);
         }
         if (mLandsRecViewModel == null) {
-            mLandsRecViewModel = new BattlefieldRecViewModel(mContext, DataModelConstants.LIST_LANDS);
+            mLandsRecViewModel = new BattlefieldRecViewModel(mActivity, DataModelConstants.LIST_LANDS);
         }
         if (mCreaturesRecViewModel == null) {
-            mCreaturesRecViewModel = new BattlefieldRecViewModel(mContext, DataModelConstants.LIST_CREATURES);
+            mCreaturesRecViewModel = new BattlefieldRecViewModel(mActivity, DataModelConstants.LIST_CREATURES);
         }
     }
 
@@ -167,7 +168,7 @@ public class BoardFragmentModel extends BaseObservable {
      */
     private void setTurnText() {
         //get unformatted string
-        String unformatted = mContext.getResources().getString(R.string.unformat_turn_display);
+        String unformatted = mActivity.getResources().getString(R.string.unformat_turn_display);
 
         //get turn number
         int turn = mGameState.getTurnNumber();
@@ -176,10 +177,10 @@ public class BoardFragmentModel extends BaseObservable {
         int currentPlayer = mGameState.getCurrentPlayer();
         String name;
         if (currentPlayer == DataModelConstants.PLAYER_ALICE) {
-            name = mContext.getResources().getString(R.string.alice);
+            name = mActivity.getResources().getString(R.string.alice);
         }
         else {
-            name = mContext.getResources().getString(R.string.bob);
+            name = mActivity.getResources().getString(R.string.bob);
         }
 
         //format the string
@@ -196,19 +197,19 @@ public class BoardFragmentModel extends BaseObservable {
      */
     private void setLifeText() {
         //get names
-        String aliceName = mContext.getResources().getString(R.string.alice);
-        String bobName = mContext.getResources().getString(R.string.bob);
+        String aliceName = mActivity.getResources().getString(R.string.alice);
+        String bobName = mActivity.getResources().getString(R.string.bob);
 
         //get colors
-        String aliceColor = mContext.getResources().getString(R.string.alice_color);
-        String bobColor = mContext.getResources().getString(R.string.bob_color);
+        String aliceColor = mActivity.getResources().getString(R.string.alice_color);
+        String bobColor = mActivity.getResources().getString(R.string.bob_color);
 
         //get life totals
         int aliceLife = mGameState.getLifeTotal(DataModelConstants.PLAYER_ALICE);
         int bobLife = mGameState.getLifeTotal(DataModelConstants.PLAYER_BOB);
 
         //get unformatted strings
-        String unformat = mContext.getResources().getString(R.string.unformat_life);
+        String unformat = mActivity.getResources().getString(R.string.unformat_life);
 
         //format the strings: color, name, life total
         String partialAlice = String.format(unformat, aliceColor, aliceName, aliceLife);
@@ -236,20 +237,38 @@ public class BoardFragmentModel extends BaseObservable {
         mBinding.gameActionLog.setText(stringId);
     }
 
+    /**
+     * Set text in next step button depending on if want to confirm combat steps first or not
+     */
     private void setNextStepButtonText() {
-        //if during declare attackers
-        if (mBattlefield.getCombat() != null && mGameState.getCurrentStep() == DataModelConstants.STEP_DECLARE_ATTACKERS) {
-            //if attack not confirmed, then change text to "Confirm Attack"
-            if (!mBattlefield.getCombat().isAttackConfirmed()) {
+        //if during declare attackers and haven't confirmed attackers
+        if (mBattlefield.shouldConfirmAttack()) {
                 mBinding.nextStep.setText(R.string.confirm_attack);
                 return;
-            }
         }
 
         //not during declare attackers, or don't need to confirm
         mBinding.nextStep.setText(R.string.next_step);
     }
 
+    /**
+     * Call when containing View or Fragment is destroyed, will unregister Subscriptions
+     */
+    public void onDestroy() {
+        //remove all subscriptions
+        if (mSubscriptions != null) {
+            mSubscriptions.unsubscribe();
+        }
+
+        //for each RecyclerViewModel, remove the subscriptions to RxJava Observables
+        mHandRecViewModel.onDestroy();
+        mLandsRecViewModel.onDestroy();
+        mCreaturesRecViewModel.onDestroy();
+    }
+
+    /***********************************************************************************************
+     * ON CLICK EVENTS
+     **********************************************************************************************/
     /**
      * Register onClick event handling for views other than RecyclerViews
      * RecyclerView onClicks handled by Permanent
@@ -286,10 +305,53 @@ public class BoardFragmentModel extends BaseObservable {
         //disable next step button
         mBinding.nextStep.setEnabled(false);
 
-        //go to next step in the data model
+        //if need to confirm attack, then display dialog
+        if (mBattlefield.shouldConfirmAttack()) {
+            CombatDialogFragment dialogFragment = new CombatDialogFragment();
+            //set listeners for the three buttons
+            dialogFragment.setListeners(
+                    this::attackersConfirmNextStep,
+                    this::attackersConfirmSameStep,
+                    this::attackersCancel
+                    );
+
+            //create the dialog
+            dialogFragment.show(((AppCompatActivity)mActivity).getSupportFragmentManager(), "confirm attackers");
+        }
+        //if don't need to confirm attack, go to next step
+        else {
+            //go to next step in the data model
+            mGameState.nextStep();
+        }
+    }
+
+    /***********************************************************************************************
+     * DIALOG RESPONSE LISTENERS
+     **********************************************************************************************/
+    public void attackersConfirmNextStep(DialogInterface dialog, int id) {
+        //confirm attack
+        mBattlefield.confirmAttack();
+        //go to the next step in the data model
         mGameState.nextStep();
     }
 
+    public void attackersConfirmSameStep(DialogInterface dialog, int id) {
+        //confirm attack
+        mBattlefield.confirmAttack();
+        //don't go to the next step, but update next step button
+        setNextStepButtonText();
+        //enable button
+        mBinding.nextStep.setEnabled(true);
+    }
+
+    public void attackersCancel(DialogInterface dialog, int id) {
+        //enable button
+        mBinding.nextStep.setEnabled(true);
+    }
+
+    /***********************************************************************************************
+     * EVENT BUS LISTENERS
+     **********************************************************************************************/
     /**
      * When switch view player, change backgrounds and update Adapters
      * Triggered by change in game state data model
@@ -334,21 +396,6 @@ public class BoardFragmentModel extends BaseObservable {
 
         //do normal stuff affiliated with handling next step
         handleNextStep();
-    }
-
-    /**
-     * Call when containing View or Fragment is destroyed, will unregister Subscriptions
-     */
-    public void onDestroy() {
-        //remove all subscriptions
-        if (mSubscriptions != null) {
-            mSubscriptions.unsubscribe();
-        }
-
-        //for each RecyclerViewModel, remove the subscriptions to RxJava Observables
-        mHandRecViewModel.onDestroy();
-        mLandsRecViewModel.onDestroy();
-        mCreaturesRecViewModel.onDestroy();
     }
 
     /***********************************************************************************************

@@ -148,12 +148,10 @@ public class Battlefield extends BaseGameZone {
     }
 
     /**
-     * Used to get object representing actions related to combat phase
-     * @return Combat object, will be null before start of combat and after end of combat
+     * Confirm declaration of attackers for combat
      */
-    @Nullable
-    public Combat getCombat() {
-        return mCombat;
+    public void confirmAttack() {
+        mCombat.setAttackers();
     }
 
     /**
@@ -204,6 +202,16 @@ public class Battlefield extends BaseGameZone {
                 ListChangeEvent.UPDATE,
                 position
         );
+    }
+
+    /**
+     * If it's the declare attackers step and attackers have not been confirmed, then want to
+     * confirm with player
+     * @return If should confirm attackers
+     */
+    public boolean shouldConfirmAttack() {
+        return mCombat != null && mGameState.getCurrentStep() == DataModelConstants.STEP_DECLARE_ATTACKERS
+                && !mCombat.isAttackConfirmed();
     }
 
     @Override

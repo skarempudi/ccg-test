@@ -1,7 +1,7 @@
 package com.example.srikar.magic.fragment;
 
+import android.app.Activity;
 import android.app.Fragment;
-import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
@@ -19,7 +19,7 @@ import com.example.srikar.magic.viewmodel.BoardFragmentModel;
 public class BoardFragment extends Fragment {
     private static final String TAG = "BoardFragment";
 
-    private Context mContext;
+    private Activity mContext;
 
     /**
      * Model for this Fragment, which handles interactions and communication with the data models.
