@@ -8,7 +8,6 @@ import com.example.srikar.magic.json.AssetLoader;
 import com.example.srikar.magic.model.zone.Battlefield;
 import com.example.srikar.magic.model.zone.Hand;
 import com.example.srikar.magic.model.DataModelConstants;
-import com.squareup.leakcanary.LeakCanary;
 
 import javax.inject.Inject;
 
@@ -35,7 +34,7 @@ public class MagicApplication extends Application {
         super.onCreate();
         INSTANCE = this;
 
-        LeakCanary.install(this);
+//        LeakCanary.install(this);
 
         mainComponent = DaggerMainComponent
                                 .builder()
