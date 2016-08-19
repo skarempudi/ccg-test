@@ -19,7 +19,7 @@ import com.example.srikar.magic.viewmodel.BoardFragmentModel;
 public class BoardFragment extends Fragment {
     private static final String TAG = "BoardFragment";
 
-    private Activity mContext;
+    private Activity mActivity;
 
     /**
      * Model for this Fragment, which handles interactions and communication with the data models.
@@ -31,7 +31,7 @@ public class BoardFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
         //initialize data set
-        mContext = getActivity();
+        mActivity = getActivity();
     }
 
     @Nullable
@@ -44,7 +44,7 @@ public class BoardFragment extends Fragment {
 
         //create the view model for this Fragment
         //it handles the binding for the inner views
-        mBoardFragmentModel = new BoardFragmentModel(mContext, binding);
+        mBoardFragmentModel = new BoardFragmentModel(mActivity, binding);
 
         //attach the view model to the binding
         binding.setFragmentBoardModel(mBoardFragmentModel);

@@ -1,6 +1,6 @@
 package com.example.srikar.magic.adapter;
 
-import android.content.Context;
+import android.app.Activity;
 import android.databinding.DataBindingUtil;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
@@ -22,13 +22,13 @@ public class BattlefieldRecViewAdapter extends BaseRecViewAdapter {
     /**
      * Constructor, takes RecyclerViewModel and ListName to make sure data model interaction is handled
      * by view models instead of this
-     * @param activityContext Context used to inflate layout
+     * @param activity Context used to inflate layout
      * @param recViewModel RecyclerViewModel that created this Adapter
      * @param listName ListName that maps to a list in Battlefield, used to populate this RecyclerView
      */
-    public BattlefieldRecViewAdapter(Context activityContext, BaseRecyclerViewModel recViewModel,
+    public BattlefieldRecViewAdapter(Activity activity, BaseRecyclerViewModel recViewModel,
                                      int listName) {
-        super(activityContext, recViewModel, listName);
+        super(activity, recViewModel, listName);
     }
 
     /**
@@ -38,7 +38,7 @@ public class BattlefieldRecViewAdapter extends BaseRecViewAdapter {
     @Override
     public BaseRecViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         PermanentBinding binding = DataBindingUtil.inflate(
-                LayoutInflater.from(mContext),
+                LayoutInflater.from(mActivity),
                 R.layout.permanent,
                 parent,
                 false //don't attach to parent, handled by RecyclerView

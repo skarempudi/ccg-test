@@ -37,7 +37,7 @@ public class BoardFragmentModel extends BaseObservable {
     @Inject
     protected GameState mGameState;
 
-    private final Activity mActivity;
+    private Activity mActivity;
     //view bindings for the Fragment
     private final FragmentBoardBinding mBinding;
 
@@ -54,14 +54,14 @@ public class BoardFragmentModel extends BaseObservable {
     private BattlefieldRecViewModel mLandsRecViewModel;
     private BattlefieldRecViewModel mCreaturesRecViewModel;
 
-    public BoardFragmentModel(Activity context, FragmentBoardBinding binding) {
+    public BoardFragmentModel(Activity activity, FragmentBoardBinding binding) {
         MagicLog.d(TAG, "BoardFragmentModel: Created");
         //get instance of GameState
         MagicApplication.getInstance()
                 .getMainComponent()
                 .inject(this);
 
-        mActivity = context;
+        mActivity = activity;
         mBinding = binding;
 
         //used to hold onClick subscriptions
@@ -264,6 +264,14 @@ public class BoardFragmentModel extends BaseObservable {
         mHandRecViewModel.onDestroy();
         mLandsRecViewModel.onDestroy();
         mCreaturesRecViewModel.onDestroy();
+
+        //remove references
+        mHandRecViewModel = null;
+        mLandsRecViewModel = null;
+        mCreaturesRecViewModel = null;
+
+        //remove reference to context
+        mActivity = null;
     }
 
     /***********************************************************************************************

@@ -1,13 +1,13 @@
 package com.example.srikar.magic.viewmodel.recyclerview;
 
-import android.content.Context;
+import android.app.Activity;
 import android.databinding.BaseObservable;
-import android.support.annotation.CallSuper;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
 import com.example.srikar.magic.MagicApplication;
 import com.example.srikar.magic.MagicLog;
+import com.example.srikar.magic.adapter.BaseRecViewAdapter;
 import com.example.srikar.magic.event.ListChangeEvent;
 import com.example.srikar.magic.event.RxEventBus;
 
@@ -24,9 +24,9 @@ import rx.Subscription;
 public abstract class BaseRecyclerViewModel extends BaseObservable {
     private static final String TAG = "BaseRecyclerViewModel";
 
-    final Context mContext;
+    protected Activity mActivity;
     //adapter handles changes to the list, creates view models for Permanents or Cards
-    private RecyclerView.Adapter mAdapter;
+    private BaseRecViewAdapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
 
     //listens for changes in model so can update display
@@ -40,11 +40,11 @@ public abstract class BaseRecyclerViewModel extends BaseObservable {
     /**
      * Base View Model for RecyclerView, which will handle interactions with the data model.
      * Subclasses handle which list from data model to use.
-     * @param appContext Context used to create the LayoutManager
+     * @param activity Context used to create the LayoutManager
      * @param listName Which data model list is being used, using DataModelConstants
      */
-    BaseRecyclerViewModel(Context appContext, int listName) {
-        mContext = appContext;
+    BaseRecyclerViewModel(Activity activity, int listName) {
+        mActivity = activity;
         mListName = listName;
         //injects instance of RecyclerView event bus
         MagicApplication.getInstance()
@@ -76,7 +76,7 @@ public abstract class BaseRecyclerViewModel extends BaseObservable {
      * Adapter type determined by subclasses
      * @return Adapter
      */
-    protected abstract RecyclerView.Adapter getAdapter();
+    protected abstract BaseRecViewAdapter getAdapter();
 
     /**
      * Writing in separate function so can potentially override.
@@ -85,7 +85,7 @@ public abstract class BaseRecyclerViewModel extends BaseObservable {
      * @return New horizontal LinearLayoutManager
      */
     private RecyclerView.LayoutManager getLayoutManager() {
-        LinearLayoutManager manager = new LinearLayoutManager(mContext);
+        LinearLayoutManager manager = new LinearLayoutManager(mActivity);
         manager.setOrientation(LinearLayoutManager.HORIZONTAL);
         return manager;
     }
@@ -108,9 +108,21 @@ public abstract class BaseRecyclerViewModel extends BaseObservable {
      * Call when containing View or Fragment is destroyed, will unregister Subscriptions
      */
     public void onDestroy() {
+        //unsubscribe to event bus
         if (mRecyclerViewEventSub != null) {
             mRecyclerViewEventSub.unsubscribe();
         }
+
+        //remove adapter reference to context
+        if (mAdapter != null) {
+            mAdapter.onDestroy();
+        }
+
+        //remove adapter
+        mAdapter = null;
+
+        //clear reference to context
+        mActivity = null;
     }
 
 

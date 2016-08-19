@@ -1,11 +1,10 @@
 package com.example.srikar.magic.adapter;
 
-import android.content.Context;
+import android.app.Activity;
 import android.databinding.ViewDataBinding;
 import android.support.v7.widget.RecyclerView;
 import android.view.ViewGroup;
 
-import com.example.srikar.magic.event.ListChangeEvent;
 import com.example.srikar.magic.viewmodel.BaseItemViewModel;
 import com.example.srikar.magic.viewmodel.recyclerview.BaseRecyclerViewModel;
 
@@ -15,7 +14,7 @@ import com.example.srikar.magic.viewmodel.recyclerview.BaseRecyclerViewModel;
  */
 public abstract class BaseRecViewAdapter extends RecyclerView.Adapter<BaseRecViewAdapter.BaseRecViewHolder> {
     private static final String TAG = "BaseRecViewAdapter";
-    final Context mContext;
+    protected Activity mActivity;
     //the RecyclerViewModel that created this
     private final BaseRecyclerViewModel mRecyclerViewModel;
     //which data model list to display
@@ -23,14 +22,14 @@ public abstract class BaseRecViewAdapter extends RecyclerView.Adapter<BaseRecVie
 
     /**
      * Constructor
-     * @param activityContext Context used to inflate views
+     * @param activity Context used to inflate views
      * @param recyclerViewModel View model for the RecyclerView, interacts with data model
      * @param listName Data model list from DataModelConstants, used to populate this RecyclerView
      */
-    BaseRecViewAdapter(Context activityContext, BaseRecyclerViewModel recyclerViewModel,
+    BaseRecViewAdapter(Activity activity, BaseRecyclerViewModel recyclerViewModel,
                        int listName) {
         super();
-        mContext = activityContext;
+        mActivity = activity;
         mRecyclerViewModel = recyclerViewModel;
         mListName = listName;
     }
@@ -73,5 +72,12 @@ public abstract class BaseRecViewAdapter extends RecyclerView.Adapter<BaseRecVie
     @Override
     public int getItemCount() {
         return mRecyclerViewModel.getItemCount();
+    }
+
+    /**
+     * What to do when containing ViewModel is destroyed
+     */
+    public void onDestroy() {
+        mActivity = null;
     }
 }

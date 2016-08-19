@@ -1,9 +1,9 @@
 package com.example.srikar.magic.viewmodel.recyclerview;
 
-import android.content.Context;
-import android.support.v7.widget.RecyclerView;
+import android.app.Activity;
 
 import com.example.srikar.magic.MagicApplication;
+import com.example.srikar.magic.adapter.BaseRecViewAdapter;
 import com.example.srikar.magic.adapter.HandRecViewAdapter;
 import com.example.srikar.magic.model.DataModelConstants;
 import com.example.srikar.magic.model.zone.Hand;
@@ -19,8 +19,8 @@ public class HandRecViewModel extends BaseRecyclerViewModel {
     @Inject
     protected Hand mHand;
 
-    public HandRecViewModel(Context appContext) {
-        super(appContext, DataModelConstants.LIST_HAND);
+    public HandRecViewModel(Activity activity) {
+        super(activity, DataModelConstants.LIST_HAND);
         //gets singleton Hand instance
         MagicApplication.getInstance()
                 .getMainComponent()
@@ -28,8 +28,8 @@ public class HandRecViewModel extends BaseRecyclerViewModel {
     }
 
     @Override
-    protected RecyclerView.Adapter getAdapter() {
-        return new HandRecViewAdapter(mContext, this);
+    protected BaseRecViewAdapter getAdapter() {
+        return new HandRecViewAdapter(mActivity, this);
     }
 
     /**

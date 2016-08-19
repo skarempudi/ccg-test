@@ -1,9 +1,9 @@
 package com.example.srikar.magic.viewmodel.recyclerview;
 
-import android.content.Context;
-import android.support.v7.widget.RecyclerView;
+import android.app.Activity;
 
 import com.example.srikar.magic.MagicApplication;
+import com.example.srikar.magic.adapter.BaseRecViewAdapter;
 import com.example.srikar.magic.adapter.BattlefieldRecViewAdapter;
 import com.example.srikar.magic.model.zone.Battlefield;
 
@@ -17,8 +17,8 @@ public class BattlefieldRecViewModel extends BaseRecyclerViewModel {
     @Inject
     protected Battlefield mBattlefield;
 
-    public BattlefieldRecViewModel(Context appContext, int listName) {
-        super(appContext, listName);
+    public BattlefieldRecViewModel(Activity activity, int listName) {
+        super(activity, listName);
         //injects singleton instance of Battlefield
         MagicApplication.getInstance()
                 .getMainComponent()
@@ -26,8 +26,8 @@ public class BattlefieldRecViewModel extends BaseRecyclerViewModel {
     }
 
     @Override
-    protected RecyclerView.Adapter getAdapter() {
-        return new BattlefieldRecViewAdapter(mContext, this, mListName);
+    protected BaseRecViewAdapter getAdapter() {
+        return new BattlefieldRecViewAdapter(mActivity, this, mListName);
     }
 
     /**

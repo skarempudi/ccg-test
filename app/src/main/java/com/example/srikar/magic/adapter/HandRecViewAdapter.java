@@ -1,6 +1,6 @@
 package com.example.srikar.magic.adapter;
 
-import android.content.Context;
+import android.app.Activity;
 import android.databinding.DataBindingUtil;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
@@ -20,10 +20,10 @@ public class HandRecViewAdapter extends BaseRecViewAdapter {
 
     /**
      * Constructor
-     * @param activityContext Used to inflate views
+     * @param activity Used to inflate views
      */
-    public HandRecViewAdapter(Context activityContext, BaseRecyclerViewModel recyclerViewModel) {
-        super(activityContext, recyclerViewModel, DataModelConstants.LIST_HAND);
+    public HandRecViewAdapter(Activity activity, BaseRecyclerViewModel recyclerViewModel) {
+        super(activity, recyclerViewModel, DataModelConstants.LIST_HAND);
     }
 
     @Override
@@ -33,7 +33,7 @@ public class HandRecViewAdapter extends BaseRecViewAdapter {
      */
     public BaseRecViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         CardBinding binding = DataBindingUtil.inflate(
-                LayoutInflater.from(mContext),
+                LayoutInflater.from(mActivity),
                 R.layout.card,
                 parent,
                 false //don't attach to parent, handled by RecyclerView
