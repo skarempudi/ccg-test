@@ -20,8 +20,8 @@ public class HandRecViewModel extends BaseRecyclerViewModel {
     @Inject
     protected Hand mHand;
 
-    public HandRecViewModel(FragmentBoardBinding binding, Activity activity) {
-        super(binding, activity, DataModelConstants.LIST_HAND);
+    public HandRecViewModel(FragmentBoardBinding binding) {
+        super(binding, DataModelConstants.LIST_HAND);
         //gets singleton Hand instance
         MagicApplication.getInstance()
                 .getMainComponent()
@@ -30,7 +30,7 @@ public class HandRecViewModel extends BaseRecyclerViewModel {
 
     @Override
     protected BaseRecViewAdapter getAdapter() {
-        return new HandRecViewAdapter(mActivity, this);
+        return new HandRecViewAdapter(this);
     }
 
     /**

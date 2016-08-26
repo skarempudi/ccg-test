@@ -22,13 +22,12 @@ public class BattlefieldRecViewAdapter extends BaseRecViewAdapter {
     /**
      * Constructor, takes RecyclerViewModel and ListName to make sure data model interaction is handled
      * by view models instead of this
-     * @param activity Context used to inflate layout
      * @param recViewModel RecyclerViewModel that created this Adapter
      * @param listName ListName that maps to a list in Battlefield, used to populate this RecyclerView
      */
-    public BattlefieldRecViewAdapter(Activity activity, BaseRecyclerViewModel recViewModel,
+    public BattlefieldRecViewAdapter(BaseRecyclerViewModel recViewModel,
                                      int listName) {
-        super(activity, recViewModel, listName);
+        super(recViewModel, listName);
     }
 
     /**
@@ -38,7 +37,7 @@ public class BattlefieldRecViewAdapter extends BaseRecViewAdapter {
     @Override
     public BaseRecViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         PermanentBinding binding = DataBindingUtil.inflate(
-                LayoutInflater.from(mActivity),
+                LayoutInflater.from(parent.getContext()),
                 R.layout.permanent,
                 parent,
                 false //don't attach to parent, handled by RecyclerView

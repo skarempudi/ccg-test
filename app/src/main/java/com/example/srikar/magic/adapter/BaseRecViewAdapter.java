@@ -14,7 +14,6 @@ import com.example.srikar.magic.viewmodel.recyclerview.BaseRecyclerViewModel;
  */
 public abstract class BaseRecViewAdapter extends RecyclerView.Adapter<BaseRecViewAdapter.BaseRecViewHolder> {
     private static final String TAG = "BaseRecViewAdapter";
-    protected Activity mActivity;
     //the RecyclerViewModel that created this
     private final BaseRecyclerViewModel mRecyclerViewModel;
     //which data model list to display, whether hand, lands, or creatures
@@ -22,14 +21,12 @@ public abstract class BaseRecViewAdapter extends RecyclerView.Adapter<BaseRecVie
 
     /**
      * Constructor
-     * @param activity Context used to inflate views
      * @param recyclerViewModel View model for the RecyclerView, interacts with data model
      * @param listName Data model list from DataModelConstants: hand, lands, or creatures
      */
-    BaseRecViewAdapter(Activity activity, BaseRecyclerViewModel recyclerViewModel,
+    BaseRecViewAdapter(BaseRecyclerViewModel recyclerViewModel,
                        int listName) {
         super();
-        mActivity = activity;
         mRecyclerViewModel = recyclerViewModel;
         mListName = listName;
     }
@@ -76,6 +73,6 @@ public abstract class BaseRecViewAdapter extends RecyclerView.Adapter<BaseRecVie
      * What to do when containing ViewModel is destroyed
      */
     public void onDestroy() {
-        mActivity = null;
+
     }
 }

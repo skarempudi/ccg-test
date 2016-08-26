@@ -127,9 +127,9 @@ public class BoardFragmentModel {
         mGameViewModels.add(new CurrentlyUnusedModel(mBinding));
 
         //create recycler view models, which still care about individually
-        mHandRecViewModel = new HandRecViewModel(mBinding, mActivity);
-        mLandsRecViewModel = new BattlefieldRecViewModel(mBinding, mActivity, DataModelConstants.LIST_LANDS);
-        mCreaturesRecViewModel = new BattlefieldRecViewModel(mBinding, mActivity, DataModelConstants.LIST_CREATURES);
+        mHandRecViewModel = new HandRecViewModel(mBinding);
+        mLandsRecViewModel = new BattlefieldRecViewModel(mBinding, DataModelConstants.LIST_LANDS);
+        mCreaturesRecViewModel = new BattlefieldRecViewModel(mBinding, DataModelConstants.LIST_CREATURES);
 
         //add to list, so can update backgrounds
         mGameViewModels.add(mHandRecViewModel);
@@ -146,52 +146,6 @@ public class BoardFragmentModel {
         for (GameViewModel model : mGameViewModels) {
             model.updateBackground();
         }
-
-//        int backgroundResource;
-//        if (mGameState.getViewPlayer() == DataModelConstants.PLAYER_ALICE) {
-//            MagicLog.d(TAG, "setBackgrounds: Alice");
-//            backgroundResource = R.drawable.alice_border;
-//        }
-//        else {
-//            MagicLog.d(TAG, "setBackgrounds: Bob");
-//            backgroundResource = R.drawable.bob_border;
-//        }
-//
-//        //turn background based on current player, not view player
-//        int turnBackgroundResource;
-//        if (mGameState.getCurrentPlayer() == DataModelConstants.PLAYER_ALICE) {
-//            MagicLog.d(TAG, "setBackgrounds: Current player is Alice");
-//            turnBackgroundResource = R.drawable.alice_border;
-//        }
-//        else {
-//            MagicLog.d(TAG, "setBackgrounds: Current player is Bob");
-//            turnBackgroundResource = R.drawable.bob_border;
-//        }
-//
-//        //first row - turns, life, switch player
-//        //turn's background is based on current player, not view player
-//        mBinding.turnCounter.setBackgroundResource(turnBackgroundResource);
-//        mBinding.lifeCounterAlice.setBackgroundResource(backgroundResource);
-//        mBinding.lifeCounterBob.setBackgroundResource(backgroundResource);
-//        mBinding.switchPlayer.setBackgroundResource(backgroundResource);
-//
-//        //second row - game action log, next step
-//        mBinding.gameActionLog.setBackgroundResource(backgroundResource);
-//        mBinding.nextStep.setBackgroundResource(backgroundResource);
-//
-//        //third row - opposing creatures
-//        mBinding.oppCreatures.setBackgroundResource(backgroundResource);
-//
-//        //fourth row - my creatures
-//        mBinding.creaturesRecyclerview.setBackgroundResource(backgroundResource);
-//
-//        //fifth row - lands, library, graveyard
-//        mBinding.landsRecyclerview.setBackgroundResource(backgroundResource);
-//        mBinding.library.setBackgroundResource(backgroundResource);
-//        mBinding.graveyard.setBackgroundResource(backgroundResource);
-//
-//        //sixth row - hand
-//        mBinding.handRecyclerview.setBackgroundResource(backgroundResource);
     }
 
     /**

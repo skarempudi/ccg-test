@@ -1,6 +1,7 @@
 package com.example.srikar.magic.viewmodel.recyclerview;
 
 import android.app.Activity;
+import android.content.Context;
 import android.databinding.BaseObservable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -26,7 +27,6 @@ import rx.Subscription;
 public abstract class BaseRecyclerViewModel extends BaseBoardModel {
     private static final String TAG = "BaseRecyclerViewModel";
 
-    protected Activity mActivity;
     //adapter handles changes to the list, creates view models for Permanents or Cards
     private BaseRecViewAdapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
@@ -43,13 +43,11 @@ public abstract class BaseRecyclerViewModel extends BaseBoardModel {
      * Base View Model for RecyclerView, which will handle interactions with the data model.
      * Subclasses handle which list from data model to use.
      * @param binding Binding used to access view that will update
-     * @param activity Context used to create the LayoutManager
      * @param listName Which data model list is being used, using DataModelConstants
      */
-    BaseRecyclerViewModel(FragmentBoardBinding binding, Activity activity, int listName) {
+    BaseRecyclerViewModel(FragmentBoardBinding binding, int listName) {
         super(binding);
 
-        mActivity = activity;
         mListName = listName;
         //injects instance of RecyclerView event bus
         MagicApplication.getInstance()
@@ -90,7 +88,8 @@ public abstract class BaseRecyclerViewModel extends BaseBoardModel {
      * @return New horizontal LinearLayoutManager
      */
     private RecyclerView.LayoutManager getLayoutManager() {
-        LinearLayoutManager manager = new LinearLayoutManager(mActivity);
+        Context context = mBinding.getRoot().getContext();
+        LinearLayoutManager manager = new LinearLayoutManager(context);
         manager.setOrientation(LinearLayoutManager.HORIZONTAL);
         return manager;
     }
@@ -125,9 +124,6 @@ public abstract class BaseRecyclerViewModel extends BaseBoardModel {
 
         //remove adapter
         mAdapter = null;
-
-        //clear reference to context
-        mActivity = null;
     }
 
 

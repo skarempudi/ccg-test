@@ -19,8 +19,8 @@ public class BattlefieldRecViewModel extends BaseRecyclerViewModel {
     @Inject
     protected Battlefield mBattlefield;
 
-    public BattlefieldRecViewModel(FragmentBoardBinding binding, Activity activity, int listName) {
-        super(binding, activity, listName);
+    public BattlefieldRecViewModel(FragmentBoardBinding binding, int listName) {
+        super(binding, listName);
         //injects singleton instance of Battlefield
         MagicApplication.getInstance()
                 .getMainComponent()
@@ -29,7 +29,7 @@ public class BattlefieldRecViewModel extends BaseRecyclerViewModel {
 
     @Override
     protected BaseRecViewAdapter getAdapter() {
-        return new BattlefieldRecViewAdapter(mActivity, this, mListName);
+        return new BattlefieldRecViewAdapter(this, mListName);
     }
 
     /**

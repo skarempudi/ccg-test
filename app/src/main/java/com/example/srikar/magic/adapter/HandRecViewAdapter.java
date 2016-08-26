@@ -19,11 +19,11 @@ public class HandRecViewAdapter extends BaseRecViewAdapter {
     private static final String TAG = "HandRecViewAdapter";
 
     /**
-     * Constructor
-     * @param activity Used to inflate views
+     * Adapter for the RecyclerView used to hold cards
+     * @param recyclerViewModel View model that created this adapter
      */
-    public HandRecViewAdapter(Activity activity, BaseRecyclerViewModel recyclerViewModel) {
-        super(activity, recyclerViewModel, DataModelConstants.LIST_HAND);
+    public HandRecViewAdapter(BaseRecyclerViewModel recyclerViewModel) {
+        super(recyclerViewModel, DataModelConstants.LIST_HAND);
     }
 
     @Override
@@ -33,7 +33,7 @@ public class HandRecViewAdapter extends BaseRecViewAdapter {
      */
     public BaseRecViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         CardBinding binding = DataBindingUtil.inflate(
-                LayoutInflater.from(mActivity),
+                LayoutInflater.from(parent.getContext()),
                 R.layout.card,
                 parent,
                 false //don't attach to parent, handled by RecyclerView
