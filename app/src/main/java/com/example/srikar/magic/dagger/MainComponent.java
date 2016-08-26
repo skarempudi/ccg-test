@@ -3,6 +3,7 @@ package com.example.srikar.magic.dagger;
 import com.example.srikar.magic.MagicApplication;
 import com.example.srikar.magic.viewmodel.BattlefieldCardViewModel;
 import com.example.srikar.magic.viewmodel.BoardFragmentModel;
+import com.example.srikar.magic.viewmodel.BaseBoardModel;
 import com.example.srikar.magic.viewmodel.recyclerview.BaseRecyclerViewModel;
 import com.example.srikar.magic.viewmodel.recyclerview.BattlefieldRecViewModel;
 import com.example.srikar.magic.viewmodel.recyclerview.HandRecViewModel;
@@ -19,6 +20,10 @@ import dagger.Component;
 @Component (modules = {BattlefieldModule.class, GameStateModule.class, HandModule.class})
 public interface MainComponent {
     void inject(BoardFragmentModel viewModel);
+
+    //non-recyclerview views
+    void inject(BaseBoardModel viewModel);
+
     void inject(BaseRecyclerViewModel viewModel);
     void inject(BattlefieldRecViewModel viewModel);
     void inject(HandRecViewModel viewModel);

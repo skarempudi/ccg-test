@@ -8,8 +8,10 @@ import android.support.v7.widget.RecyclerView;
 import com.example.srikar.magic.MagicApplication;
 import com.example.srikar.magic.MagicLog;
 import com.example.srikar.magic.adapter.BaseRecViewAdapter;
+import com.example.srikar.magic.databinding.FragmentBoardBinding;
 import com.example.srikar.magic.event.ListChangeEvent;
 import com.example.srikar.magic.event.RxEventBus;
+import com.example.srikar.magic.viewmodel.BaseBoardModel;
 
 import javax.inject.Inject;
 
@@ -21,7 +23,7 @@ import rx.Subscription;
  * The Adapter and LayoutManager are set here.
  * Created by Srikar on 6/21/2016.
  */
-public abstract class BaseRecyclerViewModel extends BaseObservable {
+public abstract class BaseRecyclerViewModel extends BaseBoardModel {
     private static final String TAG = "BaseRecyclerViewModel";
 
     protected Activity mActivity;
@@ -40,10 +42,13 @@ public abstract class BaseRecyclerViewModel extends BaseObservable {
     /**
      * Base View Model for RecyclerView, which will handle interactions with the data model.
      * Subclasses handle which list from data model to use.
+     * @param binding Binding used to access view that will update
      * @param activity Context used to create the LayoutManager
      * @param listName Which data model list is being used, using DataModelConstants
      */
-    BaseRecyclerViewModel(Activity activity, int listName) {
+    BaseRecyclerViewModel(FragmentBoardBinding binding, Activity activity, int listName) {
+        super(binding);
+
         mActivity = activity;
         mListName = listName;
         //injects instance of RecyclerView event bus

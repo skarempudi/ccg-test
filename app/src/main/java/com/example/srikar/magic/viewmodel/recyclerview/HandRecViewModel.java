@@ -5,6 +5,7 @@ import android.app.Activity;
 import com.example.srikar.magic.MagicApplication;
 import com.example.srikar.magic.adapter.BaseRecViewAdapter;
 import com.example.srikar.magic.adapter.HandRecViewAdapter;
+import com.example.srikar.magic.databinding.FragmentBoardBinding;
 import com.example.srikar.magic.model.DataModelConstants;
 import com.example.srikar.magic.model.zone.Hand;
 
@@ -19,8 +20,8 @@ public class HandRecViewModel extends BaseRecyclerViewModel {
     @Inject
     protected Hand mHand;
 
-    public HandRecViewModel(Activity activity) {
-        super(activity, DataModelConstants.LIST_HAND);
+    public HandRecViewModel(FragmentBoardBinding binding, Activity activity) {
+        super(binding, activity, DataModelConstants.LIST_HAND);
         //gets singleton Hand instance
         MagicApplication.getInstance()
                 .getMainComponent()
@@ -39,5 +40,17 @@ public class HandRecViewModel extends BaseRecyclerViewModel {
     @Override
     public int getItemCount() {
         return mHand.getHandSize();
+    }
+
+    /**
+     * Used to update the background color of this view, based on the current player or view player
+     */
+    @Override
+    public void updateBackground() {
+        //background based on view player
+        int backgroundResource = getViewPlayerBackground();
+
+        //set resource
+        mBinding.handRecyclerview.setBackgroundResource(backgroundResource);
     }
 }

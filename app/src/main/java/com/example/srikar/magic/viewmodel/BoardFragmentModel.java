@@ -2,7 +2,6 @@ package com.example.srikar.magic.viewmodel;
 
 import android.app.Activity;
 import android.content.DialogInterface;
-import android.databinding.BaseObservable;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.TextView;
 
@@ -17,9 +16,18 @@ import com.example.srikar.magic.fragment.CombatDialogFragment;
 import com.example.srikar.magic.model.DataModelConstants;
 import com.example.srikar.magic.model.GameState;
 import com.example.srikar.magic.model.zone.Battlefield;
+import com.example.srikar.magic.viewmodel.board.CurrentlyUnusedModel;
+import com.example.srikar.magic.viewmodel.board.GameActionLogModel;
+import com.example.srikar.magic.viewmodel.board.LifeCounterModel;
+import com.example.srikar.magic.viewmodel.board.NextStepModel;
+import com.example.srikar.magic.viewmodel.board.SwitchPlayerModel;
+import com.example.srikar.magic.viewmodel.board.TurnCounterModel;
 import com.example.srikar.magic.viewmodel.recyclerview.BattlefieldRecViewModel;
 import com.example.srikar.magic.viewmodel.recyclerview.HandRecViewModel;
 import com.jakewharton.rxbinding.view.RxView;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.inject.Inject;
 
@@ -54,6 +62,11 @@ public class BoardFragmentModel {
     private BattlefieldRecViewModel mLandsRecViewModel;
     private BattlefieldRecViewModel mCreaturesRecViewModel;
 
+    /**
+     * List of view models that can have their backgrounds updated
+     */
+    private List<GameViewModel> mGameViewModels = new ArrayList<>();
+
     public BoardFragmentModel(Activity activity, FragmentBoardBinding binding) {
         MagicLog.d(TAG, "BoardFragmentModel: Created");
         //get instance of GameState
@@ -66,6 +79,9 @@ public class BoardFragmentModel {
 
         //used to hold onClick subscriptions
         mSubscriptions = new CompositeSubscription();
+
+        //create the ViewModels and populate list
+        createViewModels();
 
         //set the backgrounds
         setBackgrounds();
@@ -82,8 +98,6 @@ public class BoardFragmentModel {
         //set next step button text
         setNextStepButtonText();
 
-        //create the RecyclerViewModels
-        createRecyclerViewModels();
 
         //attach the view models to the binding
         binding.setHandModel(mHandRecViewModel);
@@ -98,18 +112,29 @@ public class BoardFragmentModel {
     }
 
     /**
-     * Used to create the RecyclerViewModels that handle interaction with the data model
+     * Used to create the ViewModels that handle interaction with the data model
      */
-    private void createRecyclerViewModels() {
-        if (mHandRecViewModel == null) {
-            mHandRecViewModel = new HandRecViewModel(mActivity);
-        }
-        if (mLandsRecViewModel == null) {
-            mLandsRecViewModel = new BattlefieldRecViewModel(mActivity, DataModelConstants.LIST_LANDS);
-        }
-        if (mCreaturesRecViewModel == null) {
-            mCreaturesRecViewModel = new BattlefieldRecViewModel(mActivity, DataModelConstants.LIST_CREATURES);
-        }
+    private void createViewModels() {
+        //clear out list
+        mGameViewModels.clear();
+
+        //add view models that this class doesn't care about individually
+        mGameViewModels.add(new TurnCounterModel(mBinding));
+        mGameViewModels.add(new LifeCounterModel(mBinding));
+        mGameViewModels.add(new SwitchPlayerModel(mBinding));
+        mGameViewModels.add(new GameActionLogModel(mBinding));
+        mGameViewModels.add(new NextStepModel(mBinding));
+        mGameViewModels.add(new CurrentlyUnusedModel(mBinding));
+
+        //create recycler view models, which still care about individually
+        mHandRecViewModel = new HandRecViewModel(mBinding, mActivity);
+        mLandsRecViewModel = new BattlefieldRecViewModel(mBinding, mActivity, DataModelConstants.LIST_LANDS);
+        mCreaturesRecViewModel = new BattlefieldRecViewModel(mBinding, mActivity, DataModelConstants.LIST_CREATURES);
+
+        //add to list, so can update backgrounds
+        mGameViewModels.add(mHandRecViewModel);
+        mGameViewModels.add(mLandsRecViewModel);
+        mGameViewModels.add(mCreaturesRecViewModel);
     }
 
     /**
@@ -117,51 +142,56 @@ public class BoardFragmentModel {
      * Not done through Data Binding due to errors that pop up with background image scaling
      */
     private void setBackgrounds() {
-        int backgroundResource;
-        if (mGameState.getViewPlayer() == DataModelConstants.PLAYER_ALICE) {
-            MagicLog.d(TAG, "setBackgrounds: Alice");
-            backgroundResource = R.drawable.alice_border;
-        }
-        else {
-            MagicLog.d(TAG, "setBackgrounds: Bob");
-            backgroundResource = R.drawable.bob_border;
+        MagicLog.d(TAG, "setBackgrounds: Setting backgrounds through GameViewModels");
+        for (GameViewModel model : mGameViewModels) {
+            model.updateBackground();
         }
 
-        //turn background based on current player, not view player
-        int turnBackgroundResource;
-        if (mGameState.getCurrentPlayer() == DataModelConstants.PLAYER_ALICE) {
-            MagicLog.d(TAG, "setBackgrounds: Current player is Alice");
-            turnBackgroundResource = R.drawable.alice_border;
-        }
-        else {
-            MagicLog.d(TAG, "setBackgrounds: Current player is Bob");
-            turnBackgroundResource = R.drawable.bob_border;
-        }
-
-        //first row - turns, life, switch player
-        //turn's background is based on current player, not view player
-        mBinding.turnCounter.setBackgroundResource(turnBackgroundResource);
-        mBinding.lifeCounterAlice.setBackgroundResource(backgroundResource);
-        mBinding.lifeCounterBob.setBackgroundResource(backgroundResource);
-        mBinding.switchPlayer.setBackgroundResource(backgroundResource);
-
-        //second row - game action log, next step
-        mBinding.gameActionLog.setBackgroundResource(backgroundResource);
-        mBinding.nextStep.setBackgroundResource(backgroundResource);
-
-        //third row - opposing creatures
-        mBinding.oppCreatures.setBackgroundResource(backgroundResource);
-
-        //fourth row - my creatures
-        mBinding.creaturesRecyclerview.setBackgroundResource(backgroundResource);
-
-        //fifth row - lands, library, graveyard
-        mBinding.landsRecyclerview.setBackgroundResource(backgroundResource);
-        mBinding.library.setBackgroundResource(backgroundResource);
-        mBinding.graveyard.setBackgroundResource(backgroundResource);
-
-        //sixth row - hand
-        mBinding.handRecyclerview.setBackgroundResource(backgroundResource);
+//        int backgroundResource;
+//        if (mGameState.getViewPlayer() == DataModelConstants.PLAYER_ALICE) {
+//            MagicLog.d(TAG, "setBackgrounds: Alice");
+//            backgroundResource = R.drawable.alice_border;
+//        }
+//        else {
+//            MagicLog.d(TAG, "setBackgrounds: Bob");
+//            backgroundResource = R.drawable.bob_border;
+//        }
+//
+//        //turn background based on current player, not view player
+//        int turnBackgroundResource;
+//        if (mGameState.getCurrentPlayer() == DataModelConstants.PLAYER_ALICE) {
+//            MagicLog.d(TAG, "setBackgrounds: Current player is Alice");
+//            turnBackgroundResource = R.drawable.alice_border;
+//        }
+//        else {
+//            MagicLog.d(TAG, "setBackgrounds: Current player is Bob");
+//            turnBackgroundResource = R.drawable.bob_border;
+//        }
+//
+//        //first row - turns, life, switch player
+//        //turn's background is based on current player, not view player
+//        mBinding.turnCounter.setBackgroundResource(turnBackgroundResource);
+//        mBinding.lifeCounterAlice.setBackgroundResource(backgroundResource);
+//        mBinding.lifeCounterBob.setBackgroundResource(backgroundResource);
+//        mBinding.switchPlayer.setBackgroundResource(backgroundResource);
+//
+//        //second row - game action log, next step
+//        mBinding.gameActionLog.setBackgroundResource(backgroundResource);
+//        mBinding.nextStep.setBackgroundResource(backgroundResource);
+//
+//        //third row - opposing creatures
+//        mBinding.oppCreatures.setBackgroundResource(backgroundResource);
+//
+//        //fourth row - my creatures
+//        mBinding.creaturesRecyclerview.setBackgroundResource(backgroundResource);
+//
+//        //fifth row - lands, library, graveyard
+//        mBinding.landsRecyclerview.setBackgroundResource(backgroundResource);
+//        mBinding.library.setBackgroundResource(backgroundResource);
+//        mBinding.graveyard.setBackgroundResource(backgroundResource);
+//
+//        //sixth row - hand
+//        mBinding.handRecyclerview.setBackgroundResource(backgroundResource);
     }
 
     /**
@@ -265,6 +295,9 @@ public class BoardFragmentModel {
         mHandRecViewModel.onDestroy();
         mLandsRecViewModel.onDestroy();
         mCreaturesRecViewModel.onDestroy();
+
+        //clear list of view models
+        mGameViewModels.clear();
 
         //remove references
         mHandRecViewModel = null;
