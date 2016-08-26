@@ -10,8 +10,8 @@ import com.example.srikar.magic.MagicLog;
 import com.example.srikar.magic.R;
 import com.example.srikar.magic.UiUtil;
 import com.example.srikar.magic.databinding.FragmentBoardBinding;
+import com.example.srikar.magic.event.GameStateChangeBus;
 import com.example.srikar.magic.event.GameStateChangeEvent;
-import com.example.srikar.magic.event.RxEventBus;
 import com.example.srikar.magic.fragment.CombatDialogFragment;
 import com.example.srikar.magic.model.DataModelConstants;
 import com.example.srikar.magic.model.GameState;
@@ -50,7 +50,7 @@ public class BoardFragmentModel {
     private final FragmentBoardBinding mBinding;
 
     @Inject
-    protected RxEventBus<GameStateChangeEvent> mGameStateChangeEventBus;
+    protected GameStateChangeBus mGameStateChangeBus;
     //used to store all subscriptions, so can unsubscribe when destroy
     private final CompositeSubscription mSubscriptions;
 
@@ -371,7 +371,7 @@ public class BoardFragmentModel {
      */
     private Subscription registerEventBus() {
         MagicLog.d(TAG, "registerEventBus: ");
-        return mGameStateChangeEventBus.getEvents()
+        return mGameStateChangeBus.getEvents()
                 .subscribe(this::actOnEvent);
     }
 

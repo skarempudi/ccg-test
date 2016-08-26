@@ -2,6 +2,7 @@ package com.example.srikar.magic.model.zone;
 
 import com.example.srikar.magic.MagicLog;
 import com.example.srikar.magic.event.GameStateChangeEvent;
+import com.example.srikar.magic.event.ListChangeBus;
 import com.example.srikar.magic.event.ListChangeEvent;
 import com.example.srikar.magic.event.RxEventBus;
 import com.example.srikar.magic.model.DataModelConstants;
@@ -19,23 +20,18 @@ import static org.junit.Assert.assertTrue;
  * Created by Srikar on 7/20/2016.
  */
 public class BaseGameZoneUnitTest {
-    private final RxEventBus<ListChangeEvent> eventBus;
+    private final ListChangeBus eventBus;
     private final BaseGameZone baseGameZone;
 
     public BaseGameZoneUnitTest() {
         MagicLog.setLogging(false);
 
-        eventBus = new RxEventBus<>();
+        eventBus = new ListChangeBus();
         //create implementation that can test
-        baseGameZone = new BaseGameZone(eventBus, null, new RxEventBus<>()) {
+        baseGameZone = new BaseGameZone(eventBus, null) {
             @Override
             protected void clearLists() {
                 //there are no lists to clear
-            }
-
-            @Override
-            protected void actOnGameStateChangeEvent(GameStateChangeEvent event) {
-                //not testing response to changes in GameState
             }
         };
     }

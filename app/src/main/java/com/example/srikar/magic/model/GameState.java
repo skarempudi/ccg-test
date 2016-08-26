@@ -1,8 +1,8 @@
 package com.example.srikar.magic.model;
 
 import com.example.srikar.magic.MagicLog;
+import com.example.srikar.magic.event.GameStateChangeBus;
 import com.example.srikar.magic.event.GameStateChangeEvent;
-import com.example.srikar.magic.event.RxEventBus;
 import com.example.srikar.magic.model.zone.Battlefield;
 import com.example.srikar.magic.model.zone.Hand;
 
@@ -18,7 +18,7 @@ public class GameState {
     /**
      * Used to signal to BoardFragmentModel that game state changed
      */
-    private final RxEventBus<GameStateChangeEvent> mGameStateChangeEventBus;
+    private final GameStateChangeBus mGameStateChangeBus;
     /**
      * Not injected, due to dependency chain. Depend on GameState.
      */
@@ -33,8 +33,8 @@ public class GameState {
 
     private int[] lifeTotals = {STARTING_LIFE, STARTING_LIFE};
 
-    public GameState(RxEventBus<GameStateChangeEvent> rxEventBus) {
-        mGameStateChangeEventBus = rxEventBus;
+    public GameState(GameStateChangeBus gameStateChangeBus) {
+        mGameStateChangeBus = gameStateChangeBus;
 
         mCurrentPlayer = DataModelConstants.PLAYER_ALICE; //starting player is Alice
         mViewPlayer = DataModelConstants.PLAYER_ALICE;
@@ -193,13 +193,13 @@ public class GameState {
      * Listeners access through Dagger injection for bus, not with getter.
      **********************************************************************************************/
     /**
-     * Add event to mGameStateChangeEventBus, which alerts the listening BoardFragmentModel
+     * Add event to mGameStateChangeBus, which alerts the listening BoardFragmentModel
      * @param action From GameStateChangeEvent. Right now, only action is to switch view player
      */
     private void addGameStateChangeEvent(int action) {
         GameStateChangeEvent event = new GameStateChangeEvent(action);
         MagicLog.d(TAG, "addGameStateChangeEvent: " + event.toString());
 
-        mGameStateChangeEventBus.addEvent(event);
+        mGameStateChangeBus.addEvent(event);
     }
 }

@@ -1,7 +1,7 @@
 package com.example.srikar.magic.model.zone;
 
 import com.example.srikar.magic.MagicLog;
-import com.example.srikar.magic.event.GameStateChangeEvent;
+import com.example.srikar.magic.event.ListChangeBus;
 import com.example.srikar.magic.event.ListChangeEvent;
 import com.example.srikar.magic.event.RxEventBus;
 import com.example.srikar.magic.model.GameState;
@@ -16,14 +16,14 @@ public abstract class BaseGameZone {
      * Used to signal to associated RecyclerViews that lists updated
      * Injected during construction of subclasses
      */
-    protected final RxEventBus<ListChangeEvent> mListChangeEventBus;
+    protected final ListChangeBus mListChangeBus;
     /**
      * Used to determine who the current view player is, and thus which list to use
      */
     protected final GameState mGameState;
 
-    public BaseGameZone(RxEventBus<ListChangeEvent> rvEventBus, GameState gameState) {
-        mListChangeEventBus = rvEventBus;
+    public BaseGameZone(ListChangeBus listChangeBus, GameState gameState) {
+        mListChangeBus = listChangeBus;
         mGameState = gameState;
     }
 
@@ -37,7 +37,7 @@ public abstract class BaseGameZone {
      * Listeners access through Dagger injection for bus, not with getter.
      **********************************************************************************************/
     /**
-     * Add event to mListChangeEventBus, which alerts the specified RecyclerView to update
+     * Add event to mListChangeBus, which alerts the specified RecyclerView to update
      * @param listName Which RecyclerView, using DataModelConstants list names
      * @param action Whether to add, remove, or update, using ListChangeEvent actions
      * @param index What index to update in list
@@ -46,6 +46,6 @@ public abstract class BaseGameZone {
         ListChangeEvent event = new ListChangeEvent(listName, action, index);
         MagicLog.d(TAG, "addListChangeEvent: " + event.toString());
 
-        mListChangeEventBus.addEvent(event);
+        mListChangeBus.addEvent(event);
     }
 }

@@ -1,8 +1,6 @@
 package com.example.srikar.magic.viewmodel.recyclerview;
 
-import android.app.Activity;
 import android.content.Context;
-import android.databinding.BaseObservable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
@@ -10,8 +8,8 @@ import com.example.srikar.magic.MagicApplication;
 import com.example.srikar.magic.MagicLog;
 import com.example.srikar.magic.adapter.BaseRecViewAdapter;
 import com.example.srikar.magic.databinding.FragmentBoardBinding;
+import com.example.srikar.magic.event.ListChangeBus;
 import com.example.srikar.magic.event.ListChangeEvent;
-import com.example.srikar.magic.event.RxEventBus;
 import com.example.srikar.magic.viewmodel.BaseBoardModel;
 
 import javax.inject.Inject;
@@ -33,7 +31,7 @@ public abstract class BaseRecyclerViewModel extends BaseBoardModel {
 
     //listens for changes in model so can update display
     @Inject
-    protected RxEventBus<ListChangeEvent> mListChangeEventBus;
+    protected ListChangeBus mListChangeBus;
     private final Subscription mRecyclerViewEventSub;
 
     //used to determine which data model list to populate the RecyclerView with
@@ -138,7 +136,7 @@ public abstract class BaseRecyclerViewModel extends BaseBoardModel {
      */
     private Subscription registerEventBus() {
         MagicLog.d(TAG, "registerEventBus: ");
-        return mListChangeEventBus.getEvents()
+        return mListChangeBus.getEvents()
                 .filter(e -> e.listName == mListName)
                 .subscribe(this::actOnEvent);
     }

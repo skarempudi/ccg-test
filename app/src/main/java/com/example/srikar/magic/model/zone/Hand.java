@@ -2,6 +2,7 @@ package com.example.srikar.magic.model.zone;
 
 import com.example.srikar.magic.MagicLog;
 import com.example.srikar.magic.event.GameStateChangeEvent;
+import com.example.srikar.magic.event.ListChangeBus;
 import com.example.srikar.magic.event.ListChangeEvent;
 import com.example.srikar.magic.event.RxEventBus;
 import com.example.srikar.magic.model.Card;
@@ -25,11 +26,11 @@ public class Hand extends BaseGameZone {
     /**
      * Data model for each player's hand of cards.
      * Constructed by dependency injection.
-     * @param rvEventBus Event bus used to pass information to listening RecyclerViewModels
+     * @param listChangeBus Event bus used to pass information to listening RecyclerViewModels
      * @param gameState Used to determine who the current player is
      */
-    public Hand(RxEventBus<ListChangeEvent> rvEventBus, GameState gameState) {
-        super(rvEventBus, gameState);
+    public Hand(ListChangeBus listChangeBus, GameState gameState) {
+        super(listChangeBus, gameState);
 
         mCards = new ArrayList[2];
         mCards[DataModelConstants.PLAYER_ALICE] = new ArrayList<>();

@@ -1,6 +1,8 @@
 package com.example.srikar.magic.dagger;
 
+import com.example.srikar.magic.event.GameStateChangeBus;
 import com.example.srikar.magic.event.GameStateChangeEvent;
+import com.example.srikar.magic.event.ListChangeBus;
 import com.example.srikar.magic.event.ListChangeEvent;
 import com.example.srikar.magic.event.RxEventBus;
 
@@ -10,20 +12,20 @@ import dagger.Module;
 import dagger.Provides;
 
 /**
- * This event bus is used to note to listening RecyclerViews that their data set changed.
+ * These event buses are used for communication from data models to view models
  * Created by Srikar on 6/7/2016.
  */
 @Module
 class RxEventBusModule {
     @Provides
     @Singleton
-    public RxEventBus<ListChangeEvent> provideListChangeEventBus() {
-        return new RxEventBus<>();
+    public ListChangeBus provideListChangeEventBus() {
+        return new ListChangeBus();
     }
 
     @Provides
     @Singleton
-    public RxEventBus<GameStateChangeEvent> provideGameStateChangeEventBus() {
-        return new RxEventBus<>();
+    public GameStateChangeBus provideGameStateChangeEventBus() {
+        return new GameStateChangeBus();
     }
 }

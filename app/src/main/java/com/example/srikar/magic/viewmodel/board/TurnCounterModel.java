@@ -7,14 +7,12 @@ import com.example.srikar.magic.MagicLog;
 import com.example.srikar.magic.R;
 import com.example.srikar.magic.UiUtil;
 import com.example.srikar.magic.databinding.FragmentBoardBinding;
+import com.example.srikar.magic.event.GameStateChangeBus;
 import com.example.srikar.magic.event.GameStateChangeEvent;
-import com.example.srikar.magic.event.RxEventBus;
 import com.example.srikar.magic.model.DataModelConstants;
 import com.example.srikar.magic.viewmodel.BaseBoardModel;
 
 import javax.inject.Inject;
-
-import rx.Subscription;
 
 /**
  * View model for the turn counter
@@ -24,7 +22,7 @@ public class TurnCounterModel extends BaseBoardModel {
     private static final String TAG = "TurnCounterModel";
 
     @Inject
-    protected RxEventBus<GameStateChangeEvent> mGameStateChangeEventBus;
+    protected GameStateChangeBus mGameStateChangeBus;
 
     /**
      * View model for the turn counter
@@ -92,7 +90,7 @@ public class TurnCounterModel extends BaseBoardModel {
      * After get event bus from Dagger injection, subscribe to it.
      */
     private void registerEventBus() {
-        mGameStateChangeEventBus.getEvents()
+        mGameStateChangeBus.getEvents()
                 .filter(event -> event.action == GameStateChangeEvent.NEXT_TURN)
                 .subscribe(this::actOnEvent);
     }

@@ -1,5 +1,6 @@
 package com.example.srikar.magic.dagger;
 
+import com.example.srikar.magic.event.GameStateChangeBus;
 import com.example.srikar.magic.event.GameStateChangeEvent;
 import com.example.srikar.magic.event.RxEventBus;
 import com.example.srikar.magic.model.GameState;
@@ -17,7 +18,7 @@ import dagger.Provides;
 class GameStateModule {
     @Provides
     @Singleton
-    public GameState provideGameState(RxEventBus<GameStateChangeEvent> rxEventBus) {
-        return new GameState(rxEventBus);
+    public GameState provideGameState(GameStateChangeBus gameStateChangeBus) {
+        return new GameState(gameStateChangeBus);
     }
 }

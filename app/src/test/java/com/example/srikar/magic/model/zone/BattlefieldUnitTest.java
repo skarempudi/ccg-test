@@ -1,7 +1,8 @@
 package com.example.srikar.magic.model.zone;
 
 import com.example.srikar.magic.MagicLog;
-import com.example.srikar.magic.event.GameStateChangeEvent;
+import com.example.srikar.magic.event.GameStateChangeBus;
+import com.example.srikar.magic.event.ListChangeBus;
 import com.example.srikar.magic.event.RxEventBus;
 import com.example.srikar.magic.model.Card;
 import com.example.srikar.magic.model.DataModelConstants;
@@ -25,16 +26,15 @@ public class BattlefieldUnitTest {
     private final int NUM_CREATURES = 3;
     private final Battlefield battlefield;
 
-    private final RxEventBus<GameStateChangeEvent> gameStateChangeEventBus;
+    private final GameStateChangeBus gameStateChangeBus;
 
     /**
      * Constructor, make Battlefield object
      */
     public BattlefieldUnitTest() {
         MagicLog.setLogging(false);
-        gameStateChangeEventBus = new RxEventBus<>();
-        battlefield = new Battlefield(new RxEventBus<>(), new GameState(gameStateChangeEventBus),
-                gameStateChangeEventBus);
+        gameStateChangeBus = new GameStateChangeBus();
+        battlefield = new Battlefield(new ListChangeBus(), new GameState(gameStateChangeBus));
     }
 
     @Before
