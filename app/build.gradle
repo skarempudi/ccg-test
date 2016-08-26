@@ -47,28 +47,29 @@ dependencies {
     //for accessing UI elements using RxJava
     compile 'com.jakewharton.rxbinding:rxbinding:0.4.0'
 
-    compile 'com.android.support:appcompat-v7:24.1.1'
-    compile 'com.android.support:recyclerview-v7:24.1.1'
+    compile 'com.android.support:appcompat-v7:24.2.0'
+    compile 'com.android.support:recyclerview-v7:24.2.0'
 
+    //Picasso for image downloading
     compile 'com.squareup.okhttp3:okhttp:3.2.0'
     compile 'com.squareup.picasso:picasso:2.5.2'
 
-    compile 'com.android.support:support-v4:24.1.1'
+    compile 'com.android.support:support-v4:24.2.0'
 
     //for PercentRelativeLayout
-    compile 'com.android.support:percent:24.1.1'
+    compile 'com.android.support:percent:24.2.0'
 
     //for JSON
     compile 'com.google.code.gson:gson:2.6.2'
 
     //LeakCanary
-//    debugCompile 'com.squareup.leakcanary:leakcanary-android:1.4-beta2'
-//    releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.4-beta2'
-//    testCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.4-beta2'
+    debugCompile 'com.squareup.leakcanary:leakcanary-android:1.4-beta2'
+    releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.4-beta2'
+    testCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.4-beta2'
 
     testCompile 'junit:junit:4.12'
 
-    androidTestCompile 'com.android.support:support-annotations:24.1.1'
+    androidTestCompile 'com.android.support:support-annotations:24.2.0'
     androidTestCompile 'com.android.support.test:runner:0.5'
     androidTestCompile 'com.android.support.test:rules:0.5'
 }
