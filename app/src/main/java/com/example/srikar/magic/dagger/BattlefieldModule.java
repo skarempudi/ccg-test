@@ -15,7 +15,7 @@ import dagger.Provides;
  * Dagger module that provides a Battlefield object
  * Created by Srikar on 5/18/2016.
  */
-@Module(includes = RxEventBusModule.class)
+@Module
 class BattlefieldModule {
     @Provides
     @Singleton

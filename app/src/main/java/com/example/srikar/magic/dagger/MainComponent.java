@@ -18,7 +18,7 @@ import dagger.Component;
  * Created by Srikar on 4/28/2016.
  */
 @Singleton
-@Component (modules = {BattlefieldModule.class, GameStateModule.class, HandModule.class})
+@Component (modules = {BattlefieldModule.class, GameStateModule.class, HandModule.class, RxEventBusModule.class})
 public interface MainComponent {
     void inject(BoardFragmentModel viewModel);
 
