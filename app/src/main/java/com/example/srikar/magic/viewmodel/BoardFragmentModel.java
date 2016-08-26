@@ -30,7 +30,7 @@ import rx.subscriptions.CompositeSubscription;
  * Handles interaction between the BoardFragment and the data models.
  * Created by Srikar on 7/6/2016.
  */
-public class BoardFragmentModel extends BaseObservable {
+public class BoardFragmentModel {
     private static final String TAG = "BoardFragmentModel";
     @Inject
     protected Battlefield mBattlefield;
@@ -114,6 +114,7 @@ public class BoardFragmentModel extends BaseObservable {
 
     /**
      * Set backgrounds based on the current view player
+     * Not done through Data Binding due to errors that pop up with background image scaling
      */
     private void setBackgrounds() {
         int backgroundResource;

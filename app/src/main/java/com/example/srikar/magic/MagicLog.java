@@ -3,6 +3,7 @@ package com.example.srikar.magic;
 import android.util.Log;
 
 /**
+ * Wrapper for Log such that can turn off logging for non-Android tests using setLogging()
  * Created by Srikar on 7/12/2016.
  */
 public class MagicLog {

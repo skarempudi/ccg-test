@@ -4,10 +4,6 @@
 
     <data>
         <variable
-            name="fragmentBoardModel"
-            type="com.example.srikar.magic.viewmodel.BoardFragmentModel"
-            />
-        <variable
             name="creaturesModel"
             type="com.example.srikar.magic.viewmodel.recyclerview.BaseRecyclerViewModel"
             />

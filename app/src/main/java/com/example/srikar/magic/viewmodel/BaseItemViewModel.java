@@ -21,12 +21,15 @@ public abstract class BaseItemViewModel extends BaseObservable {
 
     /**
      * When RecyclerView Adapter binds View Holder, set the list and position where can find the
-     * relevant Card or Permanent.
-     * @param listName ListName constant from DataModelConstants that maps to a data model list
+     * relevant Card or Permanent, then update the view
+     * @param listName ListName constant from DataModelConstants: hand, lands, or creatures
      * @param position Position in that list, which should be the same as in the RecyclerView
      */
-    public void setListPosition(int listName, int position) {
+    public void setDataModel(int listName, int position) {
         mListName = listName;
         mPosition = position;
+
+        //update view, which just involves image for now
+        loadImage();
     }
 }

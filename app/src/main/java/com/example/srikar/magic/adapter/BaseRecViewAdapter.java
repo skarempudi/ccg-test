@@ -17,14 +17,14 @@ public abstract class BaseRecViewAdapter extends RecyclerView.Adapter<BaseRecVie
     protected Activity mActivity;
     //the RecyclerViewModel that created this
     private final BaseRecyclerViewModel mRecyclerViewModel;
-    //which data model list to display
+    //which data model list to display, whether hand, lands, or creatures
     private final int mListName;
 
     /**
      * Constructor
      * @param activity Context used to inflate views
      * @param recyclerViewModel View model for the RecyclerView, interacts with data model
-     * @param listName Data model list from DataModelConstants, used to populate this RecyclerView
+     * @param listName Data model list from DataModelConstants: hand, lands, or creatures
      */
     BaseRecViewAdapter(Activity activity, BaseRecyclerViewModel recyclerViewModel,
                        int listName) {
@@ -60,10 +60,8 @@ public abstract class BaseRecViewAdapter extends RecyclerView.Adapter<BaseRecVie
      */
     @Override
     public void onBindViewHolder(BaseRecViewHolder holder, int position) {
-        //update position of the view model
-        holder.viewModel.setListPosition(mListName, position);
-        //load the image
-        holder.viewModel.loadImage();
+        //update position of the view model and update view
+        holder.viewModel.setDataModel(mListName, position);
     }
 
     /**

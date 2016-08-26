@@ -14,6 +14,11 @@ public final class UiUtil {
     //to prevent from creating an instance
     private UiUtil() {}
 
+    /**
+     * Wrapper for Html.fromHtml() that handles deprecation.
+     * @param partial String to be formatted
+     * @return Formatted version of given String
+     */
     public static Spanned formatHTML(String partial) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             return Html.fromHtml(partial, Html.FROM_HTML_MODE_LEGACY);
