@@ -86,9 +86,6 @@ public class BoardFragmentModel {
         //set the backgrounds
         setBackgrounds();
 
-        //set the turn text
-        setTurnText();
-
         //set the life total texts
         setLifeText();
 
@@ -146,35 +143,6 @@ public class BoardFragmentModel {
         for (GameViewModel model : mGameViewModels) {
             model.updateBackground();
         }
-    }
-
-    /**
-     * Set the current turn number and current player in the turn display
-     */
-    private void setTurnText() {
-        //get unformatted string
-        String unformatted = mActivity.getResources().getString(R.string.unformat_turn_display);
-
-        //get turn number
-        int turn = mGameState.getTurnNumber();
-
-        //get current player name
-        int currentPlayer = mGameState.getCurrentPlayer();
-        String name;
-        if (currentPlayer == DataModelConstants.PLAYER_ALICE) {
-            name = mActivity.getResources().getString(R.string.alice);
-        }
-        else {
-            name = mActivity.getResources().getString(R.string.bob);
-        }
-
-        //format the string
-        String partial = String.format(unformatted, turn, name);
-        //uses HTML to bold player name
-        CharSequence formatted = UiUtil.formatHTML(partial);
-
-        //set in turn display
-        mBinding.turnCounter.setText(formatted);
     }
 
     /**
@@ -384,8 +352,7 @@ public class BoardFragmentModel {
      * Triggered by change in game state data model
      */
     private void handleNextTurn() {
-        //since next turn, update turn text
-        setTurnText();
+        //turn text handled by its view model
 
         //update the backgrounds and lists
         handleSwitchViewPlayer();
@@ -397,7 +364,6 @@ public class BoardFragmentModel {
     /***********************************************************************************************
      * EVENT BUS
      **********************************************************************************************/
-
     /**
      * After get event bus from Dagger injection, subscribe to it. Returns subscription so can
      * reference it to unregister later.

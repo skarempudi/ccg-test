@@ -4,6 +4,7 @@ import com.example.srikar.magic.MagicApplication;
 import com.example.srikar.magic.viewmodel.BattlefieldCardViewModel;
 import com.example.srikar.magic.viewmodel.BoardFragmentModel;
 import com.example.srikar.magic.viewmodel.BaseBoardModel;
+import com.example.srikar.magic.viewmodel.board.TurnCounterModel;
 import com.example.srikar.magic.viewmodel.recyclerview.BaseRecyclerViewModel;
 import com.example.srikar.magic.viewmodel.recyclerview.BattlefieldRecViewModel;
 import com.example.srikar.magic.viewmodel.recyclerview.HandRecViewModel;
@@ -23,6 +24,7 @@ public interface MainComponent {
 
     //non-recyclerview views
     void inject(BaseBoardModel viewModel);
+    void inject(TurnCounterModel viewModel);
 
     void inject(BaseRecyclerViewModel viewModel);
     void inject(BattlefieldRecViewModel viewModel);
