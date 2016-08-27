@@ -4,7 +4,6 @@ import rx.Observable;
 import rx.subjects.PublishSubject;
 
 /**
- * This is not a singleton class, but instances should be stored exclusively in singletons.
  * When a change happens to a singleton like Battlefield, that event is sent through this bus,
  * and anything listening will react to that event.
  * Creates link between the model and the view (adapter) with low coupling.

@@ -15,6 +15,7 @@ import com.example.srikar.magic.viewmodel.BaseBoardModel;
 import javax.inject.Inject;
 
 import rx.Subscription;
+import rx.subscriptions.CompositeSubscription;
 
 /**
  * Using data binding, the layout uses this View Model to interact with the rest of the code.
@@ -22,7 +23,9 @@ import rx.Subscription;
  * The Adapter and LayoutManager are set here.
  * Created by Srikar on 6/21/2016.
  */
-public abstract class BaseRecyclerViewModel extends BaseBoardModel {
+public abstract class BaseRecyclerViewModel extends BaseBoardModel implements
+        ListChangeBus.AddListener, ListChangeBus.RemoveListener,
+        ListChangeBus.UpdateListener, ListChangeBus.UpdateAllListener {
     private static final String TAG = "BaseRecyclerViewModel";
 
     //adapter handles changes to the list, creates view models for Permanents or Cards
@@ -32,7 +35,8 @@ public abstract class BaseRecyclerViewModel extends BaseBoardModel {
     //listens for changes in model so can update display
     @Inject
     protected ListChangeBus mListChangeBus;
-    private final Subscription mRecyclerViewEventSub;
+    //store subscriptions to ListChangeBus
+    final CompositeSubscription mEventSubs;
 
     //used to determine which data model list to populate the RecyclerView with
     final int mListName;
@@ -45,14 +49,19 @@ public abstract class BaseRecyclerViewModel extends BaseBoardModel {
      */
     BaseRecyclerViewModel(FragmentBoardBinding binding, int listName) {
         super(binding);
-
-        mListName = listName;
         //injects instance of RecyclerView event bus
         MagicApplication.getInstance()
                 .getMainComponent()
                 .inject(this);
-        //partially implemented by children, listens for changes in models to update RecyclerView
-        mRecyclerViewEventSub = registerEventBus();
+
+        mListName = listName;
+
+        //add subscriptions to listen for changes in lists
+        mEventSubs = new CompositeSubscription();
+        mEventSubs.add(mListChangeBus.subscribeAddListener(this, mListName));
+        mEventSubs.add(mListChangeBus.subscribeRemoveListener(this, mListName));
+        mEventSubs.add(mListChangeBus.subscribeUpdateListener(this, mListName));
+        mEventSubs.add(mListChangeBus.subscribeUpdateAllListener(this, mListName));
     }
 
     /**
@@ -111,8 +120,8 @@ public abstract class BaseRecyclerViewModel extends BaseBoardModel {
      */
     public void onDestroy() {
         //unsubscribe to event bus
-        if (mRecyclerViewEventSub != null) {
-            mRecyclerViewEventSub.unsubscribe();
+        if (mEventSubs != null) {
+            mEventSubs.unsubscribe();
         }
 
         //remove adapter reference to context
@@ -126,42 +135,29 @@ public abstract class BaseRecyclerViewModel extends BaseBoardModel {
 
 
     /***********************************************************************************************
-     * EVENT BUS
+     * EVENT BUS LISTENERS
      **********************************************************************************************/
-
-    /**
-     * Register to event bus for RecyclerView events
-     * Filtering handled based on list name given during creation of this view model
-     * @return The subscripton
-     */
-    private Subscription registerEventBus() {
-        MagicLog.d(TAG, "registerEventBus: ");
-        return mListChangeBus.getEvents()
-                .filter(e -> e.listName == mListName)
-                .subscribe(this::actOnEvent);
+    @Override
+    public void onAdd(ListChangeEvent event) {
+        //update list at index added at
+        mAdapter.notifyItemInserted(event.index);
     }
 
-    /**
-     * When hear of event where relevant list updated, update the view to match
-     * @param event The event that acting on, either adding or removing element
-     */
-    private void actOnEvent(ListChangeEvent event) {
-        MagicLog.d(TAG, "actOnEvent: " + event.toString());
-        //if adding
-        if (event.action == ListChangeEvent.ADD) {
-            mAdapter.notifyItemInserted(event.index);
-        }
-        //if removing
-        else if (event.action == ListChangeEvent.REMOVE) {
-            mAdapter.notifyItemRemoved(event.index);
-        }
-        //if updating
-        else if (event.action == ListChangeEvent.UPDATE) {
-            mAdapter.notifyItemChanged(event.index);
-        }
-        //if updating all
-        else if (event.action == ListChangeEvent.UPDATE_ALL) {
-            mAdapter.notifyDataSetChanged();
-        }
+    @Override
+    public void onRemove(ListChangeEvent event) {
+        //update list at index removed from
+        mAdapter.notifyItemRemoved(event.index);
+    }
+
+    @Override
+    public void onUpdate(ListChangeEvent event) {
+        //update list at index
+        mAdapter.notifyItemChanged(event.index);
+    }
+
+    @Override
+    public void onUpdateAll(ListChangeEvent event) {
+        //update entire list
+        mAdapter.notifyDataSetChanged();
     }
 }

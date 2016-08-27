@@ -17,7 +17,7 @@ public class ListChangeEvent implements MagicEvent {
 
     /**
      * An event to notify that a list changed, listened to by RecyclerViews
-     * @param changedList Which list was updated, using ListChangeEvent.ListName
+     * @param changedList Which list was updated, using DataModelConstants (hand, lands, creatures)
      * @param updateAction Whether to add, remove, update, or update all, using ListChangeEvent.Action
      * @param listIndex What index of the list to update, not used in update all
      */
