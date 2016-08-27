@@ -189,9 +189,6 @@ public class BoardFragmentModel implements GameStateChangeBus.GameStateChangeLis
      * @param empty Handles void passed by Observable
      */
     private void nextStepOnClick(Void empty) {
-        //disable next step button
-        mBinding.nextStep.setEnabled(false);
-
         //if need to confirm attack, then display dialog
         if (mBattlefield.shouldConfirmAttack()) {
             CombatDialogFragment dialogFragment = new CombatDialogFragment();
@@ -207,6 +204,8 @@ public class BoardFragmentModel implements GameStateChangeBus.GameStateChangeLis
         }
         //if don't need to confirm attack, go to next step
         else {
+            //disable next step button
+            mBinding.nextStep.setEnabled(false);
             //go to next step in the data model
             mGameState.nextStep();
         }
@@ -216,6 +215,8 @@ public class BoardFragmentModel implements GameStateChangeBus.GameStateChangeLis
      * DIALOG RESPONSE LISTENERS
      **********************************************************************************************/
     public void attackersConfirmNextStep(DialogInterface dialog, int id) {
+        //disable next step button
+        mBinding.nextStep.setEnabled(false);
         //confirm attack
         mBattlefield.confirmAttack();
         //go to the next step in the data model
@@ -227,13 +228,10 @@ public class BoardFragmentModel implements GameStateChangeBus.GameStateChangeLis
         mBattlefield.confirmAttack();
         //don't go to the next step, but update next step button
         setNextStepButtonText();
-        //enable button
-        mBinding.nextStep.setEnabled(true);
     }
 
     public void attackersCancel(DialogInterface dialog, int id) {
-        //enable button
-        mBinding.nextStep.setEnabled(true);
+        //do nothing
     }
 
     /***********************************************************************************************

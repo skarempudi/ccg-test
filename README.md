@@ -6,6 +6,8 @@ Currently, I am still experimenting with the UI, and few game mechanics have bee
 
 At this point, this is best viewed as a showcase of my experimenting with RxJava, Dagger 2, and Data Binding.
 
+I am in the middle of a massive splitting up of classes to better suit SRP (single responsibility principle), so this process is not complete, and there are sections of code that still need to be broken up. 
+
 ## Usage
 
 The bottom row represents the hand, the row above land resource cards, and the row above creature cards. Above that is your opponent's creatures (not implemented), then a game log and a button to progress through the turn, then finally the turn counter, life tracker for each player, and a button to switch what player you are viewing as.
