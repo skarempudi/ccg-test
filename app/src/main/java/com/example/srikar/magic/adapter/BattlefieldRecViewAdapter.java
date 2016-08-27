@@ -1,13 +1,12 @@
 package com.example.srikar.magic.adapter;
 
-import android.app.Activity;
 import android.databinding.DataBindingUtil;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
 import com.example.srikar.magic.R;
 import com.example.srikar.magic.databinding.PermanentBinding;
-import com.example.srikar.magic.viewmodel.BattlefieldCardViewModel;
+import com.example.srikar.magic.viewmodel.card.BattlefieldCardViewModel;
 import com.example.srikar.magic.viewmodel.recyclerview.BaseRecyclerViewModel;
 
 /**

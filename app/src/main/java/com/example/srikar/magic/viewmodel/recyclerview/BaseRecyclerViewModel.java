@@ -26,15 +26,15 @@ import rx.subscriptions.CompositeSubscription;
 public abstract class BaseRecyclerViewModel extends BaseBoardModel implements
         ListChangeBus.AddListener, ListChangeBus.RemoveListener,
         ListChangeBus.UpdateListener, ListChangeBus.UpdateAllListener {
-    private static final String TAG = "BaseRecyclerViewModel";
+    static final String TAG = "BaseRecyclerViewModel";
 
     //adapter handles changes to the list, creates view models for Permanents or Cards
-    private BaseRecViewAdapter mAdapter;
-    private RecyclerView.LayoutManager mLayoutManager;
+    BaseRecViewAdapter mAdapter;
+    RecyclerView.LayoutManager mLayoutManager;
 
     //listens for changes in model so can update display
     @Inject
-    protected ListChangeBus mListChangeBus;
+    ListChangeBus mListChangeBus;
     //store subscriptions to ListChangeBus
     final CompositeSubscription mEventSubs;
 
@@ -48,13 +48,17 @@ public abstract class BaseRecyclerViewModel extends BaseBoardModel implements
      * @param listName Which data model list is being used, using DataModelConstants
      */
     BaseRecyclerViewModel(FragmentBoardBinding binding, int listName) {
-        super(binding);
+        //won't set the background in super constructor
+        super(binding, false);
         //injects instance of RecyclerView event bus
         MagicApplication.getInstance()
                 .getMainComponent()
                 .inject(this);
 
         mListName = listName;
+
+        //now that have list name, will set background
+        updateBackground();
 
         //add subscriptions to listen for changes in lists
         mEventSubs = new CompositeSubscription();

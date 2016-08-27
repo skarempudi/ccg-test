@@ -1,6 +1,7 @@
 package com.example.srikar.magic.viewmodel.board;
 
 import com.example.srikar.magic.databinding.FragmentBoardBinding;
+import com.example.srikar.magic.event.GameStateChangeEvent;
 import com.example.srikar.magic.viewmodel.BaseBoardModel;
 
 /**

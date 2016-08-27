@@ -1,4 +1,4 @@
-package com.example.srikar.magic.viewmodel;
+package com.example.srikar.magic.viewmodel.card;
 
 import android.databinding.BaseObservable;
 
@@ -10,7 +10,7 @@ import com.example.srikar.magic.event.ListChangeEvent;
  * XML layout files
  * Created by Srikar on 5/20/2016.
  */
-public abstract class BaseItemViewModel extends BaseObservable {
+public abstract class BaseCardViewModel extends BaseObservable {
     int mListName;
     int mPosition;
 

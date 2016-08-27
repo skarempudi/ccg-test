@@ -1,11 +1,10 @@
 package com.example.srikar.magic.adapter;
 
-import android.app.Activity;
 import android.databinding.ViewDataBinding;
 import android.support.v7.widget.RecyclerView;
 import android.view.ViewGroup;
 
-import com.example.srikar.magic.viewmodel.BaseItemViewModel;
+import com.example.srikar.magic.viewmodel.card.BaseCardViewModel;
 import com.example.srikar.magic.viewmodel.recyclerview.BaseRecyclerViewModel;
 
 /**
@@ -36,9 +35,9 @@ public abstract class BaseRecViewAdapter extends RecyclerView.Adapter<BaseRecVie
      */
     public class BaseRecViewHolder extends RecyclerView.ViewHolder {
         public final ViewDataBinding binding;
-        public final BaseItemViewModel viewModel;
+        public final BaseCardViewModel viewModel;
 
-        public BaseRecViewHolder(ViewDataBinding binding, BaseItemViewModel viewModel) {
+        public BaseRecViewHolder(ViewDataBinding binding, BaseCardViewModel viewModel) {
             super(binding.getRoot());
             this.binding = binding;
             this.viewModel = viewModel;

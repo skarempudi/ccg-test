@@ -6,7 +6,7 @@ package com.example.srikar.magic.viewmodel;
  */
 public interface GameViewModel {
     /**
-     * Used to update the background color of this view, based on the current player or view player
+     * Used to unsubscribe when Activity goes through onDestroy()
      */
-    void updateBackground();
+    void onDestroy();
 }

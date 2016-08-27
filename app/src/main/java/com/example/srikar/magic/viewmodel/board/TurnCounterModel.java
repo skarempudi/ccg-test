@@ -19,11 +19,8 @@ import javax.inject.Inject;
  * Created by Srikar on 8/25/2016.
  */
 public class TurnCounterModel extends BaseBoardModel
-        implements GameStateChangeBus.NextTurnListener{
+        implements GameStateChangeBus.NextTurnListener {
     private static final String TAG = "TurnCounterModel";
-
-    @Inject
-    protected GameStateChangeBus mGameStateChangeBus;
 
     /**
      * View model for the turn counter
@@ -32,16 +29,11 @@ public class TurnCounterModel extends BaseBoardModel
     public TurnCounterModel(FragmentBoardBinding binding) {
         super(binding);
 
-        //used to get game state change event bus
-        MagicApplication.getInstance()
-                .getMainComponent()
-                .inject(this);
-
         //set text
         setTurnText();
 
         //listen for turn changes
-        mGameStateChangeBus.subscribeNextTurnListener(this);
+        mSubscriptions.add(mGameStateChangeBus.subscribeNextTurnListener(this));
     }
 
     @Override
@@ -56,7 +48,7 @@ public class TurnCounterModel extends BaseBoardModel
     /**
      * Set the current turn number and current player in the turn display
      */
-    private void setTurnText() {
+    void setTurnText() {
         Context context = mBinding.getRoot().getContext();
 
         //get unformatted string

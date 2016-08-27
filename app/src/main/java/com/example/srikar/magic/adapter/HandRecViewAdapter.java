@@ -1,6 +1,5 @@
 package com.example.srikar.magic.adapter;
 
-import android.app.Activity;
 import android.databinding.DataBindingUtil;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
@@ -8,7 +7,7 @@ import android.view.ViewGroup;
 import com.example.srikar.magic.databinding.CardBinding;
 import com.example.srikar.magic.R;
 import com.example.srikar.magic.model.DataModelConstants;
-import com.example.srikar.magic.viewmodel.HandCardViewModel;
+import com.example.srikar.magic.viewmodel.card.HandCardViewModel;
 import com.example.srikar.magic.viewmodel.recyclerview.BaseRecyclerViewModel;
 
 /**

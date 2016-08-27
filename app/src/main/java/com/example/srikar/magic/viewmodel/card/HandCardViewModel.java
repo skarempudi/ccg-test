@@ -1,4 +1,4 @@
-package com.example.srikar.magic.viewmodel;
+package com.example.srikar.magic.viewmodel.card;
 
 import android.widget.ImageView;
 
@@ -11,7 +11,7 @@ import com.squareup.picasso.Picasso;
  * Instead of directly handling the card views, work with this model that uses data binding
  * Created by Srikar on 5/10/2016.
  */
-public class HandCardViewModel extends BaseItemViewModel {
+public class HandCardViewModel extends BaseCardViewModel {
     private final CardBinding mBinding;
 
     public HandCardViewModel(CardBinding binding) {

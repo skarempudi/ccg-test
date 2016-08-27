@@ -86,18 +86,8 @@ public class BoardFragmentModel implements
         //create the ViewModels and populate list
         createViewModels();
 
-        //set the backgrounds
-        setBackgrounds();
-
-        //set the life total texts
-        setLifeText();
-
-        //set the game action log starting text
-        setLogText();
-
         //set next step button text
         setNextStepButtonText();
-
 
         //attach the view models to the binding
         binding.setHandModel(mHandRecViewModel);
@@ -138,62 +128,6 @@ public class BoardFragmentModel implements
     }
 
     /**
-     * Set backgrounds based on the current view player
-     * Not done through Data Binding due to errors that pop up with background image scaling
-     */
-    private void setBackgrounds() {
-        MagicLog.d(TAG, "setBackgrounds: Setting backgrounds through GameViewModels");
-        for (GameViewModel model : mGameViewModels) {
-            model.updateBackground();
-        }
-    }
-
-    /**
-     * Set text for life total displays based on information in game state data model
-     */
-    private void setLifeText() {
-        //get names
-        String aliceName = mActivity.getResources().getString(R.string.alice);
-        String bobName = mActivity.getResources().getString(R.string.bob);
-
-        //get colors
-        String aliceColor = mActivity.getResources().getString(R.string.alice_color);
-        String bobColor = mActivity.getResources().getString(R.string.bob_color);
-
-        //get life totals
-        int aliceLife = mGameState.getLifeTotal(DataModelConstants.PLAYER_ALICE);
-        int bobLife = mGameState.getLifeTotal(DataModelConstants.PLAYER_BOB);
-
-        //get unformatted strings
-        String unformat = mActivity.getResources().getString(R.string.unformat_life);
-
-        //format the strings: color, name, life total
-        String partialAlice = String.format(unformat, aliceColor, aliceName, aliceLife);
-        String partialBob = String.format(unformat, bobColor, bobName, bobLife);
-
-        //use HTML to finalize
-        CharSequence formatAlice = UiUtil.formatHTML(partialAlice);
-        CharSequence formatBob = UiUtil.formatHTML(partialBob);
-
-        //put in life total displays
-        mBinding.lifeCounterAlice.setText(formatAlice, TextView.BufferType.SPANNABLE);
-        mBinding.lifeCounterBob.setText(formatBob, TextView.BufferType.SPANNABLE);
-    }
-
-    /**
-     * Set text in game action log based on current step in game state data model
-     */
-    private void setLogText() {
-        //get current step
-        int step = mGameState.getCurrentStep();
-        //get the string resource ID
-        int stringId = DataModelConstants.getStepLogText(step);
-
-        //set the text in log
-        mBinding.gameActionLog.setText(stringId);
-    }
-
-    /**
      * Set text in next step button depending on if want to confirm combat steps first or not
      */
     private void setNextStepButtonText() {
@@ -216,10 +150,10 @@ public class BoardFragmentModel implements
             mSubscriptions.unsubscribe();
         }
 
-        //for each RecyclerViewModel, remove the subscriptions to RxJava Observables
-        mHandRecViewModel.onDestroy();
-        mLandsRecViewModel.onDestroy();
-        mCreaturesRecViewModel.onDestroy();
+        //call onDestroy for each view model, removing the Subscriptions to RxJava Observables
+        for (GameViewModel viewModel : mGameViewModels) {
+            viewModel.onDestroy();
+        }
 
         //clear list of view models
         mGameViewModels.clear();
@@ -324,9 +258,6 @@ public class BoardFragmentModel implements
      * Triggered by change in game state data model
      */
     private void handleSwitchViewPlayer() {
-        //updates the backgrounds
-        setBackgrounds();
-
         //notifies the RecyclerViewModels to update Adapters
         mHandRecViewModel.onViewPlayerSwitched();
         mLandsRecViewModel.onViewPlayerSwitched();
@@ -341,8 +272,6 @@ public class BoardFragmentModel implements
      * Triggered by change in game state data model
      */
     private void handleNextStep() {
-        //set log text based on current step listed in game state
-        setLogText();
         //set next step text, which can change during combat
         setNextStepButtonText();
 
@@ -355,9 +284,7 @@ public class BoardFragmentModel implements
      * Triggered by change in game state data model
      */
     private void handleNextTurn() {
-        //turn text handled by its view model
-
-        //update the backgrounds and lists
+        //update the lists
         handleSwitchViewPlayer();
 
         //do normal stuff affiliated with handling next step

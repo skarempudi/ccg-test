@@ -60,6 +60,7 @@ public class MagicApplication extends Application {
      * aren't any at that point
      */
     private void loadInitialDataModelState() {
+        //TODO: new class
         //hand
         Observable.just(this)
                 .observeOn(Schedulers.newThread()) //performs actions on new thread

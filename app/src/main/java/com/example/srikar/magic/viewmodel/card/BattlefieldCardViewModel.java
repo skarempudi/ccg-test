@@ -1,4 +1,4 @@
-package com.example.srikar.magic.viewmodel;
+package com.example.srikar.magic.viewmodel.card;
 
 import android.widget.ImageView;
 
@@ -22,7 +22,7 @@ import javax.inject.Inject;
  * Instead of directly handling the permanent views, work with this model that uses data binding
  * Created by Srikar on 5/20/2016.
  */
-public class BattlefieldCardViewModel extends BaseItemViewModel {
+public class BattlefieldCardViewModel extends BaseCardViewModel {
     private static final String TAG = "BattlefieldCardViewModel";
 
     //bindings for views in Permanent layout
