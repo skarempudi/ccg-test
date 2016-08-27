@@ -18,7 +18,8 @@ import javax.inject.Inject;
  * View model for the turn counter
  * Created by Srikar on 8/25/2016.
  */
-public class TurnCounterModel extends BaseBoardModel {
+public class TurnCounterModel extends BaseBoardModel
+        implements GameStateChangeBus.NextTurnListener{
     private static final String TAG = "TurnCounterModel";
 
     @Inject
@@ -40,7 +41,7 @@ public class TurnCounterModel extends BaseBoardModel {
         setTurnText();
 
         //listen for turn changes
-        registerEventBus();
+        mGameStateChangeBus.subscribeNextTurnListener(this);
     }
 
     @Override
@@ -84,26 +85,11 @@ public class TurnCounterModel extends BaseBoardModel {
     }
 
     /***********************************************************************************************
-     * EVENT BUS
+     * EVENT BUS LISTENER
      **********************************************************************************************/
-    /**
-     * After get event bus from Dagger injection, subscribe to it.
-     */
-    private void registerEventBus() {
-        mGameStateChangeBus.getEvents()
-                .filter(event -> event.action == GameStateChangeEvent.NEXT_TURN)
-                .subscribe(this::actOnEvent);
-    }
-
-    /**
-     * When receive event from event bus, handle by calling another method depending on event type.
-     * @param event Event received from event bus
-     */
-    private void actOnEvent(GameStateChangeEvent event) {
-        MagicLog.d(TAG, "actOnEvent: " + event.toString());
-        //if going to next turn
-        if (event.action == GameStateChangeEvent.NEXT_TURN) {
-            setTurnText();
-        }
+    @Override
+    public void onNextTurn(GameStateChangeEvent event) {
+        //update turn text
+        setTurnText();
     }
 }
