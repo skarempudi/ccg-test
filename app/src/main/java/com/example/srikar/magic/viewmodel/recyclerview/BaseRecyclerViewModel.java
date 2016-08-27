@@ -8,6 +8,7 @@ import com.example.srikar.magic.MagicApplication;
 import com.example.srikar.magic.MagicLog;
 import com.example.srikar.magic.adapter.BaseRecViewAdapter;
 import com.example.srikar.magic.databinding.FragmentBoardBinding;
+import com.example.srikar.magic.event.GameStateChangeEvent;
 import com.example.srikar.magic.event.ListChangeBus;
 import com.example.srikar.magic.event.ListChangeEvent;
 import com.example.srikar.magic.viewmodel.BaseBoardModel;
@@ -113,13 +114,6 @@ public abstract class BaseRecyclerViewModel extends BaseBoardModel implements
     public abstract int getItemCount();
 
     /**
-     * When the view player switches, the content of the RecyclerView is changed.
-     */
-    public void onViewPlayerSwitched() {
-        mAdapter.notifyDataSetChanged();
-    }
-
-    /**
      * Call when containing View or Fragment is destroyed, will unregister Subscriptions
      */
     public void onDestroy() {
@@ -162,6 +156,14 @@ public abstract class BaseRecyclerViewModel extends BaseBoardModel implements
     @Override
     public void onUpdateAll(ListChangeEvent event) {
         //update entire list
+        mAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void onSwitchViewPlayer(GameStateChangeEvent event) {
+        //updates background
+        super.onSwitchViewPlayer(event);
+        //when the view player switches, the content of the RecyclerView is changed.
         mAdapter.notifyDataSetChanged();
     }
 }

@@ -8,14 +8,23 @@ import rx.Subscription;
  * Created by Srikar on 8/26/2016.
  */
 public class GameStateChangeBus extends RxEventBus<GameStateChangeEvent> {
+    /**
+     * Listens for when the player that viewing as switches
+     */
     public interface SwitchViewPlayerListener {
         void onSwitchViewPlayer(GameStateChangeEvent event);
     }
 
+    /**
+     * Listens for next step in turn
+     */
     public interface NextStepListener {
         void onNextStep(GameStateChangeEvent event);
     }
 
+    /**
+     * Listens for start of next turn
+     */
     public interface NextTurnListener {
         void onNextTurn(GameStateChangeEvent event);
     }

@@ -22,6 +22,7 @@ import com.example.srikar.magic.viewmodel.board.LifeCounterModel;
 import com.example.srikar.magic.viewmodel.board.NextStepModel;
 import com.example.srikar.magic.viewmodel.board.SwitchPlayerModel;
 import com.example.srikar.magic.viewmodel.board.TurnCounterModel;
+import com.example.srikar.magic.viewmodel.recyclerview.BaseRecyclerViewModel;
 import com.example.srikar.magic.viewmodel.recyclerview.BattlefieldRecViewModel;
 import com.example.srikar.magic.viewmodel.recyclerview.HandRecViewModel;
 import com.jakewharton.rxbinding.view.RxView;
@@ -57,17 +58,7 @@ public class BoardFragmentModel implements
     //used to store all subscriptions, so can unsubscribe when destroy
     private final CompositeSubscription mSubscriptions;
 
-    /**
-     * RecyclerView Models, which handle more complex interactions and communicate with the
-     * data model classes.
-     */
-    private HandRecViewModel mHandRecViewModel;
-    private BattlefieldRecViewModel mLandsRecViewModel;
-    private BattlefieldRecViewModel mCreaturesRecViewModel;
-
-    /**
-     * List of view models that can have their backgrounds updated
-     */
+    //list of view models, so can destroy them in onDestroy()
     private List<GameViewModel> mGameViewModels = new ArrayList<>();
 
     public BoardFragmentModel(Activity activity, FragmentBoardBinding binding) {
@@ -83,20 +74,18 @@ public class BoardFragmentModel implements
         //used to hold onClick subscriptions
         mSubscriptions = new CompositeSubscription();
 
-        //create the ViewModels and populate list
+        //create the ViewModels, populate mGameViewModels, and bind RecyclerViewModels
         createViewModels();
 
+        //TODO: Move to NextStepModel
         //set next step button text
         setNextStepButtonText();
 
-        //attach the view models to the binding
-        binding.setHandModel(mHandRecViewModel);
-        binding.setLandsModel(mLandsRecViewModel);
-        binding.setCreaturesModel(mCreaturesRecViewModel);
-
+        //TODO: Move to respective ViewModels
         //register on click event handlers
         registerOnClicks();
 
+        //TODO: Remove when no longer have any in this class
         //register listeners for changes in GameState
         subscribeEventBus();
     }
@@ -108,7 +97,7 @@ public class BoardFragmentModel implements
         //clear out list
         mGameViewModels.clear();
 
-        //add view models that this class doesn't care about individually
+        //add view models
         mGameViewModels.add(new TurnCounterModel(mBinding));
         mGameViewModels.add(new LifeCounterModel(mBinding));
         mGameViewModels.add(new SwitchPlayerModel(mBinding));
@@ -116,15 +105,20 @@ public class BoardFragmentModel implements
         mGameViewModels.add(new NextStepModel(mBinding));
         mGameViewModels.add(new CurrentlyUnusedModel(mBinding));
 
-        //create recycler view models, which still care about individually
-        mHandRecViewModel = new HandRecViewModel(mBinding);
-        mLandsRecViewModel = new BattlefieldRecViewModel(mBinding, DataModelConstants.LIST_LANDS);
-        mCreaturesRecViewModel = new BattlefieldRecViewModel(mBinding, DataModelConstants.LIST_CREATURES);
+        //create recycler view models, which have to set in binding
+        BaseRecyclerViewModel handRecViewModel = new HandRecViewModel(mBinding);
+        BaseRecyclerViewModel landsRecViewModel = new BattlefieldRecViewModel(mBinding, DataModelConstants.LIST_LANDS);
+        BaseRecyclerViewModel creaturesRecViewModel = new BattlefieldRecViewModel(mBinding, DataModelConstants.LIST_CREATURES);
 
-        //add to list, so can update backgrounds
-        mGameViewModels.add(mHandRecViewModel);
-        mGameViewModels.add(mLandsRecViewModel);
-        mGameViewModels.add(mCreaturesRecViewModel);
+        //set in binding
+        mBinding.setHandModel(handRecViewModel);
+        mBinding.setLandsModel(landsRecViewModel);
+        mBinding.setCreaturesModel(creaturesRecViewModel);
+
+        //add to list
+        mGameViewModels.add(handRecViewModel);
+        mGameViewModels.add(landsRecViewModel);
+        mGameViewModels.add(creaturesRecViewModel);
     }
 
     /**
@@ -157,11 +151,6 @@ public class BoardFragmentModel implements
 
         //clear list of view models
         mGameViewModels.clear();
-
-        //remove references
-        mHandRecViewModel = null;
-        mLandsRecViewModel = null;
-        mCreaturesRecViewModel = null;
 
         //remove reference to context
         mActivity = null;
@@ -258,11 +247,6 @@ public class BoardFragmentModel implements
      * Triggered by change in game state data model
      */
     private void handleSwitchViewPlayer() {
-        //notifies the RecyclerViewModels to update Adapters
-        mHandRecViewModel.onViewPlayerSwitched();
-        mLandsRecViewModel.onViewPlayerSwitched();
-        mCreaturesRecViewModel.onViewPlayerSwitched();
-
         //enable switch button
         mBinding.switchPlayer.setEnabled(true);
     }

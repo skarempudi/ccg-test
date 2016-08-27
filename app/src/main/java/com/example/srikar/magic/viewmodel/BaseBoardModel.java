@@ -14,30 +14,22 @@ import javax.inject.Inject;
 import rx.subscriptions.CompositeSubscription;
 
 /**
- * Base class for subviews on BoardFragment that aren't RecyclerViews
+ * Base class for subviews on BoardFragment that aren't inside RecyclerViews
  * Created by Srikar on 8/25/2016.
  */
 public abstract class BaseBoardModel implements
         GameViewModel, UpdateBackground, GameStateChangeBus.SwitchViewPlayerListener {
-    /**
-     * Used to access views in Fragment
-     */
+    //used to access views in Fragment
     protected FragmentBoardBinding mBinding;
 
-    /**
-     * Used to access information regarding turns, current player, etc.
-     */
+    //used to access information regarding turns, current player, etc.
     @Inject
     protected GameState mGameState;
-    /**
-     * Used to listen for changes to GameState
-     */
+    //used to listen for changes to GameState
     @Inject
     protected GameStateChangeBus mGameStateChangeBus;
 
-    /**
-     * Used to store Subscriptions, destroyed in onDestroy()
-     */
+    //used to store Subscriptions, destroyed in onDestroy()
     protected final CompositeSubscription mSubscriptions;
 
     /**
@@ -51,7 +43,8 @@ public abstract class BaseBoardModel implements
 
     /**
      * Base view model for views that aren't inside Recycler Views
-     * Can specify if want to set background here or not
+     * Can specify if want to set background here or not, since BaseRecyclerViewModel won't know
+     * what list it represents until after it calls this constructor
      * @param binding Binding used to access views that will update
      * @param isBackgroundReady If true, will set background; if not, won't at this point
      */
