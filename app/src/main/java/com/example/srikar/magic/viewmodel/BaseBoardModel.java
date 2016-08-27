@@ -18,7 +18,7 @@ import rx.subscriptions.CompositeSubscription;
  * Created by Srikar on 8/25/2016.
  */
 public abstract class BaseBoardModel implements
-        GameViewModel, UpdateBackground, GameStateChangeBus.SwitchViewPlayerListener {
+        GameViewModel, UpdateBackground, GameStateChangeBus.GameStateChangeListener {
     //used to access views in Fragment
     protected FragmentBoardBinding mBinding;
 
@@ -60,8 +60,8 @@ public abstract class BaseBoardModel implements
         //used to store Subscriptions
         mSubscriptions = new CompositeSubscription();
 
-        //add subscription for switch player
-        mSubscriptions.add(mGameStateChangeBus.subscribeSwitchViewPlayerListener(this));
+        //add subscription to listen for changes to GameState, handles switch view player here
+        mSubscriptions.add(mGameStateChangeBus.subscribeGameStateChangeListener(this));
 
         //set background if ready
         if (isBackgroundReady) {
@@ -109,8 +109,10 @@ public abstract class BaseBoardModel implements
      * EVENT BUS LISTENER
      **********************************************************************************************/
     @Override
-    public void onSwitchViewPlayer(GameStateChangeEvent event) {
-        //update background when switch view player
-        updateBackground();
+    public void onGameStateChange(GameStateChangeEvent event) {
+        if (event.action == GameStateChangeEvent.SWITCH_VIEW_PLAYER) {
+            //update background when switch view player
+            updateBackground();
+        }
     }
 }

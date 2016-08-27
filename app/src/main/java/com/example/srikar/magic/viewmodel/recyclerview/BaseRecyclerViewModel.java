@@ -25,8 +25,7 @@ import rx.subscriptions.CompositeSubscription;
  * Created by Srikar on 6/21/2016.
  */
 public abstract class BaseRecyclerViewModel extends BaseBoardModel implements
-        ListChangeBus.AddListener, ListChangeBus.RemoveListener,
-        ListChangeBus.UpdateListener, ListChangeBus.UpdateAllListener {
+        ListChangeBus.ListChangeListener {
     static final String TAG = "BaseRecyclerViewModel";
 
     //adapter handles changes to the list, creates view models for Permanents or Cards
@@ -36,8 +35,6 @@ public abstract class BaseRecyclerViewModel extends BaseBoardModel implements
     //listens for changes in model so can update display
     @Inject
     ListChangeBus mListChangeBus;
-    //store subscriptions to ListChangeBus
-    final CompositeSubscription mEventSubs;
 
     //used to determine which data model list to populate the RecyclerView with
     final int mListName;
@@ -61,12 +58,8 @@ public abstract class BaseRecyclerViewModel extends BaseBoardModel implements
         //now that have list name, will set background
         updateBackground();
 
-        //add subscriptions to listen for changes in lists
-        mEventSubs = new CompositeSubscription();
-        mEventSubs.add(mListChangeBus.subscribeAddListener(this, mListName));
-        mEventSubs.add(mListChangeBus.subscribeRemoveListener(this, mListName));
-        mEventSubs.add(mListChangeBus.subscribeUpdateListener(this, mListName));
-        mEventSubs.add(mListChangeBus.subscribeUpdateAllListener(this, mListName));
+        //add subscription to listen for changes in list
+        mSubscriptions.add(mListChangeBus.subscribeListChangeListener(this, mListName));
     }
 
     /**
@@ -116,11 +109,10 @@ public abstract class BaseRecyclerViewModel extends BaseBoardModel implements
     /**
      * Call when containing View or Fragment is destroyed, will unregister Subscriptions
      */
+    @Override
     public void onDestroy() {
         //unsubscribe to event bus
-        if (mEventSubs != null) {
-            mEventSubs.unsubscribe();
-        }
+        super.onDestroy();
 
         //remove adapter reference to context
         if (mAdapter != null) {
@@ -136,34 +128,35 @@ public abstract class BaseRecyclerViewModel extends BaseBoardModel implements
      * EVENT BUS LISTENERS
      **********************************************************************************************/
     @Override
-    public void onAdd(ListChangeEvent event) {
-        //update list at index added at
-        mAdapter.notifyItemInserted(event.index);
+    public void onGameStateChange(GameStateChangeEvent event) {
+        //updates background on view player switch
+        super.onGameStateChange(event);
+        //when the view player switches, the content of the RecyclerView is changed
+        if (event.action == GameStateChangeEvent.SWITCH_VIEW_PLAYER) {
+            mAdapter.notifyDataSetChanged();
+        }
     }
 
     @Override
-    public void onRemove(ListChangeEvent event) {
-        //update list at index removed from
-        mAdapter.notifyItemRemoved(event.index);
-    }
+    public void onListChange(ListChangeEvent event) {
+        switch (event.action) {
+            case ListChangeEvent.ADD:
+                //update list at index added at
+                mAdapter.notifyItemInserted(event.index);
+                break;
+            case ListChangeEvent.REMOVE:
+                //update list at index removed from
+                mAdapter.notifyItemRemoved(event.index);
+                break;
 
-    @Override
-    public void onUpdate(ListChangeEvent event) {
-        //update list at index
-        mAdapter.notifyItemChanged(event.index);
-    }
-
-    @Override
-    public void onUpdateAll(ListChangeEvent event) {
-        //update entire list
-        mAdapter.notifyDataSetChanged();
-    }
-
-    @Override
-    public void onSwitchViewPlayer(GameStateChangeEvent event) {
-        //updates background
-        super.onSwitchViewPlayer(event);
-        //when the view player switches, the content of the RecyclerView is changed.
-        mAdapter.notifyDataSetChanged();
+            case ListChangeEvent.UPDATE:
+                //update list at index
+                mAdapter.notifyItemChanged(event.index);
+                break;
+            case ListChangeEvent.UPDATE_ALL:
+                //update entire list
+                mAdapter.notifyDataSetChanged();
+                break;
+        }
     }
 }

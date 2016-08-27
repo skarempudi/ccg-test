@@ -75,7 +75,10 @@ public class GameState {
      */
     public void switchCurrentPlayer() {
         mCurrentPlayer ^= 1; //swaps 0 to 1, and 1 to 0
-        mViewPlayer = mCurrentPlayer;
+        //if not same, switches view player to current player
+        if (mViewPlayer != mCurrentPlayer) {
+            switchViewPlayer();
+        }
     }
 
     /**

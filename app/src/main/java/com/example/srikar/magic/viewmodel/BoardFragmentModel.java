@@ -39,10 +39,7 @@ import rx.subscriptions.CompositeSubscription;
  * Handles interaction between the BoardFragment and the data models.
  * Created by Srikar on 7/6/2016.
  */
-public class BoardFragmentModel implements
-        GameStateChangeBus.SwitchViewPlayerListener,
-        GameStateChangeBus.NextStepListener,
-        GameStateChangeBus.NextTurnListener {
+public class BoardFragmentModel implements GameStateChangeBus.GameStateChangeListener {
     private static final String TAG = "BoardFragmentModel";
     @Inject
     protected Battlefield mBattlefield;
@@ -268,7 +265,7 @@ public class BoardFragmentModel implements
      * Triggered by change in game state data model
      */
     private void handleNextTurn() {
-        //update the lists
+        //reenable the switch button
         handleSwitchViewPlayer();
 
         //do normal stuff affiliated with handling next step
@@ -284,23 +281,21 @@ public class BoardFragmentModel implements
      */
     private void subscribeEventBus() {
         MagicLog.d(TAG, "subscribeEventBus: ");
-        mSubscriptions.add(mGameStateChangeBus.subscribeSwitchViewPlayerListener(this));
-        mSubscriptions.add(mGameStateChangeBus.subscribeNextStepListener(this));
-        mSubscriptions.add(mGameStateChangeBus.subscribeNextTurnListener(this));
+        mSubscriptions.add(mGameStateChangeBus.subscribeGameStateChangeListener(this));
     }
 
     @Override
-    public void onSwitchViewPlayer(GameStateChangeEvent event) {
-        handleSwitchViewPlayer();
-    }
-
-    @Override
-    public void onNextStep(GameStateChangeEvent event) {
-        handleNextStep();
-    }
-
-    @Override
-    public void onNextTurn(GameStateChangeEvent event) {
-        handleNextTurn();
+    public void onGameStateChange(GameStateChangeEvent event) {
+        switch(event.action) {
+            case GameStateChangeEvent.SWITCH_VIEW_PLAYER:
+                handleSwitchViewPlayer();
+                break;
+            case GameStateChangeEvent.NEXT_STEP:
+                handleNextStep();
+                break;
+            case GameStateChangeEvent.NEXT_TURN:
+                handleNextTurn();
+                break;
+        }
     }
 }

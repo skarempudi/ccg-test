@@ -10,15 +10,13 @@ import com.example.srikar.magic.viewmodel.BaseBoardModel;
  * View model for game action log
  * Created by Srikar on 8/25/2016.
  */
-public class GameActionLogModel extends BaseBoardModel implements GameStateChangeBus.NextStepListener{
+public class GameActionLogModel extends BaseBoardModel{
     /**
      * View model for game action log
      * @param binding Binding used to access view that will update
      */
     public GameActionLogModel(FragmentBoardBinding binding) {
         super(binding);
-        //add subscription to listen for next step in turn
-        mSubscriptions.add(mGameStateChangeBus.subscribeNextStepListener(this));
     }
 
     @Override
@@ -50,8 +48,16 @@ public class GameActionLogModel extends BaseBoardModel implements GameStateChang
      * EVENT BUS LISTENER
      **********************************************************************************************/
     @Override
-    public void onNextStep(GameStateChangeEvent event) {
-        //update log text
-        setLogText();
+    public void onGameStateChange(GameStateChangeEvent event) {
+        //handle background
+        super.onGameStateChange(event);
+
+        //update log text on next step or turn
+        switch (event.action) {
+            case GameStateChangeEvent.NEXT_STEP:
+            case GameStateChangeEvent.NEXT_TURN:
+                setLogText();
+                break;
+        }
     }
 }

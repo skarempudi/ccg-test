@@ -18,8 +18,7 @@ import javax.inject.Inject;
  * View model for the turn counter
  * Created by Srikar on 8/25/2016.
  */
-public class TurnCounterModel extends BaseBoardModel
-        implements GameStateChangeBus.NextTurnListener {
+public class TurnCounterModel extends BaseBoardModel {
     private static final String TAG = "TurnCounterModel";
 
     /**
@@ -31,9 +30,6 @@ public class TurnCounterModel extends BaseBoardModel
 
         //set text
         setTurnText();
-
-        //listen for turn changes
-        mSubscriptions.add(mGameStateChangeBus.subscribeNextTurnListener(this));
     }
 
     @Override
@@ -80,8 +76,12 @@ public class TurnCounterModel extends BaseBoardModel
      * EVENT BUS LISTENER
      **********************************************************************************************/
     @Override
-    public void onNextTurn(GameStateChangeEvent event) {
-        //update turn text
-        setTurnText();
+    public void onGameStateChange(GameStateChangeEvent event) {
+        //don't handle background on switch view player, so don't call super
+        //on start of next turn, update turn text and update background
+        if (event.action == GameStateChangeEvent.NEXT_TURN) {
+            setTurnText();
+            updateBackground();
+        }
     }
 }
