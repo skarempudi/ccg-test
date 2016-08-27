@@ -38,7 +38,10 @@ import rx.subscriptions.CompositeSubscription;
  * Handles interaction between the BoardFragment and the data models.
  * Created by Srikar on 7/6/2016.
  */
-public class BoardFragmentModel {
+public class BoardFragmentModel implements
+        GameStateChangeBus.SwitchViewPlayerListener,
+        GameStateChangeBus.NextStepListener,
+        GameStateChangeBus.NextTurnListener {
     private static final String TAG = "BoardFragmentModel";
     @Inject
     protected Battlefield mBattlefield;
@@ -104,8 +107,8 @@ public class BoardFragmentModel {
         //register on click event handlers
         registerOnClicks();
 
-        //register listener for changes in GameState
-        mSubscriptions.add(registerEventBus());
+        //register listeners for changes in GameState
+        subscribeEventBus();
     }
 
     /**
@@ -314,7 +317,7 @@ public class BoardFragmentModel {
     }
 
     /***********************************************************************************************
-     * EVENT BUS LISTENERS
+     * EVENT BUS HANDLERS
      **********************************************************************************************/
     /**
      * When switch view player, change backgrounds and update Adapters
@@ -362,36 +365,31 @@ public class BoardFragmentModel {
     }
 
     /***********************************************************************************************
-     * EVENT BUS
+     * EVENT BUS LISTENERS
      **********************************************************************************************/
     /**
-     * After get event bus from Dagger injection, subscribe to it. Returns subscription so can
-     * reference it to unregister later.
-     * @return Subscription to event bus
+     * After get event bus from Dagger injection, subscribe to it.
+     * Add subscriptions to CompositeSubscription
      */
-    private Subscription registerEventBus() {
-        MagicLog.d(TAG, "registerEventBus: ");
-        return mGameStateChangeBus.getEvents()
-                .subscribe(this::actOnEvent);
+    private void subscribeEventBus() {
+        MagicLog.d(TAG, "subscribeEventBus: ");
+        mSubscriptions.add(mGameStateChangeBus.subscribeSwitchViewPlayerListener(this));
+        mSubscriptions.add(mGameStateChangeBus.subscribeNextStepListener(this));
+        mSubscriptions.add(mGameStateChangeBus.subscribeNextTurnListener(this));
     }
 
-    /**
-     * When receive event from event bus, handle by calling another method depending on event type.
-     * @param event Event received from event bus
-     */
-    private void actOnEvent(GameStateChangeEvent event) {
-        MagicLog.d(TAG, "actOnEvent: " + event.toString());
-        //if switching view player
-        if (event.action == GameStateChangeEvent.SWITCH_VIEW_PLAYER) {
-            handleSwitchViewPlayer();
-        }
-        //if going to next step in turn
-        else if (event.action == GameStateChangeEvent.NEXT_STEP) {
-            handleNextStep();
-        }
-        //if going to next turn
-        else if (event.action == GameStateChangeEvent.NEXT_TURN) {
-            handleNextTurn();
-        }
+    @Override
+    public void onSwitchViewPlayer(GameStateChangeEvent event) {
+        handleSwitchViewPlayer();
+    }
+
+    @Override
+    public void onNextStep(GameStateChangeEvent event) {
+        handleNextStep();
+    }
+
+    @Override
+    public void onNextTurn(GameStateChangeEvent event) {
+        handleNextTurn();
     }
 }
