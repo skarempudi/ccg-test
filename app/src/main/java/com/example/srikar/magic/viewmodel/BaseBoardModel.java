@@ -1,5 +1,7 @@
 package com.example.srikar.magic.viewmodel;
 
+import android.support.annotation.CallSuper;
+
 import com.example.srikar.magic.MagicApplication;
 import com.example.srikar.magic.R;
 import com.example.srikar.magic.databinding.FragmentBoardBinding;
@@ -108,6 +110,11 @@ public abstract class BaseBoardModel implements
     /***********************************************************************************************
      * EVENT BUS LISTENER
      **********************************************************************************************/
+    /**
+     * Handles changes to the GameState, listening to EventBus
+     * Base version will update background when view player switches, so call super if want that
+     * @param event Event from EventBus
+     */
     @Override
     public void onGameStateChange(GameStateChangeEvent event) {
         if (event.action == GameStateChangeEvent.SWITCH_VIEW_PLAYER) {

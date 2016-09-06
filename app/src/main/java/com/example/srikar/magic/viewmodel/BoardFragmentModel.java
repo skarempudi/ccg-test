@@ -74,10 +74,6 @@ public class BoardFragmentModel implements GameStateChangeBus.GameStateChangeLis
         //create the ViewModels, populate mGameViewModels, and bind RecyclerViewModels
         createViewModels();
 
-        //TODO: Move to NextStepModel
-        //set next step button text
-        setNextStepButtonText();
-
         //TODO: Move to respective ViewModels
         //register on click event handlers
         registerOnClicks();
@@ -119,20 +115,6 @@ public class BoardFragmentModel implements GameStateChangeBus.GameStateChangeLis
     }
 
     /**
-     * Set text in next step button depending on if want to confirm combat steps first or not
-     */
-    private void setNextStepButtonText() {
-        //if during declare attackers and haven't confirmed attackers
-        if (mBattlefield.shouldConfirmAttack()) {
-                mBinding.nextStep.setText(R.string.confirm_attack);
-                return;
-        }
-
-        //not during declare attackers, or don't need to confirm
-        mBinding.nextStep.setText(R.string.next_step);
-    }
-
-    /**
      * Call when containing View or Fragment is destroyed, will unregister Subscriptions
      */
     public void onDestroy() {
@@ -165,11 +147,6 @@ public class BoardFragmentModel implements GameStateChangeBus.GameStateChangeLis
         Subscription switchSub = RxView.clicks(mBinding.switchPlayer)
                 .subscribe(this::switchPlayerOnClick);
         mSubscriptions.add(switchSub);
-
-        //subscribe to onClick for next step button
-        Subscription nextStepSub = RxView.clicks(mBinding.nextStep)
-                .subscribe(this::nextStepOnClick);
-        mSubscriptions.add(nextStepSub);
     }
 
     /**
@@ -182,56 +159,6 @@ public class BoardFragmentModel implements GameStateChangeBus.GameStateChangeLis
 
         //switch the player in the data model
         mGameState.switchViewPlayer();
-    }
-
-    /**
-     * When click the next step button, goes to the next step in the turn in the data model
-     * @param empty Handles void passed by Observable
-     */
-    private void nextStepOnClick(Void empty) {
-        //if need to confirm attack, then display dialog
-        if (mBattlefield.shouldConfirmAttack()) {
-            CombatDialogFragment dialogFragment = new CombatDialogFragment();
-            //set listeners for the three buttons
-            dialogFragment.setListeners(
-                    this::attackersConfirmNextStep,
-                    this::attackersConfirmSameStep,
-                    this::attackersCancel
-                    );
-
-            //create the dialog
-            dialogFragment.show(((AppCompatActivity)mActivity).getSupportFragmentManager(), "confirm attackers");
-        }
-        //if don't need to confirm attack, go to next step
-        else {
-            //disable next step button
-            mBinding.nextStep.setEnabled(false);
-            //go to next step in the data model
-            mGameState.nextStep();
-        }
-    }
-
-    /***********************************************************************************************
-     * DIALOG RESPONSE LISTENERS
-     **********************************************************************************************/
-    public void attackersConfirmNextStep(DialogInterface dialog, int id) {
-        //disable next step button
-        mBinding.nextStep.setEnabled(false);
-        //confirm attack
-        mBattlefield.confirmAttack();
-        //go to the next step in the data model
-        mGameState.nextStep();
-    }
-
-    public void attackersConfirmSameStep(DialogInterface dialog, int id) {
-        //confirm attack
-        mBattlefield.confirmAttack();
-        //don't go to the next step, but update next step button
-        setNextStepButtonText();
-    }
-
-    public void attackersCancel(DialogInterface dialog, int id) {
-        //do nothing
     }
 
     /***********************************************************************************************
@@ -247,27 +174,12 @@ public class BoardFragmentModel implements GameStateChangeBus.GameStateChangeLis
     }
 
     /**
-     * When go to next step, update display on game log
-     * Triggered by change in game state data model
-     */
-    private void handleNextStep() {
-        //set next step text, which can change during combat
-        setNextStepButtonText();
-
-        //enable next step button
-        mBinding.nextStep.setEnabled(true);
-    }
-
-    /**
      * When go to next turn, update turn, game log, and background
      * Triggered by change in game state data model
      */
     private void handleNextTurn() {
         //reenable the switch button
         handleSwitchViewPlayer();
-
-        //do normal stuff affiliated with handling next step
-        handleNextStep();
     }
 
     /***********************************************************************************************
@@ -287,9 +199,6 @@ public class BoardFragmentModel implements GameStateChangeBus.GameStateChangeLis
         switch(event.action) {
             case GameStateChangeEvent.SWITCH_VIEW_PLAYER:
                 handleSwitchViewPlayer();
-                break;
-            case GameStateChangeEvent.NEXT_STEP:
-                handleNextStep();
                 break;
             case GameStateChangeEvent.NEXT_TURN:
                 handleNextTurn();
