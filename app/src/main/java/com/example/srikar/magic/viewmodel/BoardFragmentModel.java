@@ -39,74 +39,44 @@ import rx.subscriptions.CompositeSubscription;
  * Handles interaction between the BoardFragment and the data models.
  * Created by Srikar on 7/6/2016.
  */
-public class BoardFragmentModel implements GameStateChangeBus.GameStateChangeListener {
+public class BoardFragmentModel {
     private static final String TAG = "BoardFragmentModel";
-    @Inject
-    protected Battlefield mBattlefield;
-    @Inject
-    protected GameState mGameState;
-
-    private Activity mActivity;
-    //view bindings for the Fragment
-    private final FragmentBoardBinding mBinding;
-
-    @Inject
-    protected GameStateChangeBus mGameStateChangeBus;
-    //used to store all subscriptions, so can unsubscribe when destroy
-    private final CompositeSubscription mSubscriptions;
 
     //list of view models, so can destroy them in onDestroy()
     private List<GameViewModel> mGameViewModels = new ArrayList<>();
 
-    public BoardFragmentModel(Activity activity, FragmentBoardBinding binding) {
+    public BoardFragmentModel(FragmentBoardBinding binding) {
         MagicLog.d(TAG, "BoardFragmentModel: Created");
-        //get instance of GameState
-        MagicApplication.getInstance()
-                .getMainComponent()
-                .inject(this);
 
-        mActivity = activity;
-        mBinding = binding;
-
-        //used to hold onClick subscriptions
-        mSubscriptions = new CompositeSubscription();
-
-        //create the ViewModels, populate mGameViewModels, and bind RecyclerViewModels
-        createViewModels();
-
-        //TODO: Move to respective ViewModels
-        //register on click event handlers
-        registerOnClicks();
-
-        //TODO: Remove when no longer have any in this class
-        //register listeners for changes in GameState
-        subscribeEventBus();
+        //create the ViewModels and populate mGameViewModels
+        createViewModels(binding);
     }
 
     /**
-     * Used to create the ViewModels that handle interaction with the data model
+     * Creates the ViewModels that handle interaction with the data model
+     * @param binding Binding holding views in Fragment
      */
-    private void createViewModels() {
+    private void createViewModels(FragmentBoardBinding binding) {
         //clear out list
         mGameViewModels.clear();
 
         //add view models
-        mGameViewModels.add(new TurnCounterModel(mBinding));
-        mGameViewModels.add(new LifeCounterModel(mBinding));
-        mGameViewModels.add(new SwitchPlayerModel(mBinding));
-        mGameViewModels.add(new GameActionLogModel(mBinding));
-        mGameViewModels.add(new NextStepModel(mBinding));
-        mGameViewModels.add(new CurrentlyUnusedModel(mBinding));
+        mGameViewModels.add(new TurnCounterModel(binding));
+        mGameViewModels.add(new LifeCounterModel(binding));
+        mGameViewModels.add(new SwitchPlayerModel(binding));
+        mGameViewModels.add(new GameActionLogModel(binding));
+        mGameViewModels.add(new NextStepModel(binding));
+        mGameViewModels.add(new CurrentlyUnusedModel(binding));
 
         //create recycler view models, which have to set in binding
-        BaseRecyclerViewModel handRecViewModel = new HandRecViewModel(mBinding);
-        BaseRecyclerViewModel landsRecViewModel = new BattlefieldRecViewModel(mBinding, DataModelConstants.LIST_LANDS);
-        BaseRecyclerViewModel creaturesRecViewModel = new BattlefieldRecViewModel(mBinding, DataModelConstants.LIST_CREATURES);
+        BaseRecyclerViewModel handRecViewModel = new HandRecViewModel(binding);
+        BaseRecyclerViewModel landsRecViewModel = new BattlefieldRecViewModel(binding, DataModelConstants.LIST_LANDS);
+        BaseRecyclerViewModel creaturesRecViewModel = new BattlefieldRecViewModel(binding, DataModelConstants.LIST_CREATURES);
 
         //set in binding
-        mBinding.setHandModel(handRecViewModel);
-        mBinding.setLandsModel(landsRecViewModel);
-        mBinding.setCreaturesModel(creaturesRecViewModel);
+        binding.setHandModel(handRecViewModel);
+        binding.setLandsModel(landsRecViewModel);
+        binding.setCreaturesModel(creaturesRecViewModel);
 
         //add to list
         mGameViewModels.add(handRecViewModel);
@@ -118,11 +88,6 @@ public class BoardFragmentModel implements GameStateChangeBus.GameStateChangeLis
      * Call when containing View or Fragment is destroyed, will unregister Subscriptions
      */
     public void onDestroy() {
-        //remove all subscriptions
-        if (mSubscriptions != null) {
-            mSubscriptions.unsubscribe();
-        }
-
         //call onDestroy for each view model, removing the Subscriptions to RxJava Observables
         for (GameViewModel viewModel : mGameViewModels) {
             viewModel.onDestroy();
@@ -130,79 +95,5 @@ public class BoardFragmentModel implements GameStateChangeBus.GameStateChangeLis
 
         //clear list of view models
         mGameViewModels.clear();
-
-        //remove reference to context
-        mActivity = null;
-    }
-
-    /***********************************************************************************************
-     * ON CLICK EVENTS
-     **********************************************************************************************/
-    /**
-     * Register onClick event handling for views other than RecyclerViews
-     * RecyclerView onClicks handled by Permanent
-     */
-    private void registerOnClicks() {
-        //subscribe to onClick for player switch button
-        Subscription switchSub = RxView.clicks(mBinding.switchPlayer)
-                .subscribe(this::switchPlayerOnClick);
-        mSubscriptions.add(switchSub);
-    }
-
-    /**
-     * When click the switch player button, switches the view player in data model
-     * @param empty Handles void passed by Observable
-     */
-    private void switchPlayerOnClick(Void empty) {
-        //disable switch button
-        mBinding.switchPlayer.setEnabled(false);
-
-        //switch the player in the data model
-        mGameState.switchViewPlayer();
-    }
-
-    /***********************************************************************************************
-     * EVENT BUS HANDLERS
-     **********************************************************************************************/
-    /**
-     * When switch view player, change backgrounds and update Adapters
-     * Triggered by change in game state data model
-     */
-    private void handleSwitchViewPlayer() {
-        //enable switch button
-        mBinding.switchPlayer.setEnabled(true);
-    }
-
-    /**
-     * When go to next turn, update turn, game log, and background
-     * Triggered by change in game state data model
-     */
-    private void handleNextTurn() {
-        //reenable the switch button
-        handleSwitchViewPlayer();
-    }
-
-    /***********************************************************************************************
-     * EVENT BUS LISTENERS
-     **********************************************************************************************/
-    /**
-     * After get event bus from Dagger injection, subscribe to it.
-     * Add subscriptions to CompositeSubscription
-     */
-    private void subscribeEventBus() {
-        MagicLog.d(TAG, "subscribeEventBus: ");
-        mSubscriptions.add(mGameStateChangeBus.subscribeGameStateChangeListener(this));
-    }
-
-    @Override
-    public void onGameStateChange(GameStateChangeEvent event) {
-        switch(event.action) {
-            case GameStateChangeEvent.SWITCH_VIEW_PLAYER:
-                handleSwitchViewPlayer();
-                break;
-            case GameStateChangeEvent.NEXT_TURN:
-                handleNextTurn();
-                break;
-        }
     }
 }

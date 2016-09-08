@@ -38,7 +38,7 @@ public class BoardFragment extends Fragment {
 
         //create the view model for this Fragment
         //it handles the binding for the inner views
-        mBoardFragmentModel = new BoardFragmentModel(getActivity(), binding);
+        mBoardFragmentModel = new BoardFragmentModel(binding);
 
         return rootView;
     }
