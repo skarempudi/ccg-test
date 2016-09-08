@@ -1,6 +1,7 @@
 package com.example.srikar.magic.viewmodel.board;
 
 import android.content.Context;
+import android.databinding.ObservableField;
 
 import com.example.srikar.magic.MagicApplication;
 import com.example.srikar.magic.MagicLog;
@@ -21,6 +22,9 @@ import javax.inject.Inject;
 public class TurnCounterModel extends BaseBoardModel {
     private static final String TAG = "TurnCounterModel";
 
+    //changes to this will automatically update text view, after set in binding
+    public ObservableField<CharSequence> turnText = new ObservableField<>();
+
     /**
      * View model for the turn counter
      * @param binding Binding used to access view that will update
@@ -30,6 +34,9 @@ public class TurnCounterModel extends BaseBoardModel {
 
         //set text
         setTurnText();
+
+        //set in binding
+        binding.setTurnCounterModel(this);
     }
 
     @Override
@@ -69,7 +76,7 @@ public class TurnCounterModel extends BaseBoardModel {
         CharSequence formatted = UiUtil.formatHTML(partial);
 
         //set in turn display
-        mBinding.turnCounter.setText(formatted);
+        turnText.set(formatted);
     }
 
     /***********************************************************************************************

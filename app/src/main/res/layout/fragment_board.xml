@@ -4,6 +4,10 @@
 
     <data>
         <variable
+            name="turnCounterModel"
+            type="com.example.srikar.magic.viewmodel.board.TurnCounterModel"
+            />
+        <variable
             name="creaturesModel"
             type="com.example.srikar.magic.viewmodel.recyclerview.BaseRecyclerViewModel"
             />
@@ -27,7 +31,7 @@
         <!--First row: turn, life, switch player button -->
         <TextView
             android:id="@+id/turn_counter"
-            android:text="@string/turn"
+            android:text="@{turnCounterModel.turnText}"
             android:layout_alignParentTop="true"
             app:layout_widthPercent="@fraction/turn_width_percent"
             app:layout_heightPercent="@fraction/first_row_percent"
