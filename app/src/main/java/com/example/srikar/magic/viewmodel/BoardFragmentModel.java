@@ -67,25 +67,14 @@ public class BoardFragmentModel {
         mGameViewModels.add(new GameActionLogModel(binding));
         mGameViewModels.add(new NextStepModel(binding));
         mGameViewModels.add(new CurrentlyUnusedModel(binding));
-
-        //create recycler view models, which have to set in binding
-        BaseRecyclerViewModel handRecViewModel = new HandRecViewModel(binding);
-        BaseRecyclerViewModel landsRecViewModel = new BattlefieldRecViewModel(binding, DataModelConstants.LIST_LANDS);
-        BaseRecyclerViewModel creaturesRecViewModel = new BattlefieldRecViewModel(binding, DataModelConstants.LIST_CREATURES);
-
-        //set in binding
-        binding.setHandModel(handRecViewModel);
-        binding.setLandsModel(landsRecViewModel);
-        binding.setCreaturesModel(creaturesRecViewModel);
-
-        //add to list
-        mGameViewModels.add(handRecViewModel);
-        mGameViewModels.add(landsRecViewModel);
-        mGameViewModels.add(creaturesRecViewModel);
+        //add recycler view models
+        mGameViewModels.add(new HandRecViewModel(binding));
+        mGameViewModels.add(new BattlefieldRecViewModel(binding, DataModelConstants.LIST_LANDS));
+        mGameViewModels.add(new BattlefieldRecViewModel(binding, DataModelConstants.LIST_CREATURES));
     }
 
     /**
-     * Call when containing View or Fragment is destroyed, will unregister Subscriptions
+     * Unregisters Subscriptions, call when containing View or Fragment is destroyed
      */
     public void onDestroy() {
         //call onDestroy for each view model, removing the Subscriptions to RxJava Observables

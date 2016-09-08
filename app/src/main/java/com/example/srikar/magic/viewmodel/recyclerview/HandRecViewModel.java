@@ -26,6 +26,9 @@ public class HandRecViewModel extends BaseRecyclerViewModel {
         MagicApplication.getInstance()
                 .getMainComponent()
                 .inject(this);
+
+        //sets self in binding
+        binding.setHandModel(this);
     }
 
     @Override

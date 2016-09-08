@@ -25,6 +25,14 @@ public class BattlefieldRecViewModel extends BaseRecyclerViewModel {
         MagicApplication.getInstance()
                 .getMainComponent()
                 .inject(this);
+
+        //set in binding, based on list name
+        if (listName == DataModelConstants.LIST_CREATURES) {
+            binding.setCreaturesModel(this);
+        }
+        else if (listName == DataModelConstants.LIST_LANDS) {
+            binding.setLandsModel(this);
+        }
     }
 
     @Override
