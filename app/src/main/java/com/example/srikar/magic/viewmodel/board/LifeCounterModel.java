@@ -1,7 +1,7 @@
 package com.example.srikar.magic.viewmodel.board;
 
 import android.content.Context;
-import android.widget.TextView;
+import android.databinding.ObservableField;
 
 import com.example.srikar.magic.R;
 import com.example.srikar.magic.UiUtil;
@@ -14,6 +14,10 @@ import com.example.srikar.magic.viewmodel.BaseBoardModel;
  * Created by Srikar on 8/25/2016.
  */
 public class LifeCounterModel extends BaseBoardModel {
+
+    public ObservableField<CharSequence> aliceLifeText = new ObservableField<>();
+    public ObservableField<CharSequence> bobLifeText = new ObservableField<>();
+
     /**
      * View model for both life counters
      * @param binding Binding used to access view that will update
@@ -22,6 +26,9 @@ public class LifeCounterModel extends BaseBoardModel {
         super(binding);
         //set life texts
         setLifeText();
+
+        //set in binding
+        binding.setLifeCounterModel(this);
     }
 
     @Override
@@ -63,8 +70,8 @@ public class LifeCounterModel extends BaseBoardModel {
         CharSequence formatAlice = UiUtil.formatHTML(partialAlice);
         CharSequence formatBob = UiUtil.formatHTML(partialBob);
 
-        //put in life total displays
-        mBinding.lifeCounterAlice.setText(formatAlice, TextView.BufferType.SPANNABLE);
-        mBinding.lifeCounterBob.setText(formatBob, TextView.BufferType.SPANNABLE);
+        //set in life total displays
+        aliceLifeText.set(formatAlice);
+        bobLifeText.set(formatBob);
     }
 }
