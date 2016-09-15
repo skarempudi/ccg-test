@@ -12,6 +12,7 @@ import com.example.srikar.magic.viewmodel.BaseBoardModel;
  * Created by Srikar on 8/25/2016.
  */
 public class SwitchPlayerModel extends BaseBoardModel {
+    //bound to layout, enables or disables switch player button
     public ObservableBoolean enabled = new ObservableBoolean(true);
 
     /**

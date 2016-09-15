@@ -2,7 +2,10 @@ package com.example.srikar.magic.viewmodel.board;
 
 import android.app.Activity;
 import android.content.DialogInterface;
+import android.databinding.ObservableBoolean;
+import android.databinding.ObservableInt;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
 
 import com.example.srikar.magic.MagicApplication;
 import com.example.srikar.magic.R;
@@ -22,6 +25,12 @@ import rx.Subscription;
  * Created by Srikar on 8/25/2016.
  */
 public class NextStepModel extends BaseBoardModel {
+    //bound to layout
+    //changes text
+    public ObservableInt buttonTextId = new ObservableInt(R.string.next_step);
+    //enables and disables button
+    public ObservableBoolean enabled = new ObservableBoolean(true);
+
     @Inject
     Battlefield mBattlefield;
 
@@ -37,10 +46,8 @@ public class NextStepModel extends BaseBoardModel {
                 .getMainComponent()
                 .inject(this);
 
-        //subscribe to onClick for next step button
-        Subscription nextStepSub = RxView.clicks(mBinding.nextStep)
-                .subscribe(this::nextStepOnClick);
-        mSubscriptions.add(nextStepSub);
+        //set in binding
+        binding.setNextStepModel(this);
 
         //set text
         setNextStepButtonText();
@@ -64,19 +71,19 @@ public class NextStepModel extends BaseBoardModel {
     void setNextStepButtonText() {
         //if during declare attackers and haven't confirmed attackers
         if (mBattlefield.shouldConfirmAttack()) {
-            mBinding.nextStep.setText(R.string.confirm_attack);
+            buttonTextId.set(R.string.confirm_attack);
             return;
         }
 
         //not during declare attackers, or don't need to confirm
-        mBinding.nextStep.setText(R.string.next_step);
+        buttonTextId.set(R.string.next_step);
     }
 
     /**
      * When click the next step button, goes to the next step in the turn in the data model
-     * @param empty Handles void passed by Observable
+     * Called from fragment_board.xml
      */
-    void nextStepOnClick(Void empty) {
+    public void nextStepOnClick(View view) {
         //if need to confirm attack, then display dialog
         if (mBattlefield.shouldConfirmAttack()) {
             CombatDialogFragment dialogFragment = new CombatDialogFragment();
@@ -102,7 +109,7 @@ public class NextStepModel extends BaseBoardModel {
      */
     public void goToNextStep() {
         //disable next step button
-        mBinding.nextStep.setEnabled(false);
+        enabled.set(false);
         //go to next step in the data model
         mGameState.nextStep();
     }
@@ -143,7 +150,7 @@ public class NextStepModel extends BaseBoardModel {
             setNextStepButtonText();
 
             //enable next step button
-            mBinding.nextStep.setEnabled(true);
+            enabled.set(true);
         }
     }
 }

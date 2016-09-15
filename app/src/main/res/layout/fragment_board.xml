@@ -16,6 +16,14 @@
             type="com.example.srikar.magic.viewmodel.board.SwitchPlayerModel"
             />
         <variable
+            name="gameActionLogModel"
+            type="com.example.srikar.magic.viewmodel.board.GameActionLogModel"
+            />
+        <variable
+            name="nextStepModel"
+            type="com.example.srikar.magic.viewmodel.board.NextStepModel"
+            />
+        <variable
             name="creaturesModel"
             type="com.example.srikar.magic.viewmodel.recyclerview.BaseRecyclerViewModel"
             />
@@ -80,7 +88,7 @@
         <!--Second row: log, next step button -->
         <TextView
             android:id="@+id/game_action_log"
-            android:text="@string/log"
+            android:text="@{gameActionLogModel.logTextId}"
             android:layout_below="@id/turn_counter"
             app:layout_widthPercent="@fraction/log_width_percent"
             app:layout_heightPercent="@fraction/second_row_percent"
@@ -89,12 +97,14 @@
 
         <Button
             android:id="@+id/next_step"
-            android:text="@string/next_step"
+            android:text="@{nextStepModel.buttonTextId}"
             android:layout_below="@id/switch_player"
             android:layout_toRightOf="@id/game_action_log"
             app:layout_widthPercent="@fraction/next_step_width_percent"
             app:layout_heightPercent="@fraction/second_row_percent"
             android:gravity="center"
+            android:enabled="@{nextStepModel.enabled}"
+            android:onClick="@{nextStepModel::nextStepOnClick}"
             />
 
         <!--Third row: opposing creatures -->

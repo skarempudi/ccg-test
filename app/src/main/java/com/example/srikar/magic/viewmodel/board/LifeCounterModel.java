@@ -14,7 +14,7 @@ import com.example.srikar.magic.viewmodel.BaseBoardModel;
  * Created by Srikar on 8/25/2016.
  */
 public class LifeCounterModel extends BaseBoardModel {
-
+    //bound to layout, changes the text for life counters
     public ObservableField<CharSequence> aliceLifeText = new ObservableField<>();
     public ObservableField<CharSequence> bobLifeText = new ObservableField<>();
 

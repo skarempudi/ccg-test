@@ -67,11 +67,4 @@ public abstract class BaseRecViewAdapter extends RecyclerView.Adapter<BaseRecVie
     public int getItemCount() {
         return mRecyclerViewModel.getItemCount();
     }
-
-    /**
-     * What to do when containing ViewModel is destroyed
-     */
-    public void onDestroy() {
-
-    }
 }

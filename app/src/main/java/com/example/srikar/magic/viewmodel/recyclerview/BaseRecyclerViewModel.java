@@ -114,11 +114,6 @@ public abstract class BaseRecyclerViewModel extends BaseBoardModel implements
         //unsubscribe to event bus
         super.onDestroy();
 
-        //remove adapter reference to context
-        if (mAdapter != null) {
-            mAdapter.onDestroy();
-        }
-
         //remove adapter
         mAdapter = null;
     }
