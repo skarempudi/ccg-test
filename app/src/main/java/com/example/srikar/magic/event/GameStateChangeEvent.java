@@ -1,7 +1,7 @@
 package com.example.srikar.magic.event;
 
 /**
- * Events used to notify that GameState has changed in a certain way, listened to by the fragment
+ * Events used to notify that state has changed in a certain way, listened to by the fragment
  * model
  * Created by Srikar on 7/12/2016.
  */

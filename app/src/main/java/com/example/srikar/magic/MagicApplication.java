@@ -63,13 +63,13 @@ public class MagicApplication extends Application {
         //TODO: new class
         //hand
         Observable.just(this)
-                .observeOn(Schedulers.newThread()) //performs actions on new thread
+                .observeOn(Schedulers.io()) //performs actions on I/O thread
                 .map(AssetLoader::loadCards) //loads cards from JSON asset file
                 .subscribe(list -> mHand.setCards(DataModelConstants.PLAYER_ALICE, list));
 
         //battlefield
         Observable.just(this)
-                .observeOn(Schedulers.newThread()) //performs actions on new thread
+                .observeOn(Schedulers.io()) //performs actions on I/O thread
                 .map(AssetLoader::loadCreatures) //loads permanents from JSON asset file
                 .subscribe(list -> mBattlefield.setCreatures(DataModelConstants.PLAYER_ALICE, list));
     }

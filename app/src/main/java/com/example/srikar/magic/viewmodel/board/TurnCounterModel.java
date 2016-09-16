@@ -4,13 +4,12 @@ import android.content.Context;
 import android.databinding.ObservableField;
 
 import com.example.srikar.magic.MagicApplication;
-import com.example.srikar.magic.MagicLog;
 import com.example.srikar.magic.R;
 import com.example.srikar.magic.UiUtil;
 import com.example.srikar.magic.databinding.FragmentBoardBinding;
-import com.example.srikar.magic.event.GameStateChangeBus;
 import com.example.srikar.magic.event.GameStateChangeEvent;
 import com.example.srikar.magic.model.DataModelConstants;
+import com.example.srikar.magic.model.state.Turn;
 import com.example.srikar.magic.viewmodel.BaseBoardModel;
 
 import javax.inject.Inject;
@@ -25,12 +24,20 @@ public class TurnCounterModel extends BaseBoardModel {
     //changes to this will automatically update text view, after set in binding
     public ObservableField<CharSequence> turnText = new ObservableField<>();
 
+    @Inject
+    Turn mTurn;
+
     /**
      * View model for the turn counter
      * @param binding Binding used to access view that will update
      */
     public TurnCounterModel(FragmentBoardBinding binding) {
         super(binding);
+
+        //inject Turn
+        MagicApplication.getInstance()
+                .getMainComponent()
+                .inject(this);
 
         //set text
         setTurnText();
@@ -58,10 +65,10 @@ public class TurnCounterModel extends BaseBoardModel {
         String unformatted = context.getResources().getString(R.string.unformat_turn_display);
 
         //get turn number
-        int turn = mGameState.getTurnNumber();
+        int turn = mTurn.getTurnNumber();
 
         //get current player name
-        int currentPlayer = mGameState.getCurrentPlayer();
+        int currentPlayer = mPlayerInfo.getCurrentPlayer();
         String name;
         if (currentPlayer == DataModelConstants.PLAYER_ALICE) {
             name = context.getResources().getString(R.string.alice);

@@ -1,10 +1,7 @@
 package com.example.srikar.magic.dagger;
 
-import com.example.srikar.magic.event.GameStateChangeEvent;
 import com.example.srikar.magic.event.ListChangeBus;
-import com.example.srikar.magic.event.ListChangeEvent;
-import com.example.srikar.magic.event.RxEventBus;
-import com.example.srikar.magic.model.GameState;
+import com.example.srikar.magic.model.state.PlayerInfo;
 import com.example.srikar.magic.model.zone.Hand;
 
 import javax.inject.Singleton;
@@ -20,7 +17,7 @@ import dagger.Provides;
 class HandModule {
     @Provides
     @Singleton
-    public Hand provideHand(ListChangeBus listChangeBus, GameState state) {
-        return new Hand(listChangeBus, state);
+    public Hand provideHand(ListChangeBus listChangeBus, PlayerInfo playerInfo) {
+        return new Hand(listChangeBus, playerInfo);
     }
 }

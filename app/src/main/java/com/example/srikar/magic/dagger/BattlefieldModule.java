@@ -1,11 +1,8 @@
 package com.example.srikar.magic.dagger;
 
-import com.example.srikar.magic.event.GameStateChangeEvent;
 import com.example.srikar.magic.event.ListChangeBus;
-import com.example.srikar.magic.event.ListChangeEvent;
-import com.example.srikar.magic.event.RxEventBus;
+import com.example.srikar.magic.model.state.PlayerInfo;
 import com.example.srikar.magic.model.zone.Battlefield;
-import com.example.srikar.magic.model.GameState;
 
 import javax.inject.Singleton;
 
@@ -21,7 +18,7 @@ class BattlefieldModule {
     @Provides
     @Singleton
     public Battlefield provideBattlefield(ListChangeBus listChangeBus,
-                                          GameState state) {
-        return new Battlefield(listChangeBus, state);
+                                          PlayerInfo playerInfo) {
+        return new Battlefield(listChangeBus, playerInfo);
     }
 }

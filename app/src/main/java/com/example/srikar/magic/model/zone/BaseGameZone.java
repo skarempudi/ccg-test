@@ -3,8 +3,7 @@ package com.example.srikar.magic.model.zone;
 import com.example.srikar.magic.MagicLog;
 import com.example.srikar.magic.event.ListChangeBus;
 import com.example.srikar.magic.event.ListChangeEvent;
-import com.example.srikar.magic.event.RxEventBus;
-import com.example.srikar.magic.model.GameState;
+import com.example.srikar.magic.model.state.PlayerInfo;
 
 /**
  * Base class for Battlefield and Hand. Covers data models for game zones a card may travel between.
@@ -20,11 +19,11 @@ public abstract class BaseGameZone {
     /**
      * Used to determine who the current view player is, and thus which list to use
      */
-    protected final GameState mGameState;
+    protected final PlayerInfo mPlayerInfo;
 
-    public BaseGameZone(ListChangeBus listChangeBus, GameState gameState) {
+    public BaseGameZone(ListChangeBus listChangeBus, PlayerInfo playerInfo) {
         mListChangeBus = listChangeBus;
-        mGameState = gameState;
+        mPlayerInfo = playerInfo;
     }
 
     /**

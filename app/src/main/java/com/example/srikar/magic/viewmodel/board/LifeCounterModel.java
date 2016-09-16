@@ -3,11 +3,15 @@ package com.example.srikar.magic.viewmodel.board;
 import android.content.Context;
 import android.databinding.ObservableField;
 
+import com.example.srikar.magic.MagicApplication;
 import com.example.srikar.magic.R;
 import com.example.srikar.magic.UiUtil;
 import com.example.srikar.magic.databinding.FragmentBoardBinding;
 import com.example.srikar.magic.model.DataModelConstants;
+import com.example.srikar.magic.model.state.LifeTotals;
 import com.example.srikar.magic.viewmodel.BaseBoardModel;
+
+import javax.inject.Inject;
 
 /**
  * View model for both life counters
@@ -18,12 +22,21 @@ public class LifeCounterModel extends BaseBoardModel {
     public ObservableField<CharSequence> aliceLifeText = new ObservableField<>();
     public ObservableField<CharSequence> bobLifeText = new ObservableField<>();
 
+    @Inject
+    LifeTotals mLifeTotals;
+
     /**
      * View model for both life counters
      * @param binding Binding used to access view that will update
      */
     public LifeCounterModel(FragmentBoardBinding binding) {
         super(binding);
+
+        //inject LifeTotals
+        MagicApplication.getInstance()
+                .getMainComponent()
+                .inject(this);
+
         //set life texts
         setLifeText();
 
@@ -56,8 +69,8 @@ public class LifeCounterModel extends BaseBoardModel {
         String bobColor = context.getResources().getString(R.string.bob_color);
 
         //get life totals
-        int aliceLife = mGameState.getLifeTotal(DataModelConstants.PLAYER_ALICE);
-        int bobLife = mGameState.getLifeTotal(DataModelConstants.PLAYER_BOB);
+        int aliceLife = mLifeTotals.getLifeTotal(DataModelConstants.PLAYER_ALICE);
+        int bobLife = mLifeTotals.getLifeTotal(DataModelConstants.PLAYER_BOB);
 
         //get unformatted strings
         String unformat = context.getResources().getString(R.string.unformat_life);

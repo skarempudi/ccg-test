@@ -43,7 +43,7 @@ public class SwitchPlayerModel extends BaseBoardModel {
         enabled.set(false);
 
         //switch the player in the data model
-        mGameState.switchViewPlayer();
+        mPlayerInfo.switchViewPlayer();
     }
 
     /***********************************************************************************************

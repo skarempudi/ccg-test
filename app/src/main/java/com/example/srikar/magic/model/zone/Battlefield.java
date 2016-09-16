@@ -1,16 +1,11 @@
 package com.example.srikar.magic.model.zone;
 
-import android.support.annotation.Nullable;
-
 import com.example.srikar.magic.MagicLog;
-import com.example.srikar.magic.event.GameStateChangeEvent;
 import com.example.srikar.magic.event.ListChangeBus;
 import com.example.srikar.magic.event.ListChangeEvent;
-import com.example.srikar.magic.event.RxEventBus;
 import com.example.srikar.magic.model.Card;
 import com.example.srikar.magic.model.DataModelConstants;
-import com.example.srikar.magic.model.GameState;
-import com.example.srikar.magic.model.action.Combat;
+import com.example.srikar.magic.model.state.PlayerInfo;
 
 import java.util.ArrayList;
 
@@ -25,18 +20,14 @@ public class Battlefield extends BaseGameZone {
 
     private final ArrayList<Card>[] mLands, mCreatures;
 
-    private Combat mCombat;
-
     /**
      * Holds the lands and creatures used by both players.
      * Constructed by dependency injection.
      * @param listChangeBus Event bus used to pass information to listening RecyclerViewModels
-     * @param gameState Used to determine who the current player is
+     * @param playerInfo Used to determine who the current player is
      */
-    public Battlefield(ListChangeBus listChangeBus, GameState gameState) {
-        super(listChangeBus, gameState);
-
-        mGameState.setBattlefield(this);
+    public Battlefield(ListChangeBus listChangeBus, PlayerInfo playerInfo) {
+        super(listChangeBus, playerInfo);
 
         mLands = new ArrayList[2];
         mLands[DataModelConstants.PLAYER_ALICE] = new ArrayList<>();
@@ -45,8 +36,6 @@ public class Battlefield extends BaseGameZone {
         mCreatures = new ArrayList[2];
         mCreatures[DataModelConstants.PLAYER_ALICE] = new ArrayList<>();
         mCreatures[DataModelConstants.PLAYER_BOB] = new ArrayList<>();
-
-        mCombat = null;
     }
 
     /**
@@ -99,7 +88,7 @@ public class Battlefield extends BaseGameZone {
      * @return Land
      */
     public Card getViewPlayerLand(int position) {
-        return mLands[mGameState.getViewPlayer()].get(position);
+        return mLands[mPlayerInfo.getViewPlayer()].get(position);
     }
 
     /**
@@ -108,7 +97,7 @@ public class Battlefield extends BaseGameZone {
      * @return Creature
      */
     public Card getViewPlayerCreature(int position) {
-        return mCreatures[mGameState.getViewPlayer()].get(position);
+        return mCreatures[mPlayerInfo.getViewPlayer()].get(position);
     }
 
     /**
@@ -133,26 +122,19 @@ public class Battlefield extends BaseGameZone {
     }
 
     public int getViewPlayerLandsSize() {
-        return mLands[mGameState.getViewPlayer()].size();
+        return mLands[mPlayerInfo.getViewPlayer()].size();
     }
     public int getViewPlayerCreaturesSize() {
-        return mCreatures[mGameState.getViewPlayer()].size();
+        return mCreatures[mPlayerInfo.getViewPlayer()].size();
     }
 
     /**
      * Used to determine if should skip combat for this player or not, since can't attack with no creatures
-     * Used by GameState.nextStep() after start of combat, since stuff could still happen in that step
+     * Used by Turn.nextStep() after start of combat, since stuff could still happen in that step
      * @return Number of creatures current player controls
      */
     public int getCurrentPlayerCreaturesSize() {
-        return mCreatures[mGameState.getCurrentPlayer()].size();
-    }
-
-    /**
-     * Confirm declaration of attackers for combat
-     */
-    public void confirmAttack() {
-        mCombat.setAttackers();
+        return mCreatures[mPlayerInfo.getCurrentPlayer()].size();
     }
 
     /**
@@ -205,16 +187,6 @@ public class Battlefield extends BaseGameZone {
         );
     }
 
-    /**
-     * If it's the declare attackers step and attackers have not been confirmed, then want to
-     * confirm with player
-     * @return If should confirm attackers
-     */
-    public boolean shouldConfirmAttack() {
-        return mCombat != null && mGameState.getCurrentStep() == DataModelConstants.STEP_DECLARE_ATTACKERS
-                && !mCombat.isAttackConfirmed();
-    }
-
     @Override
     protected void clearLists() {
         mLands[DataModelConstants.PLAYER_ALICE].clear();
@@ -233,7 +205,7 @@ public class Battlefield extends BaseGameZone {
      */
     public void onUntapStep() {
         MagicLog.d(TAG, "onUntapStep: Untapping all lands and creatures current player controls");
-        int index = mGameState.getCurrentPlayer();
+        int index = mPlayerInfo.getCurrentPlayer();
 
         //untap all lands
         for (int i = 0; i < mLands[index].size(); i++) {
@@ -248,19 +220,5 @@ public class Battlefield extends BaseGameZone {
                 addListChangeEvent(DataModelConstants.LIST_CREATURES, ListChangeEvent.UPDATE, i);
             }
         }
-    }
-
-    /**
-     * At start of start of combat step, create Combat object
-     */
-    public void onStartOfCombatStep() {
-        mCombat = new Combat();
-    }
-
-    /**
-     * At start of second main phase, nullify Combat object
-     */
-    public void onPostcombatMainStep() {
-        mCombat = null;
     }
 }

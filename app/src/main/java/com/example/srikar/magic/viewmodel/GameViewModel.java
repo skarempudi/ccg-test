@@ -1,7 +1,7 @@
 package com.example.srikar.magic.viewmodel;
 
 /**
- * GameViewModels can have their background updated to match the current player
+ * GameViewModels have an onDestroy() method implemented
  * Created by Srikar on 8/25/2016.
  */
 public interface GameViewModel {

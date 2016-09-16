@@ -1,6 +1,5 @@
 package com.example.srikar.magic.viewmodel.board;
 
-import android.app.Activity;
 import android.content.DialogInterface;
 import android.databinding.ObservableBoolean;
 import android.databinding.ObservableInt;
@@ -12,13 +11,12 @@ import com.example.srikar.magic.R;
 import com.example.srikar.magic.databinding.FragmentBoardBinding;
 import com.example.srikar.magic.event.GameStateChangeEvent;
 import com.example.srikar.magic.fragment.CombatDialogFragment;
-import com.example.srikar.magic.model.zone.Battlefield;
+import com.example.srikar.magic.model.DataModelConstants;
+import com.example.srikar.magic.model.state.Combat;
+import com.example.srikar.magic.model.state.Turn;
 import com.example.srikar.magic.viewmodel.BaseBoardModel;
-import com.jakewharton.rxbinding.view.RxView;
 
 import javax.inject.Inject;
-
-import rx.Subscription;
 
 /**
  * View model for next step button
@@ -32,7 +30,9 @@ public class NextStepModel extends BaseBoardModel {
     public ObservableBoolean enabled = new ObservableBoolean(true);
 
     @Inject
-    Battlefield mBattlefield;
+    Combat mCombat;
+    @Inject
+    Turn mTurn;
 
     /**
      * View model for next step button
@@ -41,7 +41,7 @@ public class NextStepModel extends BaseBoardModel {
     public NextStepModel(FragmentBoardBinding binding) {
         super(binding);
 
-        //inject Battlefield
+        //inject Battlefield and Turn
         MagicApplication.getInstance()
                 .getMainComponent()
                 .inject(this);
@@ -66,11 +66,20 @@ public class NextStepModel extends BaseBoardModel {
     }
 
     /**
+     * If in declare attackers step in combat, and attackers are not confirmed, then should confirm
+     * @return If should confirm
+     */
+    boolean shouldConfirmAttack() {
+        return mTurn.getCurrentStep() == DataModelConstants.STEP_DECLARE_ATTACKERS
+                && mCombat.isDuringCombat() && !mCombat.isAttackConfirmed();
+    }
+
+    /**
      * Set text in next step button depending on if want to confirm combat steps first or not
      */
     void setNextStepButtonText() {
         //if during declare attackers and haven't confirmed attackers
-        if (mBattlefield.shouldConfirmAttack()) {
+        if (shouldConfirmAttack()) {
             buttonTextId.set(R.string.confirm_attack);
             return;
         }
@@ -85,7 +94,7 @@ public class NextStepModel extends BaseBoardModel {
      */
     public void nextStepOnClick(View view) {
         //if need to confirm attack, then display dialog
-        if (mBattlefield.shouldConfirmAttack()) {
+        if (shouldConfirmAttack()) {
             CombatDialogFragment dialogFragment = new CombatDialogFragment();
             //set listeners for the three buttons
             dialogFragment.setListeners(
@@ -111,7 +120,7 @@ public class NextStepModel extends BaseBoardModel {
         //disable next step button
         enabled.set(false);
         //go to next step in the data model
-        mGameState.nextStep();
+        mTurn.nextStep();
     }
 
     /***********************************************************************************************
@@ -119,14 +128,14 @@ public class NextStepModel extends BaseBoardModel {
      **********************************************************************************************/
     public void attackersConfirmNextStep(DialogInterface dialog, int id) {
         //confirm attack
-        mBattlefield.confirmAttack();
+        mCombat.confirmAttack();
         //proceed to next step
         goToNextStep();
     }
 
     public void attackersConfirmSameStep(DialogInterface dialog, int id) {
         //confirm attack
-        mBattlefield.confirmAttack();
+        mCombat.confirmAttack();
         //don't go to the next step, but update next step button
         setNextStepButtonText();
     }

@@ -1,13 +1,11 @@
 package com.example.srikar.magic.model.zone;
 
 import com.example.srikar.magic.MagicLog;
-import com.example.srikar.magic.event.GameStateChangeEvent;
 import com.example.srikar.magic.event.ListChangeBus;
 import com.example.srikar.magic.event.ListChangeEvent;
-import com.example.srikar.magic.event.RxEventBus;
 import com.example.srikar.magic.model.Card;
 import com.example.srikar.magic.model.DataModelConstants;
-import com.example.srikar.magic.model.GameState;
+import com.example.srikar.magic.model.state.PlayerInfo;
 
 import java.util.ArrayList;
 
@@ -27,10 +25,10 @@ public class Hand extends BaseGameZone {
      * Data model for each player's hand of cards.
      * Constructed by dependency injection.
      * @param listChangeBus Event bus used to pass information to listening RecyclerViewModels
-     * @param gameState Used to determine who the current player is
+     * @param playerInfo Used to determine who the current player is
      */
-    public Hand(ListChangeBus listChangeBus, GameState gameState) {
-        super(listChangeBus, gameState);
+    public Hand(ListChangeBus listChangeBus, PlayerInfo playerInfo) {
+        super(listChangeBus, playerInfo);
 
         mCards = new ArrayList[2];
         mCards[DataModelConstants.PLAYER_ALICE] = new ArrayList<>();
@@ -57,7 +55,7 @@ public class Hand extends BaseGameZone {
      * @return Card
      */
     public Card getCard(int pos) {
-        return mCards[mGameState.getViewPlayer()].get(pos);
+        return mCards[mPlayerInfo.getViewPlayer()].get(pos);
     }
 
     /**
@@ -66,7 +64,7 @@ public class Hand extends BaseGameZone {
      * @return Size of list
      */
     public int getHandSize() {
-        return mCards[mGameState.getViewPlayer()].size();
+        return mCards[mPlayerInfo.getViewPlayer()].size();
     }
 
     @Override

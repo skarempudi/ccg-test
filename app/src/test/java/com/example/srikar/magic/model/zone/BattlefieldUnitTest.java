@@ -3,10 +3,9 @@ package com.example.srikar.magic.model.zone;
 import com.example.srikar.magic.MagicLog;
 import com.example.srikar.magic.event.GameStateChangeBus;
 import com.example.srikar.magic.event.ListChangeBus;
-import com.example.srikar.magic.event.RxEventBus;
 import com.example.srikar.magic.model.Card;
 import com.example.srikar.magic.model.DataModelConstants;
-import com.example.srikar.magic.model.GameState;
+import com.example.srikar.magic.model.state.PlayerInfo;
 
 
 import org.junit.After;
@@ -34,7 +33,7 @@ public class BattlefieldUnitTest {
     public BattlefieldUnitTest() {
         MagicLog.setLogging(false);
         gameStateChangeBus = new GameStateChangeBus();
-        battlefield = new Battlefield(new ListChangeBus(), new GameState(gameStateChangeBus));
+        battlefield = new Battlefield(new ListChangeBus(), new PlayerInfo(gameStateChangeBus));
     }
 
     @Before

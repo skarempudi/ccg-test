@@ -1,15 +1,12 @@
 package com.example.srikar.magic.viewmodel;
 
-import android.support.annotation.CallSuper;
-
 import com.example.srikar.magic.MagicApplication;
 import com.example.srikar.magic.R;
 import com.example.srikar.magic.databinding.FragmentBoardBinding;
 import com.example.srikar.magic.event.GameStateChangeBus;
 import com.example.srikar.magic.event.GameStateChangeEvent;
 import com.example.srikar.magic.model.DataModelConstants;
-import com.example.srikar.magic.model.GameState;
-import com.example.srikar.magic.viewmodel.GameViewModel;
+import com.example.srikar.magic.model.state.PlayerInfo;
 
 import javax.inject.Inject;
 
@@ -26,8 +23,8 @@ public abstract class BaseBoardModel implements
 
     //used to access information regarding turns, current player, etc.
     @Inject
-    protected GameState mGameState;
-    //used to listen for changes to GameState
+    protected PlayerInfo mPlayerInfo;
+    //used to listen for changes to state
     @Inject
     protected GameStateChangeBus mGameStateChangeBus;
 
@@ -54,7 +51,7 @@ public abstract class BaseBoardModel implements
         //used to access view this will modify
         mBinding = binding;
 
-        //get instance of GameState and GameStateChangeBus
+        //get instance of PlayerInfo and GameStateChangeBus
         MagicApplication.getInstance()
                 .getMainComponent()
                 .inject(this);
@@ -62,7 +59,7 @@ public abstract class BaseBoardModel implements
         //used to store Subscriptions
         mSubscriptions = new CompositeSubscription();
 
-        //add subscription to listen for changes to GameState, handles switch view player here
+        //add subscription to listen for changes to state, handles switch view player here
         mSubscriptions.add(mGameStateChangeBus.subscribeGameStateChangeListener(this));
 
         //set background if ready
@@ -76,7 +73,7 @@ public abstract class BaseBoardModel implements
      * @return Resource for Alice or Bob
      */
     protected int getViewPlayerBackground() {
-        if (mGameState.getViewPlayer() == DataModelConstants.PLAYER_ALICE) {
+        if (mPlayerInfo.getViewPlayer() == DataModelConstants.PLAYER_ALICE) {
             return R.drawable.alice_border;
         }
         else {
@@ -89,7 +86,7 @@ public abstract class BaseBoardModel implements
      * @return Resource for Alice or Bob
      */
     protected int getCurrentPlayerBackground() {
-        if (mGameState.getCurrentPlayer() == DataModelConstants.PLAYER_ALICE) {
+        if (mPlayerInfo.getCurrentPlayer() == DataModelConstants.PLAYER_ALICE) {
             return R.drawable.alice_border;
         }
         else {
@@ -111,7 +108,7 @@ public abstract class BaseBoardModel implements
      * EVENT BUS LISTENER
      **********************************************************************************************/
     /**
-     * Handles changes to the GameState, listening to EventBus
+     * Handles changes to the state, listening to EventBus
      * Base version will update background when view player switches, so call super if want that
      * @param event Event from EventBus
      */

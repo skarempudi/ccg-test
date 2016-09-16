@@ -1,6 +1,8 @@
 package com.example.srikar.magic.dagger;
 
 import com.example.srikar.magic.MagicApplication;
+import com.example.srikar.magic.viewmodel.board.GameActionLogModel;
+import com.example.srikar.magic.viewmodel.board.LifeCounterModel;
 import com.example.srikar.magic.viewmodel.board.NextStepModel;
 import com.example.srikar.magic.viewmodel.card.BattlefieldCardViewModel;
 import com.example.srikar.magic.viewmodel.BoardFragmentModel;
@@ -24,6 +26,9 @@ public interface MainComponent {
     void inject(BoardFragmentModel viewModel);
     void inject(BaseBoardModel viewModel);
 
+    void inject(TurnCounterModel viewModel);
+    void inject(LifeCounterModel viewModel);
+    void inject(GameActionLogModel viewModel);
     void inject(NextStepModel viewModel);
 
     void inject(BaseRecyclerViewModel viewModel);

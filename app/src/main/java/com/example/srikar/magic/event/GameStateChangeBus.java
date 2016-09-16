@@ -4,12 +4,12 @@ import rx.Observable;
 import rx.Subscription;
 
 /**
- * Event bus for changes to GameState
+ * Event bus for changes to state
  * Created by Srikar on 8/26/2016.
  */
 public class GameStateChangeBus extends RxEventBus<GameStateChangeEvent> {
     /**
-     * Listen for changes to the GameState data model
+     * Listen for changes to the state data model
      * Events are switch view player, next step, next turn
      */
     public interface GameStateChangeListener {
@@ -17,7 +17,7 @@ public class GameStateChangeBus extends RxEventBus<GameStateChangeEvent> {
     }
 
     /**
-     * Subscribe to this bus, listening for GameState change events
+     * Subscribe to this bus, listening for state change events
      * @param listener Interface with onGameStateChange()
      * @return Subscription, which can unsubscribe from
      */
