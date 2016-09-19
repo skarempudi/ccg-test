@@ -23,6 +23,14 @@ android {
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
+
+    dexOptions {
+        preDexLibraries true
+        javaMaxHeapSize "4g"
+        incremental true
+        dexInProcess = true
+    }
+
     buildTypes {
         release {
             minifyEnabled false
@@ -72,4 +80,6 @@ dependencies {
     androidTestCompile 'com.android.support:support-annotations:24.2.0'
     androidTestCompile 'com.android.support.test:runner:0.5'
     androidTestCompile 'com.android.support.test:rules:0.5'
+    //Espresso
+    androidTestCompile 'com.android.support.test.espresso:espresso-core:2.2.2'
 }
