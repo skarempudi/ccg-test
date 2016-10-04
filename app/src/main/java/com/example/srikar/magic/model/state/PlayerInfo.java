@@ -55,7 +55,7 @@ public class PlayerInfo extends BaseGameState {
      */
     public void switchViewPlayer() {
         mViewPlayer ^= 1; //swaps 0 to 1, and 1 to 0
-        //alert listening BoardFragmentModel that view player switched
+        //alert listening view model that view player switched
         addGameStateChangeEvent(GameStateChangeEvent.SWITCH_VIEW_PLAYER);
     }
 

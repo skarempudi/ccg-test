@@ -2,10 +2,10 @@ package com.example.srikar.magic.viewmodel.recyclerview;
 
 import android.app.Activity;
 
+import com.example.srikar.magic.BoardBinding;
 import com.example.srikar.magic.MagicApplication;
 import com.example.srikar.magic.adapter.BaseRecViewAdapter;
 import com.example.srikar.magic.adapter.HandRecViewAdapter;
-import com.example.srikar.magic.databinding.FragmentBoardBinding;
 import com.example.srikar.magic.model.DataModelConstants;
 import com.example.srikar.magic.model.zone.Hand;
 
@@ -20,7 +20,7 @@ public class HandRecViewModel extends BaseRecyclerViewModel {
     @Inject
     protected Hand mHand;
 
-    public HandRecViewModel(FragmentBoardBinding binding) {
+    public HandRecViewModel(BoardBinding binding) {
         super(binding, DataModelConstants.LIST_HAND);
         //gets singleton Hand instance
         MagicApplication.getInstance()
@@ -28,7 +28,7 @@ public class HandRecViewModel extends BaseRecyclerViewModel {
                 .inject(this);
 
         //sets self in binding
-        binding.setHandModel(this);
+        binding.get().setHandModel(this);
     }
 
     @Override
@@ -54,6 +54,6 @@ public class HandRecViewModel extends BaseRecyclerViewModel {
         int backgroundResource = getViewPlayerBackground();
 
         //set resource
-        mBinding.handRecyclerview.setBackgroundResource(backgroundResource);
+        mBinding.get().handRecyclerview.setBackgroundResource(backgroundResource);
     }
 }

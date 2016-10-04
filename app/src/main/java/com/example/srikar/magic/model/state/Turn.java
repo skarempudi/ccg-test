@@ -101,7 +101,7 @@ public class Turn extends BaseGameState {
         //have permanents untap for now current player
         mBattlefield.onUntapStep();
 
-        //alert listening BoardFragmentModel to handle change in turn
+        //alert listening view model to handle change in turn
         addGameStateChangeEvent(GameStateChangeEvent.NEXT_TURN);
     }
 }

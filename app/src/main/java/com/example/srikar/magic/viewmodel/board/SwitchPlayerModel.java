@@ -3,7 +3,7 @@ package com.example.srikar.magic.viewmodel.board;
 import android.databinding.ObservableBoolean;
 import android.view.View;
 
-import com.example.srikar.magic.databinding.FragmentBoardBinding;
+import com.example.srikar.magic.BoardBinding;
 import com.example.srikar.magic.event.GameStateChangeEvent;
 import com.example.srikar.magic.viewmodel.BaseBoardModel;
 
@@ -19,11 +19,11 @@ public class SwitchPlayerModel extends BaseBoardModel {
      * View model for switch player button
      * @param binding Binding used to access view that will update
      */
-    public SwitchPlayerModel(FragmentBoardBinding binding) {
+    public SwitchPlayerModel(BoardBinding binding) {
         super(binding);
 
         //set in binding
-        binding.setSwitchPlayerModel(this);
+        mBinding.get().setSwitchPlayerModel(this);
     }
 
     @Override
@@ -32,7 +32,7 @@ public class SwitchPlayerModel extends BaseBoardModel {
         int backgroundResource = getViewPlayerBackground();
 
         //set resource
-        mBinding.switchPlayer.setBackgroundResource(backgroundResource);
+        mBinding.get().switchPlayer.setBackgroundResource(backgroundResource);
     }
 
     /**

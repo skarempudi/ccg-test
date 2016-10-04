@@ -1,7 +1,6 @@
 package com.example.srikar.magic.viewmodel.board;
 
-import com.example.srikar.magic.databinding.FragmentBoardBinding;
-import com.example.srikar.magic.event.GameStateChangeEvent;
+import com.example.srikar.magic.BoardBinding;
 import com.example.srikar.magic.viewmodel.BaseBoardModel;
 
 /**
@@ -14,7 +13,7 @@ public class CurrentlyUnusedModel extends BaseBoardModel {
      * View model for currently unused views
      * @param binding Binding used to access view that will update
      */
-    public CurrentlyUnusedModel(FragmentBoardBinding binding) {
+    public CurrentlyUnusedModel(BoardBinding binding) {
         super(binding);
     }
 
@@ -27,8 +26,8 @@ public class CurrentlyUnusedModel extends BaseBoardModel {
         int backgroundResource = getViewPlayerBackground();
 
         //set resources
-        mBinding.oppCreatures.setBackgroundResource(backgroundResource);
-        mBinding.library.setBackgroundResource(backgroundResource);
-        mBinding.graveyard.setBackgroundResource(backgroundResource);
+        mBinding.get().oppCreatures.setBackgroundResource(backgroundResource);
+        mBinding.get().library.setBackgroundResource(backgroundResource);
+        mBinding.get().graveyard.setBackgroundResource(backgroundResource);
     }
 }

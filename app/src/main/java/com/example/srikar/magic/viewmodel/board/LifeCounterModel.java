@@ -3,10 +3,10 @@ package com.example.srikar.magic.viewmodel.board;
 import android.content.Context;
 import android.databinding.ObservableField;
 
+import com.example.srikar.magic.BoardBinding;
 import com.example.srikar.magic.MagicApplication;
 import com.example.srikar.magic.R;
 import com.example.srikar.magic.UiUtil;
-import com.example.srikar.magic.databinding.FragmentBoardBinding;
 import com.example.srikar.magic.model.DataModelConstants;
 import com.example.srikar.magic.model.state.LifeTotals;
 import com.example.srikar.magic.viewmodel.BaseBoardModel;
@@ -29,7 +29,7 @@ public class LifeCounterModel extends BaseBoardModel {
      * View model for both life counters
      * @param binding Binding used to access view that will update
      */
-    public LifeCounterModel(FragmentBoardBinding binding) {
+    public LifeCounterModel(BoardBinding binding) {
         super(binding);
 
         //inject LifeTotals
@@ -41,7 +41,7 @@ public class LifeCounterModel extends BaseBoardModel {
         setLifeText();
 
         //set in binding
-        binding.setLifeCounterModel(this);
+        mBinding.get().setLifeCounterModel(this);
     }
 
     @Override
@@ -50,15 +50,15 @@ public class LifeCounterModel extends BaseBoardModel {
         int backgroundResource = getViewPlayerBackground();
 
         //set resource for both views
-        mBinding.lifeCounterAlice.setBackgroundResource(backgroundResource);
-        mBinding.lifeCounterBob.setBackgroundResource(backgroundResource);
+        mBinding.get().lifeCounterAlice.setBackgroundResource(backgroundResource);
+        mBinding.get().lifeCounterBob.setBackgroundResource(backgroundResource);
     }
 
     /**
      * Set text for life total displays based on information in game state data model
      */
     void setLifeText() {
-        Context context = mBinding.getRoot().getContext();
+        Context context = mBinding.get().getRoot().getContext();
 
         //get names
         String aliceName = context.getResources().getString(R.string.alice);

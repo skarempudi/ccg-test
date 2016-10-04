@@ -6,9 +6,9 @@ import android.databinding.ObservableInt;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
+import com.example.srikar.magic.BoardBinding;
 import com.example.srikar.magic.MagicApplication;
 import com.example.srikar.magic.R;
-import com.example.srikar.magic.databinding.FragmentBoardBinding;
 import com.example.srikar.magic.event.GameStateChangeEvent;
 import com.example.srikar.magic.fragment.CombatDialogFragment;
 import com.example.srikar.magic.model.DataModelConstants;
@@ -38,7 +38,7 @@ public class NextStepModel extends BaseBoardModel {
      * View model for next step button
      * @param binding Binding used to access view that will update
      */
-    public NextStepModel(FragmentBoardBinding binding) {
+    public NextStepModel(BoardBinding binding) {
         super(binding);
 
         //inject Battlefield and Turn
@@ -47,7 +47,7 @@ public class NextStepModel extends BaseBoardModel {
                 .inject(this);
 
         //set in binding
-        binding.setNextStepModel(this);
+        mBinding.get().setNextStepModel(this);
 
         //set text
         setNextStepButtonText();
@@ -62,7 +62,7 @@ public class NextStepModel extends BaseBoardModel {
         int backgroundResource = getViewPlayerBackground();
 
         //set resource
-        mBinding.nextStep.setBackgroundResource(backgroundResource);
+        mBinding.get().nextStep.setBackgroundResource(backgroundResource);
     }
 
     /**
@@ -90,7 +90,7 @@ public class NextStepModel extends BaseBoardModel {
 
     /**
      * When click the next step button, goes to the next step in the turn in the data model
-     * Called from fragment_board.xml
+     * Called from activity_main.xml
      */
     public void nextStepOnClick(View view) {
         //if need to confirm attack, then display dialog
@@ -104,7 +104,7 @@ public class NextStepModel extends BaseBoardModel {
             );
 
             //create the dialog
-            AppCompatActivity activity = (AppCompatActivity)mBinding.getRoot().getContext();
+            AppCompatActivity activity = (AppCompatActivity)mBinding.get().getRoot().getContext();
             dialogFragment.show(activity.getSupportFragmentManager(), "confirm attackers");
         }
         //if don't need to confirm attack, go to next step

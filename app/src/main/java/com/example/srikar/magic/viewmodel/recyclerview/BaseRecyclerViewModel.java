@@ -4,10 +4,10 @@ import android.content.Context;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
+import com.example.srikar.magic.BoardBinding;
 import com.example.srikar.magic.MagicApplication;
 import com.example.srikar.magic.MagicLog;
 import com.example.srikar.magic.adapter.BaseRecViewAdapter;
-import com.example.srikar.magic.databinding.FragmentBoardBinding;
 import com.example.srikar.magic.event.GameStateChangeEvent;
 import com.example.srikar.magic.event.ListChangeBus;
 import com.example.srikar.magic.event.ListChangeEvent;
@@ -45,7 +45,7 @@ public abstract class BaseRecyclerViewModel extends BaseBoardModel implements
      * @param binding Binding used to access view that will update
      * @param listName Which data model list is being used, using DataModelConstants
      */
-    BaseRecyclerViewModel(FragmentBoardBinding binding, int listName) {
+    BaseRecyclerViewModel(BoardBinding binding, int listName) {
         //won't set the background in super constructor
         super(binding, false);
         //injects instance of RecyclerView event bus
@@ -93,7 +93,7 @@ public abstract class BaseRecyclerViewModel extends BaseBoardModel implements
      * @return New horizontal LinearLayoutManager
      */
     private RecyclerView.LayoutManager getLayoutManager() {
-        Context context = mBinding.getRoot().getContext();
+        Context context = mBinding.get().getRoot().getContext();
         LinearLayoutManager manager = new LinearLayoutManager(context);
         manager.setOrientation(LinearLayoutManager.HORIZONTAL);
         return manager;

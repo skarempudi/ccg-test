@@ -2,9 +2,9 @@ package com.example.srikar.magic.viewmodel.board;
 
 import android.databinding.ObservableInt;
 
+import com.example.srikar.magic.BoardBinding;
 import com.example.srikar.magic.MagicApplication;
 import com.example.srikar.magic.R;
-import com.example.srikar.magic.databinding.FragmentBoardBinding;
 import com.example.srikar.magic.event.GameStateChangeEvent;
 import com.example.srikar.magic.model.DataModelConstants;
 import com.example.srikar.magic.model.state.Turn;
@@ -27,7 +27,7 @@ public class GameActionLogModel extends BaseBoardModel {
      * View model for game action log
      * @param binding Binding used to access view that will update
      */
-    public GameActionLogModel(FragmentBoardBinding binding) {
+    public GameActionLogModel(BoardBinding binding) {
         super(binding);
 
         //inject Turn
@@ -36,7 +36,7 @@ public class GameActionLogModel extends BaseBoardModel {
                 .inject(this);
 
         //set in binding
-        binding.setGameActionLogModel(this);
+        mBinding.get().setGameActionLogModel(this);
 
         //set initial text
         setLogText();
@@ -48,7 +48,7 @@ public class GameActionLogModel extends BaseBoardModel {
         int backgroundResource = getViewPlayerBackground();
 
         //set resource
-        mBinding.gameActionLog.setBackgroundResource(backgroundResource);
+        mBinding.get().gameActionLog.setBackgroundResource(backgroundResource);
     }
 
     /**

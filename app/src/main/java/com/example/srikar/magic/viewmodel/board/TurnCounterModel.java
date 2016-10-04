@@ -3,10 +3,11 @@ package com.example.srikar.magic.viewmodel.board;
 import android.content.Context;
 import android.databinding.ObservableField;
 
+import com.example.srikar.magic.BoardBinding;
 import com.example.srikar.magic.MagicApplication;
 import com.example.srikar.magic.R;
 import com.example.srikar.magic.UiUtil;
-import com.example.srikar.magic.databinding.FragmentBoardBinding;
+import com.example.srikar.magic.databinding.ActivityMainBinding;
 import com.example.srikar.magic.event.GameStateChangeEvent;
 import com.example.srikar.magic.model.DataModelConstants;
 import com.example.srikar.magic.model.state.Turn;
@@ -31,7 +32,7 @@ public class TurnCounterModel extends BaseBoardModel {
      * View model for the turn counter
      * @param binding Binding used to access view that will update
      */
-    public TurnCounterModel(FragmentBoardBinding binding) {
+    public TurnCounterModel(BoardBinding binding) {
         super(binding);
 
         //inject Turn
@@ -43,7 +44,7 @@ public class TurnCounterModel extends BaseBoardModel {
         setTurnText();
 
         //set in binding
-        binding.setTurnCounterModel(this);
+        mBinding.get().setTurnCounterModel(this);
     }
 
     @Override
@@ -52,14 +53,14 @@ public class TurnCounterModel extends BaseBoardModel {
         int backgroundResource = getCurrentPlayerBackground();
 
         //set resource
-        mBinding.turnCounter.setBackgroundResource(backgroundResource);
+        mBinding.get().turnCounter.setBackgroundResource(backgroundResource);
     }
 
     /**
      * Set the current turn number and current player in the turn display
      */
     void setTurnText() {
-        Context context = mBinding.getRoot().getContext();
+        Context context = mBinding.get().getRoot().getContext();
 
         //get unformatted string
         String unformatted = context.getResources().getString(R.string.unformat_turn_display);

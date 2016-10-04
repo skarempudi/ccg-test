@@ -12,7 +12,7 @@ public class BaseGameState {
     private static final String TAG = "BaseGameState";
 
     /**
-     * Used to signal to BoardFragmentModel that game state changed
+     * Used to signal to view models that game state changed
      */
     protected final GameStateChangeBus mGameStateChangeBus;
 

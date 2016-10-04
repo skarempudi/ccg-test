@@ -1,8 +1,8 @@
 package com.example.srikar.magic.viewmodel;
 
+import com.example.srikar.magic.BoardBinding;
 import com.example.srikar.magic.MagicApplication;
 import com.example.srikar.magic.R;
-import com.example.srikar.magic.databinding.FragmentBoardBinding;
 import com.example.srikar.magic.event.GameStateChangeBus;
 import com.example.srikar.magic.event.GameStateChangeEvent;
 import com.example.srikar.magic.model.DataModelConstants;
@@ -13,13 +13,13 @@ import javax.inject.Inject;
 import rx.subscriptions.CompositeSubscription;
 
 /**
- * Base class for subviews on BoardFragment that aren't inside RecyclerViews
+ * Base class for subviews on board that aren't inside RecyclerViews
  * Created by Srikar on 8/25/2016.
  */
 public abstract class BaseBoardModel implements
         GameViewModel, UpdateBackground, GameStateChangeBus.GameStateChangeListener {
-    //used to access views in Fragment
-    protected FragmentBoardBinding mBinding;
+    //used to access views in board XML
+    protected BoardBinding mBinding;
 
     //used to access information regarding turns, current player, etc.
     @Inject
@@ -36,7 +36,7 @@ public abstract class BaseBoardModel implements
      * Will set background by default
      * @param binding Binding used to access views that will update
      */
-    public BaseBoardModel(FragmentBoardBinding binding) {
+    public BaseBoardModel(BoardBinding binding) {
         this(binding, true);
     }
 
@@ -47,7 +47,7 @@ public abstract class BaseBoardModel implements
      * @param binding Binding used to access views that will update
      * @param isBackgroundReady If true, will set background; if not, won't at this point
      */
-    public BaseBoardModel(FragmentBoardBinding binding, boolean isBackgroundReady) {
+    public BaseBoardModel(BoardBinding binding, boolean isBackgroundReady) {
         //used to access view this will modify
         mBinding = binding;
 

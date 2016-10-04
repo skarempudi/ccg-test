@@ -16,8 +16,8 @@ public class ViewModelBindings {
     private static final String TAG = "ViewModelBindings";
 
     /**
-     * FRAGMENT_BOARD.XML
-     * Called by fragment_board.xml RecyclerView with attribute
+     * ACTIVITY_MAIN.XML
+     * Called by activity_main.xml RecyclerView with attribute
      * bind:recyclerViewModel="@{recyclerViewModel}".
      * Sets up the RecyclerView with the Adapter and LayoutManager.
      * Have to do this way to pass parameters into View Model on construction.

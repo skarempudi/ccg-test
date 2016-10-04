@@ -1,11 +1,9 @@
 package com.example.srikar.magic.viewmodel.recyclerview;
 
-import android.app.Activity;
-
+import com.example.srikar.magic.BoardBinding;
 import com.example.srikar.magic.MagicApplication;
 import com.example.srikar.magic.adapter.BaseRecViewAdapter;
 import com.example.srikar.magic.adapter.BattlefieldRecViewAdapter;
-import com.example.srikar.magic.databinding.FragmentBoardBinding;
 import com.example.srikar.magic.model.DataModelConstants;
 import com.example.srikar.magic.model.zone.Battlefield;
 
@@ -19,7 +17,7 @@ public class BattlefieldRecViewModel extends BaseRecyclerViewModel {
     @Inject
     protected Battlefield mBattlefield;
 
-    public BattlefieldRecViewModel(FragmentBoardBinding binding, int listName) {
+    public BattlefieldRecViewModel(BoardBinding binding, int listName) {
         super(binding, listName);
         //injects singleton instance of Battlefield
         MagicApplication.getInstance()
@@ -28,10 +26,10 @@ public class BattlefieldRecViewModel extends BaseRecyclerViewModel {
 
         //set in binding, based on list name
         if (listName == DataModelConstants.LIST_CREATURES) {
-            binding.setCreaturesModel(this);
+            binding.get().setCreaturesModel(this);
         }
         else if (listName == DataModelConstants.LIST_LANDS) {
-            binding.setLandsModel(this);
+            binding.get().setLandsModel(this);
         }
     }
 
@@ -60,10 +58,10 @@ public class BattlefieldRecViewModel extends BaseRecyclerViewModel {
 
         //choose which view to set based on list name
         if (mListName == DataModelConstants.LIST_LANDS) {
-            mBinding.landsRecyclerview.setBackgroundResource(backgroundResource);
+            mBinding.get().landsRecyclerview.setBackgroundResource(backgroundResource);
         }
         else if (mListName == DataModelConstants.LIST_CREATURES) {
-            mBinding.creaturesRecyclerview.setBackgroundResource(backgroundResource);
+            mBinding.get().creaturesRecyclerview.setBackgroundResource(backgroundResource);
         }
     }
 }
