@@ -8,6 +8,8 @@ import com.example.srikar.magic.MagicLog;
 import com.example.srikar.magic.databinding.PermanentBinding;
 import com.example.srikar.magic.model.Card;
 import com.example.srikar.magic.model.detail.CreatureDetails;
+import com.example.srikar.magic.model.state.Combat;
+import com.example.srikar.magic.model.state.Turn;
 import com.example.srikar.magic.view.BoardBinding;
 import com.example.srikar.magic.MagicApplication;
 import com.example.srikar.magic.R;
@@ -24,6 +26,10 @@ import javax.inject.Inject;
 public class BattlefieldListViewModel extends BaseCardListViewModel {
     @Inject
     protected Battlefield mBattlefield;
+    @Inject
+    protected Combat mCombat;
+    @Inject
+    protected Turn mTurn;
 
     public BattlefieldListViewModel(BoardBinding binding, int listName) {
         super(binding, listName);
@@ -57,8 +63,35 @@ public class BattlefieldListViewModel extends BaseCardListViewModel {
     }
 
     @Override
-    public void onItemClick(int position) {
-        mBattlefield.onViewPlayerPermanentClicked(mListName, position);
+    public void onItemClick(ViewDataBinding binding, int position) {
+        if (mListName == DataModelConstants.LIST_CREATURES) {
+            //get creature
+            Card creature = retrievePermanent(position);
+            PermanentBinding permBinding = (PermanentBinding)binding;
+
+            //if is own turn, declare attackers step, and attack has not been confirmed, then
+            //toggle creature attack declaration
+            if (mPlayerInfo.getCurrentPlayer() == mPlayerInfo.getViewPlayer()
+                    && mTurn.getCurrentStep() == DataModelConstants.STEP_DECLARE_ATTACKERS
+                    && !mCombat.isAttackConfirmed()) {
+                //if declared attacking, declare not attacking
+                if (creature.isDeclaredAttacking()) {
+                    //remove from combat list
+                    mCombat.removeAttacker(creature);
+                    creature.declareAttack(false);
+                    //set attack icon to invisible
+                    permBinding.attackIcon.setVisibility(View.INVISIBLE);
+                }
+                //if not declared attacking, declare attacking
+                else {
+                    //add to combat list
+                    mCombat.addAttacker(creature);
+                    creature.declareAttack(true);
+                    //set attack icon to visible
+                    permBinding.attackIcon.setVisibility(View.VISIBLE);
+                }
+            }
+        }
     }
 
     @Override

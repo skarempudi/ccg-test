@@ -45,7 +45,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         }
 
         public void onClick() {
-            mRecyclerViewModel.onItemClick(getAdapterPosition());
+            mRecyclerViewModel.onItemClick(binding, getAdapterPosition());
         }
     }
 

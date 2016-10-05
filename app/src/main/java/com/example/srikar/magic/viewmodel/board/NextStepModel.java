@@ -6,6 +6,7 @@ import android.databinding.ObservableInt;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
+import com.example.srikar.magic.model.zone.Battlefield;
 import com.example.srikar.magic.view.BoardBinding;
 import com.example.srikar.magic.MagicApplication;
 import com.example.srikar.magic.R;
@@ -30,6 +31,8 @@ public class NextStepModel extends BaseBoardModel {
     public ObservableBoolean enabled = new ObservableBoolean(true);
 
     @Inject
+    Battlefield mBattlefield;
+    @Inject
     Combat mCombat;
     @Inject
     Turn mTurn;
@@ -41,7 +44,7 @@ public class NextStepModel extends BaseBoardModel {
     public NextStepModel(BoardBinding binding) {
         super(binding);
 
-        //inject Battlefield and Turn
+        //inject Battlefield, Combat, and Turn
         MagicApplication.getInstance()
                 .getMainComponent()
                 .inject(this);
@@ -71,7 +74,7 @@ public class NextStepModel extends BaseBoardModel {
      */
     boolean shouldConfirmAttack() {
         return mTurn.getCurrentStep() == DataModelConstants.STEP_DECLARE_ATTACKERS
-                && mCombat.isDuringCombat() && !mCombat.isAttackConfirmed();
+                && !mCombat.isAttackConfirmed();
     }
 
     /**
@@ -127,17 +130,20 @@ public class NextStepModel extends BaseBoardModel {
      * DIALOG RESPONSE LISTENERS
      **********************************************************************************************/
     public void attackersConfirmNextStep(DialogInterface dialog, int id) {
-        //confirm attack
-        mCombat.confirmAttack();
+        confirmAttack();
         //proceed to next step
         goToNextStep();
     }
 
     public void attackersConfirmSameStep(DialogInterface dialog, int id) {
-        //confirm attack
-        mCombat.confirmAttack();
+        confirmAttack();
         //don't go to the next step, but update next step button
         setNextStepButtonText();
+    }
+
+    private void confirmAttack() {
+        mCombat.confirmAttack();
+        mBattlefield.onConfirmAttack();
     }
 
     public void attackersCancel(DialogInterface dialog, int id) {

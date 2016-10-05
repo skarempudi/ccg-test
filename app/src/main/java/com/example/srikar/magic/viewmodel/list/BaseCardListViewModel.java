@@ -112,9 +112,10 @@ public abstract class BaseCardListViewModel extends BaseBoardModel implements
 
     /**
      * Called by view for this list
+     * @param binding Binding for the view
      * @param position What card in list was clicked
      */
-    public abstract void onItemClick(int position);
+    public abstract void onItemClick(ViewDataBinding binding, int position);
 
     /**
      * Called by view for this list when load

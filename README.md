@@ -2,19 +2,17 @@
 
 This is an in-progress work with the aim to model the combat system of a collectible card game like Magic: the Gathering.
 
-Currently, I am still experimenting with the UI, and few game mechanics have been implemented. There are creatures on the battlefield with default images and stats that can be tapped, and turns go through each step, but attacking and other game actions have not been implemented.
+Currently, I am still experimenting with the UI, and few game mechanics have been implemented. There are creatures on the battlefield with default images and stats that can be declared to attack, and turns go through each step, but full combat and other game actions have not been implemented.
 
 At this point, this is best viewed as a showcase of my experimenting with RxJava, Dagger 2, and Data Binding.
-
-I am in the middle of a massive splitting up of classes to better suit SRP (single responsibility principle), so this process is not complete, and there are sections of code that still need to be broken up. 
 
 ## Usage
 
 The bottom row represents the hand, the row above land resource cards, and the row above creature cards. Above that is your opponent's creatures (not implemented), then a game log and a button to progress through the turn, then finally the turn counter, life tracker for each player, and a button to switch what player you are viewing as.
 
-Touching the creature cards will result in them rotating 90 degrees (tapping), and returning to normal (untapping) on a second touch.
+Touching the creature cards will produce no action most of the time, but during the "declare attackers" step, if you are viewing the game as the current player, this will add or remove a sword icon that designiates it as an attacking creature. When you press the button labeled "Confirm Attack", and don't cancel, the creatures will be rotated 90 degrees (tapped). The sword icon will disappear after the "end of combat" step, and the creatures will untap at the start of the current player's next turn.
 
-Touching the "next step" button will progress through the steps in a turn, indicated in the game log. The special qualities of these steps have not been implemented yet. After the end step, it will switch to the other player's turn. The current player is indicated in the turn counter, both in name and color.
+Touching the "next step" button will progress through the steps in a turn, indicated in the game log. After the end step, it will switch to the other player's turn. The current player is indicated in the turn counter, both in name and color.
 
 Touching the "switch" button will switch which player you are viewing the board as, but will not change whose turn it is. In the future, this will allow players to cast spells during another player's turn, and this will be used to set up blockers when the other player attacks.
 

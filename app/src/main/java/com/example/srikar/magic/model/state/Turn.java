@@ -75,6 +75,8 @@ public class Turn extends BaseGameState {
 
                 case DataModelConstants.STEP_POSTCOMBAT_MAIN:
                     mCombat.endCombat();
+                    //Battlefield will update creatures to remove from combat, update list view model
+                    mBattlefield.onPostcombatMain();
                     break;
             }
 

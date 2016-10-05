@@ -137,59 +137,6 @@ public class Battlefield extends BaseGameZone {
         return mCreatures[mPlayerInfo.getCurrentPlayer()].size();
     }
 
-    /**
-     * When a creature Permanent is clicked from the view player creature RecyclerView, determine
-     * what to do.
-     * Right now, just taps or untaps creature.
-     * @param listName Which list this event came from, using list name constants
-     * @param position Position in view player creatures list, which matches position in RecyclerView
-     */
-    public void onViewPlayerPermanentClicked(int listName, int position) {
-        switch(listName) {
-            case DataModelConstants.LIST_LANDS:
-                return;
-
-            case DataModelConstants.LIST_CREATURES:
-                onViewPlayerCreatureClicked(position);
-                return;
-
-            default:
-        }
-    }
-
-    /**
-     * When a creature Permanent is clicked from the view player creature RecyclerView, determine
-     * what to do.
-     * Right now, just taps or untaps creature.
-     * @param position Position in view player creatures list, which matches position in RecyclerView
-     */
-    private void onViewPlayerCreatureClicked(int position) {
-        //get creature
-        Card creature = getViewPlayerCreature(position);
-
-        //check if declare attackers step
-
-
-        //if creature tapped, untap it
-//        if (creature.isTapped()) {
-//            MagicLog.d(TAG, "onViewPlayerCreatureClicked: Creature at position " + position + " tapped, untapping");
-//            creature.untap();
-//        }
-//        //if creature not tapped, tap it
-//        else {
-//            MagicLog.d(TAG, "onViewPlayerCreatureClicked: Creature at position " + position + " untapped, tapping");
-//            creature.tap();
-//        }
-
-        //alert RecyclerView that position has updated, and Permanent should be drawn tapped or
-        //untapped
-        addListChangeEvent(
-                DataModelConstants.LIST_CREATURES,
-                ListChangeEvent.UPDATE,
-                position
-        );
-    }
-
     @Override
     protected void clearLists() {
         mLands[DataModelConstants.PLAYER_ALICE].clear();
@@ -210,16 +157,49 @@ public class Battlefield extends BaseGameZone {
         MagicLog.d(TAG, "onUntapStep: Untapping all lands and creatures current player controls");
         int index = mPlayerInfo.getCurrentPlayer();
 
-        //untap all lands
+        //untap all current player lands
         for (int i = 0; i < mLands[index].size(); i++) {
             mLands[index].get(i).untap();
             //since don't have lands implemented yet, no action when untap
         }
 
-        //untap all creatures
+        //untap all current player creatures
         for (int i = 0; i < mCreatures[index].size(); i++) {
             if (mCreatures[index].get(i).untap()) {
                 //only update the creatures that untap
+                addListChangeEvent(DataModelConstants.LIST_CREATURES, ListChangeEvent.UPDATE, i);
+            }
+        }
+    }
+
+    /**
+     * Not really a step, but when confirm attackers, tap all attacking creatures that should be tapped
+     */
+    public void onConfirmAttack() {
+        MagicLog.d(TAG, "onAttackersConfirmed: Tap all attackers without vigilance");
+        int index = mPlayerInfo.getCurrentPlayer();
+        for (int i = 0; i < mCreatures[index].size(); i++) {
+            Card creature = mCreatures[index].get(i);
+            if (creature.isDeclaredAttacking()) {
+                //tap creatures without vigilance
+                creature.tap();
+                //update those creatures
+                addListChangeEvent(DataModelConstants.LIST_CREATURES, ListChangeEvent.UPDATE, i);
+            }
+        }
+    }
+
+    /**
+     * At start of second main phase, remove all creatures from combat
+     */
+    public void onPostcombatMain() {
+        MagicLog.d(TAG, "onSecondMain: Removing all creatures from combat");
+        //remove Alice's creatures from combat
+        //only Alice has creatures right now
+        int index = DataModelConstants.PLAYER_ALICE;
+        for (int i = 0; i < mCreatures[index].size(); i++) {
+            if (mCreatures[index].get(i).removeFromCombat()) {
+                //only update the creatures removed from combat
                 addListChangeEvent(DataModelConstants.LIST_CREATURES, ListChangeEvent.UPDATE, i);
             }
         }

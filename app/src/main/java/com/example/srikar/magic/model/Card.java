@@ -76,6 +76,18 @@ public class Card {
         declaredAttacking = willAttack;
     }
 
+    /**
+     * Remove card from combat, use only if on Battlefield
+     * @return If removal from combat actually occurred, returns false if wasn't in combat
+     */
+    public boolean removeFromCombat() {
+        if (isDeclaredAttacking()) {
+            declareAttack(false);
+            return true;
+        }
+        return false;
+    }
+
     @Override
     public String toString() {
         return id + " " + (tapped? "tapped" : "untapped");

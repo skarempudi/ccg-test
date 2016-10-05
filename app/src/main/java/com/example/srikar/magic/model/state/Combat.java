@@ -39,10 +39,7 @@ public class Combat {
     public void endCombat() {
         duringCombat = false;
         attackConfirmed = false;
-        //for each creature, set so not declared attacking
-        for (Card creature : attackers) {
-            creature.declareAttack(false);
-        }
+        attackers.clear();
     }
 
     public boolean isDuringCombat() {
@@ -58,5 +55,21 @@ public class Combat {
 
     public boolean isAttackConfirmed() {
         return attackConfirmed;
+    }
+
+    /**
+     * Add to list of attacking creatures
+     * @param creature Creature that will attack
+     */
+    public void addAttacker(Card creature) {
+        attackers.add(creature);
+    }
+
+    /**
+     * Remove from list of attacking creatures
+     * @param creature Creature that won't attack
+     */
+    public void removeAttacker(Card creature) {
+        attackers.remove(creature);
     }
 }

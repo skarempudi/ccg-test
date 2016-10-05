@@ -48,7 +48,7 @@ public class HandListViewModel extends BaseCardListViewModel {
     }
 
     @Override
-    public void onItemClick(int position) {
+    public void onItemClick(ViewDataBinding binding, int position) {
         //do nothing for now
     }
 
