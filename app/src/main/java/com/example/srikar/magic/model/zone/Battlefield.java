@@ -167,16 +167,19 @@ public class Battlefield extends BaseGameZone {
         //get creature
         Card creature = getViewPlayerCreature(position);
 
+        //check if declare attackers step
+
+
         //if creature tapped, untap it
-        if (creature.isTapped()) {
-            MagicLog.d(TAG, "onViewPlayerCreatureClicked: Creature at position " + position + " tapped, untapping");
-            creature.untap();
-        }
-        //if creature not tapped, tap it
-        else {
-            MagicLog.d(TAG, "onViewPlayerCreatureClicked: Creature at position " + position + " untapped, tapping");
-            creature.tap();
-        }
+//        if (creature.isTapped()) {
+//            MagicLog.d(TAG, "onViewPlayerCreatureClicked: Creature at position " + position + " tapped, untapping");
+//            creature.untap();
+//        }
+//        //if creature not tapped, tap it
+//        else {
+//            MagicLog.d(TAG, "onViewPlayerCreatureClicked: Creature at position " + position + " untapped, tapping");
+//            creature.tap();
+//        }
 
         //alert RecyclerView that position has updated, and Permanent should be drawn tapped or
         //untapped

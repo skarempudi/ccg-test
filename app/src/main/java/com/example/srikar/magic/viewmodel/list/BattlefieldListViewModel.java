@@ -1,6 +1,7 @@
-package com.example.srikar.magic.viewmodel.recyclerview;
+package com.example.srikar.magic.viewmodel.list;
 
 import android.databinding.ViewDataBinding;
+import android.view.View;
 import android.widget.ImageView;
 
 import com.example.srikar.magic.MagicLog;
@@ -62,8 +63,10 @@ public class BattlefieldListViewModel extends BaseCardListViewModel {
 
     @Override
     public void onItemLoad(ViewDataBinding binding, int position) {
+        PermanentBinding permBinding = (PermanentBinding)binding;
+
         //get the image view
-        ImageView view = ((PermanentBinding)binding).cardImage;
+        ImageView view = permBinding.cardImage;
         //get the Permanent
         Card perm = retrievePermanent(position);
 
@@ -83,9 +86,17 @@ public class BattlefieldListViewModel extends BaseCardListViewModel {
                     .into(view);
         }
 
+        //if declared attacking, make icon visible, or invisible if not
+        if (perm.isDeclaredAttacking()) {
+            permBinding.attackIcon.setVisibility(View.VISIBLE);
+        }
+        else {
+            permBinding.attackIcon.setVisibility(View.INVISIBLE);
+        }
+
         //set power and toughness
         if (mListName == DataModelConstants.LIST_CREATURES) {
-            ((PermanentBinding)binding).powerToughness.setText(getPTText(perm));
+            permBinding.powerToughness.setText(getPTText(perm));
         }
     }
 

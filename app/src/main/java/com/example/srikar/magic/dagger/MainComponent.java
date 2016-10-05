@@ -6,9 +6,9 @@ import com.example.srikar.magic.viewmodel.board.LifeCounterModel;
 import com.example.srikar.magic.viewmodel.board.NextStepModel;
 import com.example.srikar.magic.viewmodel.BaseBoardModel;
 import com.example.srikar.magic.viewmodel.board.TurnCounterModel;
-import com.example.srikar.magic.viewmodel.recyclerview.BaseCardListViewModel;
-import com.example.srikar.magic.viewmodel.recyclerview.BattlefieldListViewModel;
-import com.example.srikar.magic.viewmodel.recyclerview.HandListViewModel;
+import com.example.srikar.magic.viewmodel.list.BaseCardListViewModel;
+import com.example.srikar.magic.viewmodel.list.BattlefieldListViewModel;
+import com.example.srikar.magic.viewmodel.list.HandListViewModel;
 
 import javax.inject.Singleton;
 

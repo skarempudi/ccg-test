@@ -16,6 +16,7 @@ public class Card {
     public CreatureDetails details;
 
     private boolean tapped = false;
+    private boolean declaredAttacking = false;
 
     public Card(int id) {
         this.id = id;
@@ -23,10 +24,18 @@ public class Card {
 
     /**
      * Returns if this card is tapped, use only if on Battlefield
-     * @return if tapped
+     * @return If tapped
      */
     public boolean isTapped() {
         return tapped;
+    }
+
+    /**
+     * Returns if this card is declared attacking, use only if on Battlefield
+     * @return If attacking
+     */
+    public boolean isDeclaredAttacking() {
+        return declaredAttacking;
     }
 
     /**
@@ -59,8 +68,12 @@ public class Card {
         return true;
     }
 
-    public void onClick() {
-        MagicLog.d(TAG, "onClick: " + id);
+    /**
+     * Set if declared attacking
+     * @param willAttack If will declare attacking or not
+     */
+    public void declareAttack(boolean willAttack) {
+        declaredAttacking = willAttack;
     }
 
     @Override

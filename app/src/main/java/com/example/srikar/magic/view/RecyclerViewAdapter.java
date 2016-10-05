@@ -7,7 +7,7 @@ import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
 import com.example.srikar.magic.UiUtil;
-import com.example.srikar.magic.viewmodel.recyclerview.BaseCardListViewModel;
+import com.example.srikar.magic.viewmodel.list.BaseCardListViewModel;
 import com.jakewharton.rxbinding.view.RxView;
 
 import java.util.concurrent.TimeUnit;

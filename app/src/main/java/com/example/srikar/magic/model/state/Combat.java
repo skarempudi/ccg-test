@@ -1,5 +1,10 @@
 package com.example.srikar.magic.model.state;
 
+import com.example.srikar.magic.model.Card;
+
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Class used to describe combat, including:
  * start of combat
@@ -12,10 +17,12 @@ package com.example.srikar.magic.model.state;
 public class Combat {
     private boolean duringCombat;
     private boolean attackConfirmed;
+    private List<Card> attackers;
 
     public Combat() {
         duringCombat = false;
         attackConfirmed = false;
+        attackers = new ArrayList<>();
     }
 
     /**
@@ -32,6 +39,10 @@ public class Combat {
     public void endCombat() {
         duringCombat = false;
         attackConfirmed = false;
+        //for each creature, set so not declared attacking
+        for (Card creature : attackers) {
+            creature.declareAttack(false);
+        }
     }
 
     public boolean isDuringCombat() {

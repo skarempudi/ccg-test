@@ -3,7 +3,7 @@ package com.example.srikar.magic.viewmodel;
 import android.databinding.BindingAdapter;
 import android.support.v7.widget.RecyclerView;
 
-import com.example.srikar.magic.viewmodel.recyclerview.BaseCardListViewModel;
+import com.example.srikar.magic.viewmodel.list.BaseCardListViewModel;
 
 /**
  * Container class for custom setters used in layout data binding.

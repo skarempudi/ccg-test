@@ -25,15 +25,15 @@
             />
         <variable
             name="creaturesModel"
-            type="com.example.srikar.magic.viewmodel.recyclerview.BaseCardListViewModel"
+            type="com.example.srikar.magic.viewmodel.list.BaseCardListViewModel"
             />
         <variable
             name="landsModel"
-            type="com.example.srikar.magic.viewmodel.recyclerview.BaseCardListViewModel"
+            type="com.example.srikar.magic.viewmodel.list.BaseCardListViewModel"
             />
         <variable
             name="handModel"
-            type="com.example.srikar.magic.viewmodel.recyclerview.BaseCardListViewModel"
+            type="com.example.srikar.magic.viewmodel.list.BaseCardListViewModel"
             />
     </data>
 

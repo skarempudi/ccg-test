@@ -1,4 +1,4 @@
-package com.example.srikar.magic.viewmodel.recyclerview;
+package com.example.srikar.magic.viewmodel.list;
 
 import android.content.Context;
 import android.databinding.ViewDataBinding;
