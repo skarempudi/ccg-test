@@ -4,12 +4,11 @@ import com.example.srikar.magic.MagicApplication;
 import com.example.srikar.magic.viewmodel.board.GameActionLogModel;
 import com.example.srikar.magic.viewmodel.board.LifeCounterModel;
 import com.example.srikar.magic.viewmodel.board.NextStepModel;
-import com.example.srikar.magic.viewmodel.card.BattlefieldCardViewModel;
 import com.example.srikar.magic.viewmodel.BaseBoardModel;
 import com.example.srikar.magic.viewmodel.board.TurnCounterModel;
-import com.example.srikar.magic.viewmodel.recyclerview.BaseRecyclerViewModel;
-import com.example.srikar.magic.viewmodel.recyclerview.BattlefieldRecViewModel;
-import com.example.srikar.magic.viewmodel.recyclerview.HandRecViewModel;
+import com.example.srikar.magic.viewmodel.recyclerview.BaseCardListViewModel;
+import com.example.srikar.magic.viewmodel.recyclerview.BattlefieldListViewModel;
+import com.example.srikar.magic.viewmodel.recyclerview.HandListViewModel;
 
 import javax.inject.Singleton;
 
@@ -29,10 +28,9 @@ public interface MainComponent {
     void inject(GameActionLogModel viewModel);
     void inject(NextStepModel viewModel);
 
-    void inject(BaseRecyclerViewModel viewModel);
-    void inject(BattlefieldRecViewModel viewModel);
-    void inject(HandRecViewModel viewModel);
-    void inject(BattlefieldCardViewModel viewModel);
+    void inject(BaseCardListViewModel viewModel);
+    void inject(BattlefieldListViewModel viewModel);
+    void inject(HandListViewModel viewModel);
     //remove later
     void inject(MagicApplication app);
 }

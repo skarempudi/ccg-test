@@ -6,7 +6,7 @@ import android.databinding.ObservableInt;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
-import com.example.srikar.magic.BoardBinding;
+import com.example.srikar.magic.view.BoardBinding;
 import com.example.srikar.magic.MagicApplication;
 import com.example.srikar.magic.R;
 import com.example.srikar.magic.event.GameStateChangeEvent;

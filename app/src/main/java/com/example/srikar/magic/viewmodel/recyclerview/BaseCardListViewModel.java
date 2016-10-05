@@ -1,13 +1,13 @@
 package com.example.srikar.magic.viewmodel.recyclerview;
 
 import android.content.Context;
+import android.databinding.ViewDataBinding;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
-import com.example.srikar.magic.BoardBinding;
+import com.example.srikar.magic.view.BoardBinding;
 import com.example.srikar.magic.MagicApplication;
-import com.example.srikar.magic.MagicLog;
-import com.example.srikar.magic.adapter.BaseRecViewAdapter;
+import com.example.srikar.magic.view.RecyclerViewAdapter;
 import com.example.srikar.magic.event.GameStateChangeEvent;
 import com.example.srikar.magic.event.ListChangeBus;
 import com.example.srikar.magic.event.ListChangeEvent;
@@ -15,21 +15,18 @@ import com.example.srikar.magic.viewmodel.BaseBoardModel;
 
 import javax.inject.Inject;
 
-import rx.Subscription;
-import rx.subscriptions.CompositeSubscription;
-
 /**
  * Using data binding, the layout uses this View Model to interact with the rest of the code.
  * This is the base class used for RecyclerView View Models. List to use determined by constructor.
  * The Adapter and LayoutManager are set here.
  * Created by Srikar on 6/21/2016.
  */
-public abstract class BaseRecyclerViewModel extends BaseBoardModel implements
+public abstract class BaseCardListViewModel extends BaseBoardModel implements
         ListChangeBus.ListChangeListener {
-    static final String TAG = "BaseRecyclerViewModel";
+    static final String TAG = "BaseCardListViewModel";
 
     //adapter handles changes to the list, creates view models for Permanents or Cards
-    BaseRecViewAdapter mAdapter;
+    RecyclerViewAdapter mAdapter;
     RecyclerView.LayoutManager mLayoutManager;
 
     //listens for changes in model so can update display
@@ -45,7 +42,7 @@ public abstract class BaseRecyclerViewModel extends BaseBoardModel implements
      * @param binding Binding used to access view that will update
      * @param listName Which data model list is being used, using DataModelConstants
      */
-    BaseRecyclerViewModel(BoardBinding binding, int listName) {
+    BaseCardListViewModel(BoardBinding binding, int listName) {
         //won't set the background in super constructor
         super(binding, false);
         //injects instance of RecyclerView event bus
@@ -80,11 +77,12 @@ public abstract class BaseRecyclerViewModel extends BaseBoardModel implements
     }
 
     /**
-     * Gets the Adapter used by the RecyclerView being modeled
-     * Adapter type determined by subclasses
+     * Gets the Adapter
      * @return Adapter
      */
-    protected abstract BaseRecViewAdapter getAdapter();
+    private RecyclerViewAdapter getAdapter() {
+        return new RecyclerViewAdapter(this);
+    }
 
     /**
      * Writing in separate function so can potentially override.
@@ -105,6 +103,26 @@ public abstract class BaseRecyclerViewModel extends BaseBoardModel implements
      * @return Number of items in relevant list
      */
     public abstract int getItemCount();
+
+    /**
+     * Returns layout ID of card, as desired for this list
+     * @return Layout ID
+     */
+    public abstract int getCardLayout();
+
+    /**
+     * Called by view for this list
+     * @param position What card in list was clicked
+     */
+    public abstract void onItemClick(int position);
+
+    /**
+     * Called by view for this list when load
+     * Loads image
+     * @param binding Binding for the view that will load
+     * @param position What card in list is being loaded
+     */
+    public abstract void onItemLoad(ViewDataBinding binding, int position);
 
     /**
      * Call when containing View or Fragment is destroyed, will unregister Subscriptions

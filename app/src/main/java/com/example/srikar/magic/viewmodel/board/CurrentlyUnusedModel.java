@@ -1,6 +1,6 @@
 package com.example.srikar.magic.viewmodel.board;
 
-import com.example.srikar.magic.BoardBinding;
+import com.example.srikar.magic.view.BoardBinding;
 import com.example.srikar.magic.viewmodel.BaseBoardModel;
 
 /**

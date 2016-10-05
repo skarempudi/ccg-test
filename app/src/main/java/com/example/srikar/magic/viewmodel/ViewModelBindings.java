@@ -2,10 +2,8 @@ package com.example.srikar.magic.viewmodel;
 
 import android.databinding.BindingAdapter;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
-import android.widget.ImageView;
 
-import com.example.srikar.magic.viewmodel.recyclerview.BaseRecyclerViewModel;
+import com.example.srikar.magic.viewmodel.recyclerview.BaseCardListViewModel;
 
 /**
  * Container class for custom setters used in layout data binding.
@@ -26,7 +24,7 @@ public class ViewModelBindings {
      */
     @BindingAdapter("recyclerViewModel")
     public static void setRecyclerViewModel(RecyclerView recyclerView,
-                                            BaseRecyclerViewModel viewModel) {
+                                            BaseCardListViewModel viewModel) {
         viewModel.setupRecyclerView(recyclerView);
     }
 }

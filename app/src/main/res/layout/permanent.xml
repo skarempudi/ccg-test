@@ -1,13 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android">
-
-    <data>
-        <variable
-            name="battlefieldCardViewModel"
-            type="com.example.srikar.magic.viewmodel.card.BattlefieldCardViewModel"
-            />
-    </data>
-
     <FrameLayout
         android:id="@+id/card"
         android:layout_width="@dimen/card_width"
@@ -23,7 +15,7 @@
 
         <TextView
             android:id="@+id/power_toughness"
-            android:text="@{battlefieldCardViewModel.PTText}"
+            android:text="temporary"
             android:layout_gravity="bottom|right"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />

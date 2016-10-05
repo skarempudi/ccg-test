@@ -59,7 +59,7 @@ public class Hand extends BaseGameZone {
     }
 
     /**
-     * Used by HandRecViewAdapter to determine how many entries are in the RecyclerView
+     * Used to determine how many entries are in the RecyclerView
      * Only see the hand of player that view focused on
      * @return Size of list
      */

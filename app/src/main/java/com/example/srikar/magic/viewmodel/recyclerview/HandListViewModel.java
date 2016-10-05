@@ -1,13 +1,15 @@
 package com.example.srikar.magic.viewmodel.recyclerview;
 
-import android.app.Activity;
+import android.databinding.ViewDataBinding;
+import android.widget.ImageView;
 
-import com.example.srikar.magic.BoardBinding;
+import com.example.srikar.magic.databinding.CardBinding;
+import com.example.srikar.magic.view.BoardBinding;
 import com.example.srikar.magic.MagicApplication;
-import com.example.srikar.magic.adapter.BaseRecViewAdapter;
-import com.example.srikar.magic.adapter.HandRecViewAdapter;
+import com.example.srikar.magic.R;
 import com.example.srikar.magic.model.DataModelConstants;
 import com.example.srikar.magic.model.zone.Hand;
+import com.squareup.picasso.Picasso;
 
 import javax.inject.Inject;
 
@@ -16,11 +18,11 @@ import javax.inject.Inject;
  * View model for the RecyclerView that stores Cards in hand
  * Created by Srikar on 6/29/2016.
  */
-public class HandRecViewModel extends BaseRecyclerViewModel {
+public class HandListViewModel extends BaseCardListViewModel {
     @Inject
     protected Hand mHand;
 
-    public HandRecViewModel(BoardBinding binding) {
+    public HandListViewModel(BoardBinding binding) {
         super(binding, DataModelConstants.LIST_HAND);
         //gets singleton Hand instance
         MagicApplication.getInstance()
@@ -31,18 +33,31 @@ public class HandRecViewModel extends BaseRecyclerViewModel {
         binding.get().setHandModel(this);
     }
 
-    @Override
-    protected BaseRecViewAdapter getAdapter() {
-        return new HandRecViewAdapter(this);
-    }
-
     /**
-     * Get the number of Cards in Hand. Called by HandRecViewAdapter
+     * Get the number of Cards in Hand.
      * @return Number of Cards
      */
     @Override
     public int getItemCount() {
         return mHand.getHandSize();
+    }
+
+    @Override
+    public int getCardLayout() {
+        return R.layout.card;
+    }
+
+    @Override
+    public void onItemClick(int position) {
+        //do nothing for now
+    }
+
+    @Override
+    public void onItemLoad(ViewDataBinding binding, int position) {
+        ImageView view = ((CardBinding)binding).cardImage;
+        Picasso.with(view.getContext())
+                .load(R.drawable.ic_launcher)
+                .into(view);
     }
 
     /**

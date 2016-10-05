@@ -6,6 +6,7 @@ import android.os.Bundle;
 
 import com.example.srikar.magic.databinding.ActivityMainBinding;
 import com.example.srikar.magic.model.DataModelConstants;
+import com.example.srikar.magic.view.BoardBinding;
 import com.example.srikar.magic.viewmodel.GameViewModel;
 import com.example.srikar.magic.viewmodel.board.CurrentlyUnusedModel;
 import com.example.srikar.magic.viewmodel.board.GameActionLogModel;
@@ -13,8 +14,8 @@ import com.example.srikar.magic.viewmodel.board.LifeCounterModel;
 import com.example.srikar.magic.viewmodel.board.NextStepModel;
 import com.example.srikar.magic.viewmodel.board.SwitchPlayerModel;
 import com.example.srikar.magic.viewmodel.board.TurnCounterModel;
-import com.example.srikar.magic.viewmodel.recyclerview.BattlefieldRecViewModel;
-import com.example.srikar.magic.viewmodel.recyclerview.HandRecViewModel;
+import com.example.srikar.magic.viewmodel.recyclerview.BattlefieldListViewModel;
+import com.example.srikar.magic.viewmodel.recyclerview.HandListViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -52,9 +53,9 @@ public class MainActivity extends AppCompatActivity {
         mGameViewModels.add(new NextStepModel(binding));
         mGameViewModels.add(new CurrentlyUnusedModel(binding));
         //add recycler view models
-        mGameViewModels.add(new HandRecViewModel(binding));
-        mGameViewModels.add(new BattlefieldRecViewModel(binding, DataModelConstants.LIST_LANDS));
-        mGameViewModels.add(new BattlefieldRecViewModel(binding, DataModelConstants.LIST_CREATURES));
+        mGameViewModels.add(new HandListViewModel(binding));
+        mGameViewModels.add(new BattlefieldListViewModel(binding, DataModelConstants.LIST_LANDS));
+        mGameViewModels.add(new BattlefieldListViewModel(binding, DataModelConstants.LIST_CREATURES));
     }
 
     @Override

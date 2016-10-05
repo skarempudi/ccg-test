@@ -3,11 +3,10 @@ package com.example.srikar.magic.viewmodel.board;
 import android.content.Context;
 import android.databinding.ObservableField;
 
-import com.example.srikar.magic.BoardBinding;
+import com.example.srikar.magic.view.BoardBinding;
 import com.example.srikar.magic.MagicApplication;
 import com.example.srikar.magic.R;
 import com.example.srikar.magic.UiUtil;
-import com.example.srikar.magic.databinding.ActivityMainBinding;
 import com.example.srikar.magic.event.GameStateChangeEvent;
 import com.example.srikar.magic.model.DataModelConstants;
 import com.example.srikar.magic.model.state.Turn;

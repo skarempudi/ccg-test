@@ -1,4 +1,4 @@
-package com.example.srikar.magic;
+package com.example.srikar.magic.view;
 
 import com.example.srikar.magic.databinding.ActivityMainBinding;
 

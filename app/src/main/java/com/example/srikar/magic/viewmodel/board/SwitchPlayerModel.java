@@ -3,7 +3,7 @@ package com.example.srikar.magic.viewmodel.board;
 import android.databinding.ObservableBoolean;
 import android.view.View;
 
-import com.example.srikar.magic.BoardBinding;
+import com.example.srikar.magic.view.BoardBinding;
 import com.example.srikar.magic.event.GameStateChangeEvent;
 import com.example.srikar.magic.viewmodel.BaseBoardModel;
 

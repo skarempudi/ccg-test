@@ -1,6 +1,6 @@
 package com.example.srikar.magic.viewmodel;
 
-import com.example.srikar.magic.BoardBinding;
+import com.example.srikar.magic.view.BoardBinding;
 import com.example.srikar.magic.MagicApplication;
 import com.example.srikar.magic.R;
 import com.example.srikar.magic.event.GameStateChangeBus;
@@ -42,7 +42,7 @@ public abstract class BaseBoardModel implements
 
     /**
      * Base view model for views that aren't inside Recycler Views
-     * Can specify if want to set background here or not, since BaseRecyclerViewModel won't know
+     * Can specify if want to set background here or not, since BaseCardListViewModel won't know
      * what list it represents until after it calls this constructor
      * @param binding Binding used to access views that will update
      * @param isBackgroundReady If true, will set background; if not, won't at this point

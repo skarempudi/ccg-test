@@ -11,6 +11,8 @@ import android.text.Spanned;
 public final class UiUtil {
     public static final int CLICK_DELAY = 500;
 
+    //
+
     //to prevent from creating an instance
     private UiUtil() {}
 
