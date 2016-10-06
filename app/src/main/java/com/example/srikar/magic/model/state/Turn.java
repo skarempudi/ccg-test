@@ -67,10 +67,15 @@ public class Turn extends BaseGameState {
                 mStep = DataModelConstants.STEP_POSTCOMBAT_MAIN;
             }
 
-            //change state of Combat
+            //call callbacks for each step
             switch (mStep) {
                 case DataModelConstants.STEP_START_OF_COMBAT:
                     mCombat.startCombat();
+                    break;
+
+                case DataModelConstants.STEP_COMBAT_DAMAGE:
+                    //Battlefield will deal damage
+                    mBattlefield.onCombatDamageStep();
                     break;
 
                 case DataModelConstants.STEP_POSTCOMBAT_MAIN:

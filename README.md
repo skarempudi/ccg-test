@@ -12,6 +12,8 @@ The bottom row represents the hand, the row above land resource cards, and the r
 
 Touching the creature cards will produce no action most of the time, but during the "declare attackers" step, if you are viewing the game as the current player, this will add or remove a sword icon that designiates it as an attacking creature. When you press the button labeled "Confirm Attack", and don't cancel, the creatures will be rotated 90 degrees (tapped). The sword icon will disappear after the "end of combat" step, and the creatures will untap at the start of the current player's next turn.
 
+During the "combat damage" step, attacking creatures will deal damage to the other player. Creature-to-creature combat has not been implemented yet, nor has game loss.
+
 Touching the "next step" button will progress through the steps in a turn, indicated in the game log. After the end step, it will switch to the other player's turn. The current player is indicated in the turn counter, both in name and color.
 
 Touching the "switch" button will switch which player you are viewing the board as, but will not change whose turn it is. In the future, this will allow players to cast spells during another player's turn, and this will be used to set up blockers when the other player attacks.

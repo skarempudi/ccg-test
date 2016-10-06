@@ -3,6 +3,7 @@ package com.example.srikar.magic.viewmodel.board;
 import android.content.Context;
 import android.databinding.ObservableField;
 
+import com.example.srikar.magic.event.GameStateChangeEvent;
 import com.example.srikar.magic.view.BoardBinding;
 import com.example.srikar.magic.MagicApplication;
 import com.example.srikar.magic.R;
@@ -86,5 +87,17 @@ public class LifeCounterModel extends BaseBoardModel {
         //set in life total displays
         aliceLifeText.set(formatAlice);
         bobLifeText.set(formatBob);
+    }
+
+    /***********************************************************************************************
+     * EVENT BUS LISTENER
+     **********************************************************************************************/
+    @Override
+    public void onGameStateChange(GameStateChangeEvent event) {
+        super.onGameStateChange(event);
+        //update display if life totals change
+        if (event.action == GameStateChangeEvent.LIFE_CHANGE) {
+            setLifeText();
+        }
     }
 }

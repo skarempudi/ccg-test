@@ -1,6 +1,10 @@
 package com.example.srikar.magic.model.state;
 
 import com.example.srikar.magic.event.GameStateChangeBus;
+import com.example.srikar.magic.event.GameStateChangeEvent;
+import com.example.srikar.magic.model.Card;
+
+import java.util.List;
 
 /**
  * Used to keep track of life totals
@@ -18,10 +22,25 @@ public class LifeTotals extends BaseGameState {
 
     /**
      * Get the current life total for the given player
-     * @param playerID Either DataModelConstants.PLAYER_ALICE or PLAYER_BOB
+     * @param playerId Either DataModelConstants.PLAYER_ALICE or PLAYER_BOB
      * @return Life total
      */
-    public int getLifeTotal(int playerID) {
-        return lifeTotals[playerID];
+    public int getLifeTotal(int playerId) {
+        return lifeTotals[playerId];
+    }
+
+    /**
+     * Given list of creatures, each deals damage equal to its power to given player
+     * @param playerId Player being damaged
+     * @param creatures List of creatures attacking the player
+     */
+    public void dealCombatDamage(int playerId, List<Card> creatures) {
+        int totalDamage = 0;
+        for (Card creature : creatures) {
+            totalDamage += creature.details.power;
+        }
+        lifeTotals[playerId] -= totalDamage;
+        //alert life counter
+        addGameStateChangeEvent(GameStateChangeEvent.LIFE_CHANGE);
     }
 }

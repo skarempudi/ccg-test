@@ -5,9 +5,11 @@ import com.example.srikar.magic.event.ListChangeBus;
 import com.example.srikar.magic.event.ListChangeEvent;
 import com.example.srikar.magic.model.Card;
 import com.example.srikar.magic.model.DataModelConstants;
+import com.example.srikar.magic.model.state.LifeTotals;
 import com.example.srikar.magic.model.state.PlayerInfo;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * The Battlefield is where Permanents like Creatures get to interact
@@ -18,6 +20,7 @@ import java.util.ArrayList;
 public class Battlefield extends BaseGameZone {
     private static final String TAG = "Battlefield";
 
+    private final LifeTotals mLifeTotals;
     private final ArrayList<Card>[] mLands, mCreatures;
 
     /**
@@ -25,9 +28,11 @@ public class Battlefield extends BaseGameZone {
      * Constructed by dependency injection.
      * @param listChangeBus Event bus used to pass information to listening RecyclerViewModels
      * @param playerInfo Used to determine who the current player is
+     * @param lifeTotals Keeps track of player life totals, so can deal damage
      */
-    public Battlefield(ListChangeBus listChangeBus, PlayerInfo playerInfo) {
+    public Battlefield(ListChangeBus listChangeBus, PlayerInfo playerInfo, LifeTotals lifeTotals) {
         super(listChangeBus, playerInfo);
+        mLifeTotals = lifeTotals;
 
         mLands = new ArrayList[2];
         mLands[DataModelConstants.PLAYER_ALICE] = new ArrayList<>();
@@ -187,6 +192,26 @@ public class Battlefield extends BaseGameZone {
                 addListChangeEvent(DataModelConstants.LIST_CREATURES, ListChangeEvent.UPDATE, i);
             }
         }
+    }
+
+    /**
+     * At start of combat damage step, creatures deal combat damage
+     * Includes "step" in name to distinguish from combat damage triggered abilities
+     */
+    public void onCombatDamageStep() {
+        MagicLog.d(TAG, "onCombatDamageStep: Creatures deal combat damage");
+        //every attacking creature deals damage, since no blockers yet
+        //get list (moving away from using Combat object for this)
+        int index = mPlayerInfo.getCurrentPlayer();
+        List<Card> attackers = new ArrayList<>();
+        for (Card creature : mCreatures[index]) {
+            if (creature.isDeclaredAttacking()) {
+                attackers.add(creature);
+            }
+        }
+        //send to LifeTotals
+        int opponent = mPlayerInfo.getOtherPlayer();
+        mLifeTotals.dealCombatDamage(opponent, attackers);
     }
 
     /**
