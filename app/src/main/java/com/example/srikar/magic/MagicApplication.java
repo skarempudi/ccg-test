@@ -12,6 +12,7 @@ import com.example.srikar.magic.model.DataModelConstants;
 import javax.inject.Inject;
 
 import rx.Observable;
+import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
 /**
@@ -60,17 +61,23 @@ public class MagicApplication extends Application {
      * aren't any at that point
      */
     private void loadInitialDataModelState() {
-        //TODO: new class
         //hand
         Observable.just(this)
-                .observeOn(Schedulers.io()) //performs actions on I/O thread
+                .subscribeOn(Schedulers.io()) //performs actions on I/O thread
                 .map(AssetLoader::loadCards) //loads cards from JSON asset file
+                .observeOn(AndroidSchedulers.mainThread()) //set data on main thread
                 .subscribe(list -> mHand.setCards(DataModelConstants.PLAYER_ALICE, list));
 
         //battlefield
         Observable.just(this)
-                .observeOn(Schedulers.io()) //performs actions on I/O thread
-                .map(AssetLoader::loadCreatures) //loads permanents from JSON asset file
+                .subscribeOn(Schedulers.io()) //performs actions on I/O thread
+                .map(AssetLoader::loadAliceCreatures) //loads permanents from JSON asset file
+                .observeOn(AndroidSchedulers.mainThread()) //set data on main thread
                 .subscribe(list -> mBattlefield.setCreatures(DataModelConstants.PLAYER_ALICE, list));
+        Observable.just(this)
+                .subscribeOn(Schedulers.io()) //performs actions on I/O thread
+                .map(AssetLoader::loadBobCreatures) //loads permanents from JSON asset file
+                .observeOn(AndroidSchedulers.mainThread()) //set data on main thread
+                .subscribe(list -> mBattlefield.setCreatures(DataModelConstants.PLAYER_BOB, list));
     }
 }

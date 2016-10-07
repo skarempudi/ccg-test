@@ -146,6 +146,7 @@ public abstract class BaseCardListViewModel extends BaseBoardModel implements
         //updates background on view player switch
         super.onGameStateChange(event);
         //when the view player switches, the content of the RecyclerView is changed
+        if (mAdapter == null) return;
         if (event.action == GameStateChangeEvent.SWITCH_VIEW_PLAYER) {
             mAdapter.notifyDataSetChanged();
         }
@@ -153,6 +154,8 @@ public abstract class BaseCardListViewModel extends BaseBoardModel implements
 
     @Override
     public void onListChange(ListChangeEvent event) {
+        if (mAdapter == null) return;
+
         switch (event.action) {
             case ListChangeEvent.ADD:
                 //update list at index added at

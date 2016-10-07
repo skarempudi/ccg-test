@@ -21,7 +21,7 @@ public class Battlefield extends BaseGameZone {
     private static final String TAG = "Battlefield";
 
     private final LifeTotals mLifeTotals;
-    private final ArrayList<Card>[] mLands, mCreatures;
+    private final List<Card>[] mLands, mCreatures;
 
     /**
      * Holds the lands and creatures used by both players.
@@ -34,11 +34,11 @@ public class Battlefield extends BaseGameZone {
         super(listChangeBus, playerInfo);
         mLifeTotals = lifeTotals;
 
-        mLands = new ArrayList[2];
+        mLands = new List[2];
         mLands[DataModelConstants.PLAYER_ALICE] = new ArrayList<>();
         mLands[DataModelConstants.PLAYER_BOB] = new ArrayList<>();
 
-        mCreatures = new ArrayList[2];
+        mCreatures = new List[2];
         mCreatures[DataModelConstants.PLAYER_ALICE] = new ArrayList<>();
         mCreatures[DataModelConstants.PLAYER_BOB] = new ArrayList<>();
     }
@@ -58,11 +58,11 @@ public class Battlefield extends BaseGameZone {
      * @param playerID Either DataModelConstants.PLAYER_ALICE or PLAYER_BOB
      * @param creatures List of creatures
      */
-    public void setCreatures(int playerID, ArrayList<Card> creatures) {
+    public void setCreatures(int playerID, List<Card> creatures) {
         MagicLog.d(TAG, "setCreatures: " + creatures.toString() + " for " + playerID);
         mCreatures[playerID] = creatures;
         addListChangeEvent(
-                DataModelConstants.LIST_CREATURES,
+                DataModelConstants.LIST_MY_CREATURES,
                 ListChangeEvent.UPDATE_ALL,
                 0
         );
@@ -79,7 +79,7 @@ public class Battlefield extends BaseGameZone {
             case DataModelConstants.LIST_LANDS:
                 return getViewPlayerLand(position);
 
-            case DataModelConstants.LIST_CREATURES:
+            case DataModelConstants.LIST_MY_CREATURES:
                 return getViewPlayerCreature(position);
 
             default:
@@ -118,7 +118,7 @@ public class Battlefield extends BaseGameZone {
             case DataModelConstants.LIST_LANDS:
                 return getViewPlayerLandsSize();
 
-            case DataModelConstants.LIST_CREATURES:
+            case DataModelConstants.LIST_MY_CREATURES:
                 return getViewPlayerCreaturesSize();
 
             default:
@@ -172,7 +172,7 @@ public class Battlefield extends BaseGameZone {
         for (int i = 0; i < mCreatures[index].size(); i++) {
             if (mCreatures[index].get(i).untap()) {
                 //only update the creatures that untap
-                addListChangeEvent(DataModelConstants.LIST_CREATURES, ListChangeEvent.UPDATE, i);
+                addListChangeEvent(DataModelConstants.LIST_MY_CREATURES, ListChangeEvent.UPDATE, i);
             }
         }
     }
@@ -189,7 +189,7 @@ public class Battlefield extends BaseGameZone {
                 //tap creatures without vigilance
                 creature.tap();
                 //update those creatures
-                addListChangeEvent(DataModelConstants.LIST_CREATURES, ListChangeEvent.UPDATE, i);
+                addListChangeEvent(DataModelConstants.LIST_MY_CREATURES, ListChangeEvent.UPDATE, i);
             }
         }
     }
@@ -219,13 +219,17 @@ public class Battlefield extends BaseGameZone {
      */
     public void onPostcombatMain() {
         MagicLog.d(TAG, "onSecondMain: Removing all creatures from combat");
-        //remove Alice's creatures from combat
-        //only Alice has creatures right now
-        int index = DataModelConstants.PLAYER_ALICE;
-        for (int i = 0; i < mCreatures[index].size(); i++) {
-            if (mCreatures[index].get(i).removeFromCombat()) {
+        //remove all creatures from combat
+        for (int index : new int[]{DataModelConstants.PLAYER_ALICE, DataModelConstants.PLAYER_BOB}) {
+            for (int i = 0; i < mCreatures[index].size(); i++) {
                 //only update the creatures removed from combat
-                addListChangeEvent(DataModelConstants.LIST_CREATURES, ListChangeEvent.UPDATE, i);
+                if (mCreatures[index].get(i).removeFromCombat()) {
+                    //determine which view to update
+                    int list = (mPlayerInfo.getViewPlayer() == index)?
+                            DataModelConstants.LIST_MY_CREATURES :
+                            DataModelConstants.LIST_OPP_CREATURES;
+                    addListChangeEvent(list, ListChangeEvent.UPDATE, i);
+                }
             }
         }
     }

@@ -55,7 +55,7 @@ public class MainActivity extends AppCompatActivity {
         //add recycler view models
         mGameViewModels.add(new HandListViewModel(binding));
         mGameViewModels.add(new BattlefieldListViewModel(binding, DataModelConstants.LIST_LANDS));
-        mGameViewModels.add(new BattlefieldListViewModel(binding, DataModelConstants.LIST_CREATURES));
+        mGameViewModels.add(new BattlefieldListViewModel(binding, DataModelConstants.LIST_MY_CREATURES));
     }
 
     @Override

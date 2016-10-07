@@ -8,6 +8,7 @@ import com.example.srikar.magic.model.DataModelConstants;
 import com.example.srikar.magic.model.state.PlayerInfo;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Stores the cards in hand for each player.
@@ -19,7 +20,7 @@ public class Hand extends BaseGameZone {
     /**
      * Holds the Cards in Hand. Initial state passed in by MagicApplication calling setCards().
      */
-    private final ArrayList<Card>[] mCards;
+    private final List<Card>[] mCards;
 
     /**
      * Data model for each player's hand of cards.
@@ -30,7 +31,7 @@ public class Hand extends BaseGameZone {
     public Hand(ListChangeBus listChangeBus, PlayerInfo playerInfo) {
         super(listChangeBus, playerInfo);
 
-        mCards = new ArrayList[2];
+        mCards = new List[2];
         mCards[DataModelConstants.PLAYER_ALICE] = new ArrayList<>();
         mCards[DataModelConstants.PLAYER_BOB] = new ArrayList<>();
     }
@@ -40,7 +41,7 @@ public class Hand extends BaseGameZone {
      * @param playerID Either DataModelConstants.PLAYER_ALICE or PLAYER_BOB
      * @param cards Cards
      */
-    public void setCards(int playerID, ArrayList<Card> cards) {
+    public void setCards(int playerID, List<Card> cards) {
         MagicLog.d(TAG, "setCards: " + cards.toString() + " for " + playerID);
         mCards[playerID] = cards;
 

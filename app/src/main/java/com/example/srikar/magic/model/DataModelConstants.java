@@ -11,7 +11,8 @@ public class DataModelConstants {
      * List name
      * Used to access lists from view models and provide address for events in event bus.
      */
-    public static final int LIST_HAND = 0, LIST_LANDS = 1, LIST_CREATURES = 2;
+    public static final int LIST_HAND = 0, LIST_LANDS = 1, LIST_MY_CREATURES = 2,
+            LIST_OPP_CREATURES = 3;
 
     /**
      * In classes like Battlefield, store data for both players in array

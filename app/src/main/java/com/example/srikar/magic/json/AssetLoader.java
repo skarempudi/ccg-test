@@ -16,6 +16,7 @@ import java.io.InputStreamReader;
 import java.io.Reader;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Used to load default values from JSON in asset folder.
@@ -25,12 +26,14 @@ public class AssetLoader {
     private static final String TAG = "AssetLoader";
     private static final String ASSET_CARDS_FILE = "cards.json";
     private static final String ASSET_CREATURES_FILE = "creatures.json";
+    private static final String ASSET_CREATURES_ALICE_FILE = "creatures_alice.json";
+    private static final String ASSET_CREATURES_BOB_FILE = "creatures_bob.json";
 
     /**
      * Uses cards.json to load default Cards.
      * @return List of Cards, used by Hand data model.
      */
-    public static ArrayList<Card> loadCards(Context context) {
+    public static List<Card> loadCards(Context context) {
         MagicLog.d(TAG, "loadCards: Starting load");
 
         AssetManager assetManager = context.getAssets();
@@ -53,18 +56,32 @@ public class AssetLoader {
         return null;
     }
 
-    public static ArrayList<Card> loadCreatures(Context context) {
+    /**
+     * Used for testing. Temporary solution until soon-to-come Card overhauling.
+     * @param context Used to open assets
+     * @return List of cards
+     */
+    public static List<Card> loadCreatures(Context context) {
+        return loadCreaturesHelper(context, ASSET_CREATURES_FILE);
+    }
+
+    public static List<Card> loadAliceCreatures(Context context) {
+        return loadCreaturesHelper(context, ASSET_CREATURES_ALICE_FILE);
+    }
+
+    public static List<Card> loadBobCreatures(Context context) {
+        return loadCreaturesHelper(context, ASSET_CREATURES_BOB_FILE);
+    }
+
+    private static List<Card> loadCreaturesHelper(Context context, String name) {
         MagicLog.d(TAG, "loadCreatures: Staring load");
 
         AssetManager assetManager = context.getAssets();
         Gson gson = new Gson();
 
         try {
-            InputStream in = assetManager.open(ASSET_CREATURES_FILE);
+            InputStream in = assetManager.open(name);
             Reader reader = new InputStreamReader(in);
-//            JsonReader jsonReader = new JsonReader(reader);
-//
-//            ArrayList<Card> list = new ArrayList<>();
 
             Type arrayListType = new TypeToken<ArrayList<Card>>(){}.getType();
 
@@ -73,24 +90,6 @@ public class AssetLoader {
                 card.details = new CreatureDetails();
             }
             return list;
-
-            //since Permanent holds custom Cards, have to do mixed read
-//            jsonReader.beginArray();
-//            while (jsonReader.hasNext()) {
-//                //{"card":{"id":"#"}}
-//                jsonReader.beginObject();
-//                //"card":{"id":"#"}
-//                jsonReader.nextName();
-//                //{"id":"#"}
-//                Card card = gson.fromJson(jsonReader, Card.class);
-//                MagicLog.d(TAG, "loadCreatures: loaded card " + card.toString());
-//                list.add(new Permanent(card));
-//                jsonReader.endObject();
-//            }
-//            jsonReader.endArray();
-//            jsonReader.close();
-//
-//            return list;
         }
         catch (IOException e) {
             e.printStackTrace();

@@ -29,7 +29,7 @@ public class ListChangeEvent implements MagicEvent {
 
     @Override
     public String toString() {
-        String listNames[] = {"hand", "lands", "creatures"};
+        String listNames[] = {"hand", "lands", "my creatures", "opp creatures"};
         String actions[] = {"add", "remove", "update", "update all"};
 
         return listNames[listName] + ", " + actions[action] + ", " + index;

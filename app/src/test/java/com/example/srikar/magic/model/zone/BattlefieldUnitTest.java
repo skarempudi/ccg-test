@@ -205,7 +205,7 @@ public class BattlefieldUnitTest {
 //        }
 //        else if (event.action == ListChangeEvent.Action.REMOVE) {
 //            testMoveToAttack_RecyclerViewEventBus_remove =
-//                    event.listName == ListChangeEvent.ListName.LIST_CREATURES
+//                    event.listName == ListChangeEvent.ListName.LIST_MY_CREATURES
 //                    && event.index == 0;
 //        }
 //    }
@@ -245,7 +245,7 @@ public class BattlefieldUnitTest {
 //    private void testUndoAttackDeclaration_RecyclerViewEventBus_Sub(ListChangeEvent event) {
 //        if (event.action == ListChangeEvent.Action.ADD) {
 //            testUndoAttackDeclaration_RecyclerViewEventBus_add =
-//                    event.listName == ListChangeEvent.ListName.LIST_CREATURES
+//                    event.listName == ListChangeEvent.ListName.LIST_MY_CREATURES
 //                            && event.index == NUM_CREATURES;
 //        }
 //        else if (event.action == ListChangeEvent.Action.REMOVE) {

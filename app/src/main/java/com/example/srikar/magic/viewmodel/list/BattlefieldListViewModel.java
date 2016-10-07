@@ -39,7 +39,7 @@ public class BattlefieldListViewModel extends BaseCardListViewModel {
                 .inject(this);
 
         //set in binding, based on list name
-        if (listName == DataModelConstants.LIST_CREATURES) {
+        if (listName == DataModelConstants.LIST_MY_CREATURES) {
             binding.get().setCreaturesModel(this);
         }
         else if (listName == DataModelConstants.LIST_LANDS) {
@@ -64,7 +64,7 @@ public class BattlefieldListViewModel extends BaseCardListViewModel {
 
     @Override
     public void onItemClick(ViewDataBinding binding, int position) {
-        if (mListName == DataModelConstants.LIST_CREATURES) {
+        if (mListName == DataModelConstants.LIST_MY_CREATURES) {
             //get creature
             Card creature = retrievePermanent(position);
             PermanentBinding permBinding = (PermanentBinding)binding;
@@ -128,7 +128,7 @@ public class BattlefieldListViewModel extends BaseCardListViewModel {
         }
 
         //set power and toughness
-        if (mListName == DataModelConstants.LIST_CREATURES) {
+        if (mListName == DataModelConstants.LIST_MY_CREATURES) {
             permBinding.powerToughness.setText(getPTText(perm));
         }
     }
@@ -165,7 +165,7 @@ public class BattlefieldListViewModel extends BaseCardListViewModel {
         if (mListName == DataModelConstants.LIST_LANDS) {
             mBinding.get().landsRecyclerview.setBackgroundResource(backgroundResource);
         }
-        else if (mListName == DataModelConstants.LIST_CREATURES) {
+        else if (mListName == DataModelConstants.LIST_MY_CREATURES) {
             mBinding.get().creaturesRecyclerview.setBackgroundResource(backgroundResource);
         }
     }
