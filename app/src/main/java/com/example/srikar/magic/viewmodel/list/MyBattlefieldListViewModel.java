@@ -23,7 +23,7 @@ import javax.inject.Inject;
  * View model for Battlefield list of your creatures or lands
  * Created by Srikar on 7/7/2016.
  */
-public class BattlefieldListViewModel extends BaseCardListViewModel {
+public class MyBattlefieldListViewModel extends BaseCardListViewModel {
     @Inject
     protected Battlefield mBattlefield;
     @Inject
@@ -31,7 +31,7 @@ public class BattlefieldListViewModel extends BaseCardListViewModel {
     @Inject
     protected Turn mTurn;
 
-    public BattlefieldListViewModel(BoardBinding binding, int listName) {
+    public MyBattlefieldListViewModel(BoardBinding binding, int listName) {
         super(binding, listName);
         //injects singleton instance of Battlefield
         MagicApplication.getInstance()

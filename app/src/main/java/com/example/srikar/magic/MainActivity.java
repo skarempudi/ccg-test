@@ -14,7 +14,7 @@ import com.example.srikar.magic.viewmodel.board.LifeCounterModel;
 import com.example.srikar.magic.viewmodel.board.NextStepModel;
 import com.example.srikar.magic.viewmodel.board.SwitchPlayerModel;
 import com.example.srikar.magic.viewmodel.board.TurnCounterModel;
-import com.example.srikar.magic.viewmodel.list.BattlefieldListViewModel;
+import com.example.srikar.magic.viewmodel.list.MyBattlefieldListViewModel;
 import com.example.srikar.magic.viewmodel.list.HandListViewModel;
 
 import java.util.ArrayList;
@@ -54,8 +54,8 @@ public class MainActivity extends AppCompatActivity {
         mGameViewModels.add(new CurrentlyUnusedModel(binding));
         //add recycler view models
         mGameViewModels.add(new HandListViewModel(binding));
-        mGameViewModels.add(new BattlefieldListViewModel(binding, DataModelConstants.LIST_LANDS));
-        mGameViewModels.add(new BattlefieldListViewModel(binding, DataModelConstants.LIST_MY_CREATURES));
+        mGameViewModels.add(new MyBattlefieldListViewModel(binding, DataModelConstants.LIST_LANDS));
+        mGameViewModels.add(new MyBattlefieldListViewModel(binding, DataModelConstants.LIST_MY_CREATURES));
     }
 
     @Override
