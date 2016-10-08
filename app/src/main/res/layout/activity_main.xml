@@ -24,6 +24,10 @@
             type="com.example.srikar.magic.viewmodel.board.NextStepModel"
             />
         <variable
+            name="oppCreaturesModel"
+            type="com.example.srikar.magic.viewmodel.list.BaseCardListViewModel"
+            />
+        <variable
             name="creaturesModel"
             type="com.example.srikar.magic.viewmodel.list.BaseCardListViewModel"
             />
@@ -108,13 +112,12 @@
             />
 
         <!--Third row: opposing creatures -->
-        <TextView
+        <android.support.v7.widget.RecyclerView
             android:id="@+id/opp_creatures"
-            android:text="@string/opp_creatures"
             android:layout_below="@id/game_action_log"
             android:layout_width="match_parent"
             app:layout_heightPercent="@fraction/third_row_percent"
-            android:gravity="center"
+            bind:recyclerViewModel="@{oppCreaturesModel}"
             />
 
         <!--Fourth row: my creatures -->

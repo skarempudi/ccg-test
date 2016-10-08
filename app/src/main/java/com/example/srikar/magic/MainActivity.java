@@ -16,6 +16,7 @@ import com.example.srikar.magic.viewmodel.board.SwitchPlayerModel;
 import com.example.srikar.magic.viewmodel.board.TurnCounterModel;
 import com.example.srikar.magic.viewmodel.list.MyBattlefieldListViewModel;
 import com.example.srikar.magic.viewmodel.list.HandListViewModel;
+import com.example.srikar.magic.viewmodel.list.OppCreaturesListViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -56,6 +57,7 @@ public class MainActivity extends AppCompatActivity {
         mGameViewModels.add(new HandListViewModel(binding));
         mGameViewModels.add(new MyBattlefieldListViewModel(binding, DataModelConstants.LIST_LANDS));
         mGameViewModels.add(new MyBattlefieldListViewModel(binding, DataModelConstants.LIST_MY_CREATURES));
+        mGameViewModels.add(new OppCreaturesListViewModel(binding));
     }
 
     @Override

@@ -25,25 +25,25 @@ import javax.inject.Inject;
  */
 public class MyBattlefieldListViewModel extends BaseCardListViewModel {
     @Inject
-    protected Battlefield mBattlefield;
+    Battlefield mBattlefield;
     @Inject
-    protected Combat mCombat;
+    Combat mCombat;
     @Inject
-    protected Turn mTurn;
+    Turn mTurn;
 
     public MyBattlefieldListViewModel(BoardBinding binding, int listName) {
         super(binding, listName);
-        //injects singleton instance of Battlefield
+        //injects singleton instances
         MagicApplication.getInstance()
                 .getMainComponent()
                 .inject(this);
 
         //set in binding, based on list name
         if (listName == DataModelConstants.LIST_MY_CREATURES) {
-            binding.get().setCreaturesModel(this);
+            mBinding.get().setCreaturesModel(this);
         }
         else if (listName == DataModelConstants.LIST_LANDS) {
-            binding.get().setLandsModel(this);
+            mBinding.get().setLandsModel(this);
         }
     }
 
@@ -100,11 +100,10 @@ public class MyBattlefieldListViewModel extends BaseCardListViewModel {
 
         //get the image view
         ImageView view = permBinding.cardImage;
-        //get the Permanent
+        //get the permanent
         Card perm = retrievePermanent(position);
 
         //if tapped, rotate 90 degrees
-        //in future, will instead have a set of custom transformations that apply
         if (perm.isTapped()) {
             MagicLog.d(TAG, "onItemLoad: Drawing tapped");
             Picasso.with(view.getContext())

@@ -9,6 +9,7 @@ import com.example.srikar.magic.viewmodel.board.TurnCounterModel;
 import com.example.srikar.magic.viewmodel.list.BaseCardListViewModel;
 import com.example.srikar.magic.viewmodel.list.MyBattlefieldListViewModel;
 import com.example.srikar.magic.viewmodel.list.HandListViewModel;
+import com.example.srikar.magic.viewmodel.list.OppCreaturesListViewModel;
 
 import javax.inject.Singleton;
 
@@ -30,7 +31,7 @@ public interface MainComponent {
 
     void inject(BaseCardListViewModel viewModel);
     void inject(MyBattlefieldListViewModel viewModel);
+    void inject(OppCreaturesListViewModel viewModel);
     void inject(HandListViewModel viewModel);
-    //remove later
     void inject(MagicApplication app);
 }

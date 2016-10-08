@@ -4,7 +4,7 @@ import com.example.srikar.magic.view.BoardBinding;
 import com.example.srikar.magic.viewmodel.BaseBoardModel;
 
 /**
- * View model for currently unused views: opposing creatures, library, graveyard
+ * View model for currently unused views: library, graveyard
  * They will be split off when they start fulfilling their roles
  * Created by Srikar on 8/25/2016.
  */
@@ -26,7 +26,6 @@ public class CurrentlyUnusedModel extends BaseBoardModel {
         int backgroundResource = getViewPlayerBackground();
 
         //set resources
-        mBinding.get().oppCreatures.setBackgroundResource(backgroundResource);
         mBinding.get().library.setBackgroundResource(backgroundResource);
         mBinding.get().graveyard.setBackgroundResource(backgroundResource);
     }

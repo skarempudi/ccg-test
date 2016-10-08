@@ -133,6 +133,14 @@ public class Battlefield extends BaseGameZone {
         return mCreatures[mPlayerInfo.getViewPlayer()].size();
     }
 
+    public Card getOtherViewPlayerCreature(int position) {
+        return mCreatures[mPlayerInfo.getOtherViewPlayer()].get(position);
+    }
+
+    public int getOtherViewPlayerCreaturesSize() {
+        return mCreatures[mPlayerInfo.getOtherViewPlayer()].size();
+    }
+
     /**
      * Used to determine if should skip combat for this player or not, since can't attack with no creatures
      * Used by Turn.nextStep() after start of combat, since stuff could still happen in that step
@@ -189,7 +197,9 @@ public class Battlefield extends BaseGameZone {
                 //tap creatures without vigilance
                 creature.tap();
                 //update those creatures
-                addListChangeEvent(DataModelConstants.LIST_MY_CREATURES, ListChangeEvent.UPDATE, i);
+                int list = (index == mPlayerInfo.getViewPlayer())? DataModelConstants.LIST_MY_CREATURES
+                        : DataModelConstants.LIST_OPP_CREATURES;
+                addListChangeEvent(list, ListChangeEvent.UPDATE, i);
             }
         }
     }
