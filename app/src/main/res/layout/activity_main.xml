@@ -58,31 +58,65 @@
             android:gravity="center"
             />
 
-        <TextView
-            android:id="@+id/life_counter_alice"
-            android:text="@{lifeCounterModel.aliceLifeText}"
+        <FrameLayout
+            android:id="@+id/life_counter_alice_frame"
             android:layout_alignParentTop="true"
             android:layout_toRightOf="@id/turn_counter"
             app:layout_widthPercent="@fraction/life_counter_width_percent"
             app:layout_heightPercent="@fraction/first_row_percent"
-            android:gravity="center"
-            />
+            >
 
-        <TextView
-            android:id="@+id/life_counter_bob"
-            android:text="@{lifeCounterModel.bobLifeText}"
+            <TextView
+                android:id="@+id/life_counter_alice"
+                android:text="@{lifeCounterModel.aliceLifeText}"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                />
+
+            <TextView
+                android:id="@+id/life_counter_alice_change"
+                android:text="@{lifeCounterModel.aliceLifeChangeText}"
+                android:textColor="@color/colorLifeLoss"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="bottom|center"
+                />
+
+        </FrameLayout>
+
+        <FrameLayout
+            android:id="@+id/life_counter_bob_frame"
             android:layout_alignParentTop="true"
-            android:layout_toRightOf="@id/life_counter_alice"
+            android:layout_toRightOf="@id/life_counter_alice_frame"
             app:layout_widthPercent="@fraction/life_counter_width_percent"
             app:layout_heightPercent="@fraction/first_row_percent"
-            android:gravity="center"
-            />
+            >
+
+            <TextView
+                android:id="@+id/life_counter_bob"
+                android:text="@{lifeCounterModel.bobLifeText}"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                />
+
+            <TextView
+                android:id="@+id/life_counter_bob_change"
+                android:text="@{lifeCounterModel.bobLifeChangeText}"
+                android:textColor="@color/colorLifeLoss"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="bottom|center"
+                />
+
+        </FrameLayout>
 
         <Button
             android:id="@+id/switch_player"
             android:text="@string/switch_player"
             android:layout_alignParentTop="true"
-            android:layout_toRightOf="@id/life_counter_bob"
+            android:layout_toRightOf="@id/life_counter_bob_frame"
             app:layout_widthPercent="@fraction/switch_player_width_percent"
             app:layout_heightPercent="@fraction/first_row_percent"
             android:enabled="@{switchPlayerModel.enabled}"

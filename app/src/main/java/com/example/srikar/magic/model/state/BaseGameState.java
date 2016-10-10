@@ -26,10 +26,24 @@ public class BaseGameState {
      **********************************************************************************************/
     /**
      * Add event to mGameStateChangeBus, which alerts the listening view models
-     * @param action From GameStateChangeEvent.
+     * @param action From GameStateChangeEvent
      */
     protected void addGameStateChangeEvent(int action) {
         GameStateChangeEvent event = new GameStateChangeEvent(action);
+        MagicLog.d(TAG, "addGameStateChangeEvent: " + event.toString());
+
+        mGameStateChangeBus.addEvent(event);
+    }
+
+    /**
+     * Add event to mGameStateChangeBus, which alerts the listening view models
+     * Use this version if the action requires an extra detail, such as LIFE_CHANGE requiring a
+     * player ID
+     * @param action From GameStateChangeEvent
+     * @param detail Varies for each action, most don't use this, but LIFE_CHANGE uses player ID
+     */
+    protected void addGameStateChangeEvent(int action, int detail) {
+        GameStateChangeEvent event = new GameStateChangeEvent(action, detail);
         MagicLog.d(TAG, "addGameStateChangeEvent: " + event.toString());
 
         mGameStateChangeBus.addEvent(event);
