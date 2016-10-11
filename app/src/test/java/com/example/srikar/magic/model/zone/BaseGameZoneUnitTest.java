@@ -43,8 +43,8 @@ public class BaseGameZoneUnitTest {
     public void testAddListChangeEvent() {
         //listen for events
         Subscription sub = eventBus.getEvents()
-                .observeOn(Schedulers.newThread())
-                .subscribe(this::listenChangeEventListener);
+                .observeOn(Schedulers.io())
+                .subscribe(this::listChangeEventListener);
 
         baseGameZone.addListChangeEvent(
                 DataModelConstants.LIST_HAND,
@@ -71,7 +71,7 @@ public class BaseGameZoneUnitTest {
      * Used by testAddListChangeEvent() to test if event received.
      * @param event Event received
      */
-    private void listenChangeEventListener(ListChangeEvent event) {
+    private void listChangeEventListener(ListChangeEvent event) {
         receivedEvent = event;
         isEventReceived = (event.listName == DataModelConstants.LIST_HAND)
                 && (event.action == ListChangeEvent.UPDATE_ALL)

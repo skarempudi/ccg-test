@@ -5,6 +5,7 @@ import com.example.srikar.magic.event.GameStateChangeBus;
 import com.example.srikar.magic.event.ListChangeBus;
 import com.example.srikar.magic.model.Card;
 import com.example.srikar.magic.model.DataModelConstants;
+import com.example.srikar.magic.model.state.LifeTotals;
 import com.example.srikar.magic.model.state.PlayerInfo;
 
 
@@ -33,7 +34,8 @@ public class BattlefieldUnitTest {
     public BattlefieldUnitTest() {
         MagicLog.setLogging(false);
         gameStateChangeBus = new GameStateChangeBus();
-        battlefield = new Battlefield(new ListChangeBus(), new PlayerInfo(gameStateChangeBus));
+        battlefield = new Battlefield(new ListChangeBus(), new PlayerInfo(gameStateChangeBus),
+                new LifeTotals(gameStateChangeBus));
     }
 
     @Before
