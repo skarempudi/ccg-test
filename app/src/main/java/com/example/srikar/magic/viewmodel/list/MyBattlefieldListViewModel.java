@@ -139,7 +139,7 @@ public class MyBattlefieldListViewModel extends BaseCardListViewModel {
      * @return Permanent
      */
     private Card retrievePermanent(int position) {
-        return mBattlefield.getViewPlayerPermanent(mListName, position);
+        return mBattlefield.getViewPlayerCard(mListName, position);
     }
 
     /**

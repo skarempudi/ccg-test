@@ -44,12 +44,62 @@ public class Battlefield extends BaseGameZone {
     }
 
     /**
+     * Get a card from the specified list for the player that is viewing
+     * @param listName The list being retrieved from, using list name constants
+     * @param position The position in the list
+     * @return The card
+     */
+    public Card getViewPlayerCard(int listName, int position) {
+        switch(listName) {
+            case DataModelConstants.LIST_LANDS:
+                return getViewPlayerLand(position);
+
+            case DataModelConstants.LIST_MY_CREATURES:
+                return getViewPlayerCreature(position);
+
+            default:
+                return null;
+        }
+    }
+
+    /**
+     * Gets the size of the list that matches to the given listName.
+     * @param listName The list being targeted, using list name constants
+     * @return The size of that list
+     */
+    public int getViewPlayerListSize(int listName) {
+        switch(listName) {
+            case DataModelConstants.LIST_LANDS:
+                return getViewPlayerLandsSize();
+
+            case DataModelConstants.LIST_MY_CREATURES:
+                return getViewPlayerCreaturesSize();
+
+            default:
+                return 0;
+        }
+    }
+
+    /**
      * Add land for the specified player
      * @param playerID Either DataModelConstants.PLAYER_ALICE or DataModelConstants.PLAYER_BOB
      * @param land Land
      */
     void addLand(int playerID, Card land) {
         mLands[playerID].add(land);
+    }
+
+    /**
+     * Get a land for player that viewing
+     * @param position Position in list
+     * @return Land
+     */
+    public Card getViewPlayerLand(int position) {
+        return mLands[mPlayerInfo.getViewPlayer()].get(position);
+    }
+
+    public int getViewPlayerLandsSize() {
+        return mLands[mPlayerInfo.getViewPlayer()].size();
     }
 
     /**
@@ -69,34 +119,6 @@ public class Battlefield extends BaseGameZone {
     }
 
     /**
-     * Get a permanent from the specified list for the player that is viewing
-     * @param listName The list being retrieved from, using list name constants
-     * @param position The position in the list
-     * @return The permanent
-     */
-    public Card getViewPlayerPermanent(int listName, int position) {
-        switch(listName) {
-            case DataModelConstants.LIST_LANDS:
-                return getViewPlayerLand(position);
-
-            case DataModelConstants.LIST_MY_CREATURES:
-                return getViewPlayerCreature(position);
-
-            default:
-                return null;
-        }
-    }
-
-    /**
-     * Get a land for player that viewing
-     * @param position Position in list
-     * @return Land
-     */
-    public Card getViewPlayerLand(int position) {
-        return mLands[mPlayerInfo.getViewPlayer()].get(position);
-    }
-
-    /**
      * Get a creature for player that viewing
      * @param position Position in list
      * @return Creature
@@ -105,36 +127,12 @@ public class Battlefield extends BaseGameZone {
         return mCreatures[mPlayerInfo.getViewPlayer()].get(position);
     }
 
-    /**
-     * Methods to return size of list
-     */
-    /**
-     * Gets the size of the list that matches to the given listName.
-     * @param listName The list being targeted, using list name constants
-     * @return The size of that list
-     */
-    public int getViewPlayerListSize(int listName) {
-        switch(listName) {
-            case DataModelConstants.LIST_LANDS:
-                return getViewPlayerLandsSize();
-
-            case DataModelConstants.LIST_MY_CREATURES:
-                return getViewPlayerCreaturesSize();
-
-            default:
-                return 0;
-        }
-    }
-
-    public int getViewPlayerLandsSize() {
-        return mLands[mPlayerInfo.getViewPlayer()].size();
-    }
-    public int getViewPlayerCreaturesSize() {
-        return mCreatures[mPlayerInfo.getViewPlayer()].size();
-    }
-
     public Card getOtherViewPlayerCreature(int position) {
         return mCreatures[mPlayerInfo.getOtherViewPlayer()].get(position);
+    }
+
+    public int getViewPlayerCreaturesSize() {
+        return mCreatures[mPlayerInfo.getViewPlayer()].size();
     }
 
     public int getOtherViewPlayerCreaturesSize() {
