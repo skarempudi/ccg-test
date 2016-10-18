@@ -42,7 +42,7 @@ public class Hand extends BaseGameZone {
      * @param cards Cards
      */
     public void setCards(int playerID, List<Card> cards) {
-        MagicLog.d(TAG, "setCards: " + cards.toString() + " for " + playerID);
+        MagicLog.d(TAG, "setCards: " + ((cards == null)? "null" : cards.toString()) + " for " + playerID);
         mCards[playerID] = cards;
 
         //update all in RecyclerView for Hand
@@ -56,7 +56,9 @@ public class Hand extends BaseGameZone {
      * @return Card
      */
     public Card getCard(int pos) {
-        return mCards[mPlayerInfo.getViewPlayer()].get(pos);
+        int player = mPlayerInfo.getViewPlayer();
+        if (mCards[player] == null) return null;
+        return mCards[player].get(pos);
     }
 
     /**
@@ -65,12 +67,14 @@ public class Hand extends BaseGameZone {
      * @return Size of list
      */
     public int getHandSize() {
-        return mCards[mPlayerInfo.getViewPlayer()].size();
+        int player = mPlayerInfo.getViewPlayer();
+        if (mCards[player] == null) return 0;
+        return mCards[player].size();
     }
 
     @Override
     protected void clearLists() {
-        mCards[DataModelConstants.PLAYER_ALICE].clear();
-        mCards[DataModelConstants.PLAYER_BOB].clear();
+        if (mCards[DataModelConstants.PLAYER_ALICE] != null) mCards[DataModelConstants.PLAYER_ALICE].clear();
+        if (mCards[DataModelConstants.PLAYER_BOB] != null) mCards[DataModelConstants.PLAYER_BOB].clear();
     }
 }

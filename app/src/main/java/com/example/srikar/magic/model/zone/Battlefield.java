@@ -109,7 +109,7 @@ public class Battlefield extends BaseGameZone {
      * @param creatures List of creatures
      */
     public void setCreatures(int playerID, List<Card> creatures) {
-        MagicLog.d(TAG, "setCreatures: " + creatures.toString() + " for " + playerID);
+        MagicLog.d(TAG, "setCreatures: " + ((creatures == null)? "null" : creatures.toString()) + " for " + playerID);
         mCreatures[playerID] = creatures;
         addListChangeEvent(
                 DataModelConstants.LIST_MY_CREATURES,
@@ -124,19 +124,27 @@ public class Battlefield extends BaseGameZone {
      * @return Creature
      */
     public Card getViewPlayerCreature(int position) {
-        return mCreatures[mPlayerInfo.getViewPlayer()].get(position);
+        int player = mPlayerInfo.getViewPlayer();
+        if (mCreatures[player] == null) return null;
+        return mCreatures[player].get(position);
     }
 
     public Card getOtherViewPlayerCreature(int position) {
-        return mCreatures[mPlayerInfo.getOtherViewPlayer()].get(position);
+        int player = mPlayerInfo.getOtherViewPlayer();
+        if (mCreatures[player] == null) return null;
+        return mCreatures[player].get(position);
     }
 
     public int getViewPlayerCreaturesSize() {
-        return mCreatures[mPlayerInfo.getViewPlayer()].size();
+        int player = mPlayerInfo.getViewPlayer();
+        if (mCreatures[player] == null) return 0;
+        return mCreatures[player].size();
     }
 
     public int getOtherViewPlayerCreaturesSize() {
-        return mCreatures[mPlayerInfo.getOtherViewPlayer()].size();
+        int player = mPlayerInfo.getOtherViewPlayer();
+        if (mCreatures[player] == null) return 0;
+        return mCreatures[player].size();
     }
 
     /**
@@ -145,16 +153,18 @@ public class Battlefield extends BaseGameZone {
      * @return Number of creatures current player controls
      */
     public int getCurrentPlayerCreaturesSize() {
-        return mCreatures[mPlayerInfo.getCurrentPlayer()].size();
+        int player = mPlayerInfo.getCurrentPlayer();
+        if (mCreatures[player] == null) return 0;
+        return mCreatures[player].size();
     }
 
     @Override
     protected void clearLists() {
-        mLands[DataModelConstants.PLAYER_ALICE].clear();
-        mLands[DataModelConstants.PLAYER_BOB].clear();
+        if (mLands[DataModelConstants.PLAYER_ALICE] != null) mLands[DataModelConstants.PLAYER_ALICE].clear();
+        if (mLands[DataModelConstants.PLAYER_BOB] != null) mLands[DataModelConstants.PLAYER_BOB].clear();
 
-        mCreatures[DataModelConstants.PLAYER_ALICE].clear();
-        mCreatures[DataModelConstants.PLAYER_BOB].clear();
+        if (mCreatures[DataModelConstants.PLAYER_ALICE] != null) mCreatures[DataModelConstants.PLAYER_ALICE].clear();
+        if (mCreatures[DataModelConstants.PLAYER_BOB] != null) mCreatures[DataModelConstants.PLAYER_BOB].clear();
     }
 
     /***********************************************************************************************
@@ -169,16 +179,20 @@ public class Battlefield extends BaseGameZone {
         int index = mPlayerInfo.getCurrentPlayer();
 
         //untap all current player lands
-        for (int i = 0; i < mLands[index].size(); i++) {
-            mLands[index].get(i).untap();
-            //since don't have lands implemented yet, no action when untap
+        if (mLands[index] != null) {
+            for (int i = 0; i < mLands[index].size(); i++) {
+                mLands[index].get(i).untap();
+                //since don't have lands implemented yet, no action when untap
+            }
         }
 
         //untap all current player creatures
-        for (int i = 0; i < mCreatures[index].size(); i++) {
-            if (mCreatures[index].get(i).untap()) {
-                //only update the creatures that untap
-                addListChangeEvent(DataModelConstants.LIST_MY_CREATURES, ListChangeEvent.UPDATE, i);
+        if (mCreatures[index] != null) {
+            for (int i = 0; i < mCreatures[index].size(); i++) {
+                if (mCreatures[index].get(i).untap()) {
+                    //only update the creatures that untap
+                    addListChangeEvent(DataModelConstants.LIST_MY_CREATURES, ListChangeEvent.UPDATE, i);
+                }
             }
         }
     }
@@ -189,15 +203,17 @@ public class Battlefield extends BaseGameZone {
     public void onConfirmAttack() {
         MagicLog.d(TAG, "onAttackersConfirmed: Tap all attackers without vigilance");
         int index = mPlayerInfo.getCurrentPlayer();
-        for (int i = 0; i < mCreatures[index].size(); i++) {
-            Card creature = mCreatures[index].get(i);
-            if (creature.isDeclaredAttacking()) {
-                //tap creatures without vigilance
-                creature.tap();
-                //update those creatures
-                int list = (index == mPlayerInfo.getViewPlayer())? DataModelConstants.LIST_MY_CREATURES
-                        : DataModelConstants.LIST_OPP_CREATURES;
-                addListChangeEvent(list, ListChangeEvent.UPDATE, i);
+        if (mCreatures[index] != null) {
+            for (int i = 0; i < mCreatures[index].size(); i++) {
+                Card creature = mCreatures[index].get(i);
+                if (creature.isDeclaredAttacking()) {
+                    //tap creatures without vigilance
+                    creature.tap();
+                    //update those creatures
+                    int list = (index == mPlayerInfo.getViewPlayer()) ? DataModelConstants.LIST_MY_CREATURES
+                            : DataModelConstants.LIST_OPP_CREATURES;
+                    addListChangeEvent(list, ListChangeEvent.UPDATE, i);
+                }
             }
         }
     }
@@ -212,9 +228,11 @@ public class Battlefield extends BaseGameZone {
         //get list (moving away from using Combat object for this)
         int index = mPlayerInfo.getCurrentPlayer();
         List<Card> attackers = new ArrayList<>();
-        for (Card creature : mCreatures[index]) {
-            if (creature.isDeclaredAttacking()) {
-                attackers.add(creature);
+        if (mCreatures[index] != null) {
+            for (Card creature : mCreatures[index]) {
+                if (creature.isDeclaredAttacking()) {
+                    attackers.add(creature);
+                }
             }
         }
         //send to LifeTotals
@@ -229,6 +247,7 @@ public class Battlefield extends BaseGameZone {
         MagicLog.d(TAG, "onSecondMain: Removing all creatures from combat");
         //remove all creatures from combat
         for (int index : new int[]{DataModelConstants.PLAYER_ALICE, DataModelConstants.PLAYER_BOB}) {
+            if (mCreatures[index] == null) continue;
             for (int i = 0; i < mCreatures[index].size(); i++) {
                 //only update the creatures removed from combat
                 if (mCreatures[index].get(i).removeFromCombat()) {
