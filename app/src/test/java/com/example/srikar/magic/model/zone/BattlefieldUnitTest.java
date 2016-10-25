@@ -97,33 +97,57 @@ public class BattlefieldUnitTest {
      * Assert that get card from correct list with getViewPlayerCard()
      */
     public void testGetViewPlayerCard() {
+        String[] players = {"Alice", "Bob"};
+        int[] testIds = {0, 100};
+
         //assert lands from both players
-        Card land = battlefield.getViewPlayerCard(DataModelConstants.LIST_LANDS, 0);
-        assertTrue("The Alice land id is " + land.toString(),
-                land.toString().compareTo("0 untapped") == 0);
-        playerInfo.switchViewPlayer();
-        land = battlefield.getViewPlayerCard(DataModelConstants.LIST_LANDS, 0);
-        assertTrue("The Bob land id is " + land.toString(),
-                land.toString().compareTo("100 untapped") == 0);
-        playerInfo.switchViewPlayer();
+        Card land;
+        for (int i = 0; i < 2; i++) {
+            land = battlefield.getViewPlayerCard(DataModelConstants.LIST_LANDS, 0);
+            assertTrue(players[i] + " land id is " + land.toString(),
+                    land.toString().compareTo(testIds[i] + " untapped") == 0);
+            playerInfo.switchViewPlayer();
+        }
 
         //assert creatures from both players
-        Card creature = battlefield.getViewPlayerCard(DataModelConstants.LIST_MY_CREATURES, 0);
-        assertTrue("The Alice creature id is " + creature.toString(),
-                creature.toString().compareTo("0 untapped") == 0);
-        playerInfo.switchViewPlayer();
-        creature = battlefield.getViewPlayerCard(DataModelConstants.LIST_MY_CREATURES, 0);
-        assertTrue("The Bob creature id is " + creature.toString(),
-                creature.toString().compareTo("100 untapped") == 0);
-        playerInfo.switchViewPlayer();
+        Card creature;
+        for (int i = 0; i < 2; i++) {
+            creature = battlefield.getViewPlayerCard(DataModelConstants.LIST_MY_CREATURES, 0);
+            assertTrue(players[i] + " creature id is " + creature.toString(),
+                    creature.toString().compareTo(testIds[i] + " untapped") == 0);
+            playerInfo.switchViewPlayer();
+        }
 
         //test nonexistent list
-        Card nonCard = battlefield.getViewPlayerCard(999, 0);
-        assertNull("Not null, is " + ((nonCard == null)? "" : nonCard.toString()), nonCard);
-        playerInfo.switchViewPlayer();
-        nonCard = battlefield.getViewPlayerCard(999, 0);
-        assertNull("Not null, is " + ((nonCard == null)? "" : nonCard.toString()), nonCard);
-        playerInfo.switchViewPlayer();
+        Card nonCard;
+        for (int i = 0; i < 2; i++) {
+            nonCard = battlefield.getViewPlayerCard(999, 0);
+            assertNull(players[i] + " not null, is " + ((nonCard == null)? "" : nonCard.toString()), nonCard);
+            playerInfo.switchViewPlayer();
+        }
+
+        //test out of bounds
+        for (int i = 0; i < 2; i++) {
+            nonCard = battlefield.getViewPlayerCard(DataModelConstants.LIST_LANDS, -1);
+            assertNull(players[i] + " not null, is " + ((nonCard == null)? "" : nonCard.toString()), nonCard);
+            nonCard = battlefield.getViewPlayerCard(DataModelConstants.LIST_LANDS, NUM_LANDS);
+            assertNull(players[i] + " not null, is " + ((nonCard == null)? "" : nonCard.toString()), nonCard);
+
+            nonCard = battlefield.getViewPlayerCard(DataModelConstants.LIST_MY_CREATURES, -1);
+            assertNull(players[i] + " not null, is " + ((nonCard == null)? "" : nonCard.toString()), nonCard);
+            nonCard = battlefield.getViewPlayerCard(DataModelConstants.LIST_MY_CREATURES, NUM_CREATURES);
+            assertNull(players[i] + " not null, is " + ((nonCard == null)? "" : nonCard.toString()), nonCard);
+        }
+
+        //clear lists, test
+        battlefield.clearLists();
+        for (int i = 0; i < 2; i++) {
+            nonCard = battlefield.getViewPlayerCard(DataModelConstants.LIST_LANDS, 0);
+            assertNull(players[i] + " not null, is " + ((nonCard == null)? "" : nonCard.toString()), nonCard);
+
+            nonCard = battlefield.getViewPlayerCard(DataModelConstants.LIST_MY_CREATURES, 0);
+            assertNull(players[i] + " not null, is " + ((nonCard == null)? "" : nonCard.toString()), nonCard);
+        }
     }
 
     @Test
