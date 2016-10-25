@@ -95,7 +95,11 @@ public class Battlefield extends BaseGameZone {
      * @return Land
      */
     public Card getViewPlayerLand(int position) {
-        return mLands[mPlayerInfo.getViewPlayer()].get(position);
+        int player = mPlayerInfo.getViewPlayer();
+        if (mLands[player] == null || position < 0 || mLands[player].size() <= position) {
+            return null;
+        }
+        return mLands[player].get(position);
     }
 
     public int getViewPlayerLandsSize() {
@@ -125,13 +129,17 @@ public class Battlefield extends BaseGameZone {
      */
     public Card getViewPlayerCreature(int position) {
         int player = mPlayerInfo.getViewPlayer();
-        if (mCreatures[player] == null) return null;
+        if (mCreatures[player] == null || position < 0 || mCreatures[player].size() <= position) {
+            return null;
+        }
         return mCreatures[player].get(position);
     }
 
     public Card getOtherViewPlayerCreature(int position) {
         int player = mPlayerInfo.getOtherViewPlayer();
-        if (mCreatures[player] == null) return null;
+        if (mCreatures[player] == null || position < 0 || mCreatures[player].size() <= position) {
+            return null;
+        }
         return mCreatures[player].get(position);
     }
 
