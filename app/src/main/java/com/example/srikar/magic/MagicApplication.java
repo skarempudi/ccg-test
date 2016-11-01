@@ -62,23 +62,20 @@ public class MagicApplication extends Application {
      */
     private void loadInitialDataModelState() {
         //hand
-        Observable.just(this)
+        AssetLoader.loadCards(this)
                 .subscribeOn(Schedulers.io()) //performs actions on I/O thread
-                .map(AssetLoader::loadCards) //loads cards from JSON asset file
                 .onErrorResumeNext(Observable.empty()) //if fail, empty list
                 .observeOn(AndroidSchedulers.mainThread()) //set data on main thread
                 .subscribe(list -> mHand.setCards(DataModelConstants.PLAYER_ALICE, list));
 
         //battlefield
-        Observable.just(this)
+        AssetLoader.loadAliceCreatures(this)
                 .subscribeOn(Schedulers.io()) //performs actions on I/O thread
-                .map(AssetLoader::loadAliceCreatures) //loads permanents from JSON asset file
                 .onErrorResumeNext(Observable.empty()) //if fail, stop
                 .observeOn(AndroidSchedulers.mainThread()) //set data on main thread
                 .subscribe(list -> mBattlefield.setCreatures(DataModelConstants.PLAYER_ALICE, list));
-        Observable.just(this)
+        AssetLoader.loadBobCreatures(this)
                 .subscribeOn(Schedulers.io()) //performs actions on I/O thread
-                .map(AssetLoader::loadBobCreatures) //loads permanents from JSON asset file
                 .onErrorResumeNext(Observable.empty()) //if fail, stop
                 .observeOn(AndroidSchedulers.mainThread()) //set data on main thread
                 .subscribe(list -> mBattlefield.setCreatures(DataModelConstants.PLAYER_BOB, list));

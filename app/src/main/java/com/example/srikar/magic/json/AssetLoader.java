@@ -18,6 +18,8 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
+import rx.Observable;
+
 /**
  * Used to load default values from JSON in asset folder.
  * Created by Srikar on 7/18/2016.
@@ -33,7 +35,7 @@ public class AssetLoader {
      * Uses cards.json to load default Cards.
      * @return List of Cards, used by Hand data model.
      */
-    public static List<Card> loadCards(Context context) {
+    public static Observable<List<Card>> loadCards(Context context) {
         MagicLog.d(TAG, "loadCards: Starting load");
 
         AssetManager assetManager = context.getAssets();
@@ -45,7 +47,7 @@ public class AssetLoader {
 
             Type arrayListType = new TypeToken<ArrayList<Card>>(){}.getType();
 
-            return gson.fromJson(reader, arrayListType);
+            return Observable.just(gson.fromJson(reader, arrayListType));
         }
         catch (IOException e) {
             e.printStackTrace();
@@ -53,7 +55,7 @@ public class AssetLoader {
 
         MagicLog.d(TAG, "loadCards: Load failed");
 
-        return null;
+        return Observable.empty();
     }
 
     /**
@@ -61,19 +63,19 @@ public class AssetLoader {
      * @param context Used to open assets
      * @return List of cards
      */
-    public static List<Card> loadCreatures(Context context) {
+    public static Observable<List<Card>> loadCreatures(Context context) {
         return loadCreaturesHelper(context, ASSET_CREATURES_FILE);
     }
 
-    public static List<Card> loadAliceCreatures(Context context) {
+    public static Observable<List<Card>> loadAliceCreatures(Context context) {
         return loadCreaturesHelper(context, ASSET_CREATURES_ALICE_FILE);
     }
 
-    public static List<Card> loadBobCreatures(Context context) {
+    public static Observable<List<Card>> loadBobCreatures(Context context) {
         return loadCreaturesHelper(context, ASSET_CREATURES_BOB_FILE);
     }
 
-    private static List<Card> loadCreaturesHelper(Context context, String name) {
+    private static Observable<List<Card>> loadCreaturesHelper(Context context, String name) {
         MagicLog.d(TAG, "loadCreatures: Staring load");
 
         AssetManager assetManager = context.getAssets();
@@ -89,7 +91,7 @@ public class AssetLoader {
             for (Card card : list) {
                 card.details = new CreatureDetails();
             }
-            return list;
+            return Observable.just(list);
         }
         catch (IOException e) {
             e.printStackTrace();
@@ -97,6 +99,6 @@ public class AssetLoader {
 
         MagicLog.d(TAG, "loadCreatures: Load failed");
 
-        return null;
+        return Observable.empty();
     }
 }
