@@ -21,7 +21,7 @@ public abstract class BaseBoardModel implements
     //used to access views in board XML
     protected BoardBinding mBinding;
 
-    //used to access information regarding turns, current player, etc.
+    //used to access information regarding turns, active player, etc.
     @Inject
     protected PlayerInfo mPlayerInfo;
     //used to listen for changes to state
@@ -82,11 +82,11 @@ public abstract class BaseBoardModel implements
     }
 
     /**
-     * Get background resource based on current player
+     * Get background resource based on active player
      * @return Resource for Alice or Bob
      */
-    protected int getCurrentPlayerBackground() {
-        if (mPlayerInfo.getCurrentPlayer() == DataModelConstants.PLAYER_ALICE) {
+    protected int getActivePlayerBackground() {
+        if (mPlayerInfo.getActivePlayer() == DataModelConstants.PLAYER_ALICE) {
             return R.drawable.alice_border;
         }
         else {

@@ -63,7 +63,7 @@ public class Turn extends BaseGameState {
             mStep++;
 
             //if starting combat with no creatures, instead go to second main phase
-            if (mStep == DataModelConstants.STEP_DECLARE_ATTACKERS && mBattlefield.getCurrentPlayerCreaturesSize() == 0) {
+            if (mStep == DataModelConstants.STEP_DECLARE_ATTACKERS && mBattlefield.getActivePlayerCreaturesSize() == 0) {
                 mStep = DataModelConstants.STEP_POSTCOMBAT_MAIN;
             }
 
@@ -102,10 +102,10 @@ public class Turn extends BaseGameState {
         mTurn++;
         //go to untap step
         mStep = DataModelConstants.STEP_UNTAP;
-        //switch current player and change view player to it
+        //switch active player and change view player to it
         mPlayerInfo.onNextTurn();
 
-        //have permanents untap for now current player
+        //have permanents untap for now active player
         mBattlefield.onUntapStep();
 
         //alert listening view model to handle change in turn

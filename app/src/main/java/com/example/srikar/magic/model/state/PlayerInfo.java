@@ -11,14 +11,14 @@ import com.example.srikar.magic.model.DataModelConstants;
 public class PlayerInfo extends BaseGameState {
     private static final String TAG = "PlayerInfo";
 
-    private int mCurrentPlayer; //the player whose turn it is
+    private int mActivePlayer; //the player whose turn it is
     private int mViewPlayer; //the player whose view is currently being used
 
 
     public PlayerInfo(GameStateChangeBus gameStateChangeBus) {
         super(gameStateChangeBus);
 
-        mCurrentPlayer = DataModelConstants.PLAYER_ALICE; //starting player is Alice
+        mActivePlayer = DataModelConstants.PLAYER_ALICE; //starting player is Alice
         mViewPlayer = DataModelConstants.PLAYER_ALICE;
     }
 
@@ -26,18 +26,18 @@ public class PlayerInfo extends BaseGameState {
      * Returns ID of player whose turn it is
      * @return Player ID
      */
-    public int getCurrentPlayer() {
-        return mCurrentPlayer;
+    public int getActivePlayer() {
+        return mActivePlayer;
     }
 
     /**
      * When one player's turn ends, switch to the other
      * Also changes the view to that player
      */
-    public void switchCurrentPlayer() {
-        mCurrentPlayer ^= 1; //swaps 0 to 1, and 1 to 0
-        //if not same, switches view player to current player
-        if (mViewPlayer != mCurrentPlayer) {
+    public void switchActivePlayer() {
+        mActivePlayer ^= 1; //swaps 0 to 1, and 1 to 0
+        //if not same, switches view player to active player
+        if (mViewPlayer != mActivePlayer) {
             switchViewPlayer();
         }
     }
@@ -64,7 +64,7 @@ public class PlayerInfo extends BaseGameState {
      * @return Player ID
      */
     public int getOtherPlayer() {
-        return mCurrentPlayer ^ 1;
+        return mActivePlayer ^ 1;
     }
 
     /**
@@ -77,9 +77,9 @@ public class PlayerInfo extends BaseGameState {
 
     /**
      * Called by Turn when new turn starts
-     * Will switch the current player
+     * Will switch the active player
      */
     public void onNextTurn() {
-        switchCurrentPlayer();
+        switchActivePlayer();
     }
 }

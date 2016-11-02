@@ -48,15 +48,15 @@ public class TurnCounterModel extends BaseBoardModel {
 
     @Override
     public void updateBackground() {
-        //turn background based on current player, not view player
-        int backgroundResource = getCurrentPlayerBackground();
+        //turn background based on active player, not view player
+        int backgroundResource = getActivePlayerBackground();
 
         //set resource
         mBinding.get().turnCounter.setBackgroundResource(backgroundResource);
     }
 
     /**
-     * Set the current turn number and current player in the turn display
+     * Set the current turn number and active player in the turn display
      */
     void setTurnText() {
         Context context = mBinding.get().getRoot().getContext();
@@ -67,10 +67,10 @@ public class TurnCounterModel extends BaseBoardModel {
         //get turn number
         int turn = mTurn.getTurnNumber();
 
-        //get current player name
-        int currentPlayer = mPlayerInfo.getCurrentPlayer();
+        //get active player name
+        int activePlayer = mPlayerInfo.getActivePlayer();
         String name;
-        if (currentPlayer == DataModelConstants.PLAYER_ALICE) {
+        if (activePlayer == DataModelConstants.PLAYER_ALICE) {
             name = context.getResources().getString(R.string.alice);
         }
         else {

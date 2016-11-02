@@ -71,7 +71,7 @@ public class MyBattlefieldListViewModel extends BaseCardListViewModel {
 
             //if is own turn, declare attackers step, and attack has not been confirmed, then
             //toggle creature attack declaration
-            if (mPlayerInfo.getCurrentPlayer() == mPlayerInfo.getViewPlayer()
+            if (mPlayerInfo.getActivePlayer() == mPlayerInfo.getViewPlayer()
                     && mTurn.getCurrentStep() == DataModelConstants.STEP_DECLARE_ATTACKERS
                     && !mCombat.isAttackConfirmed()) {
                 //if declared attacking, declare not attacking
@@ -153,7 +153,7 @@ public class MyBattlefieldListViewModel extends BaseCardListViewModel {
     }
 
     /**
-     * Used to update the background color of this view, based on the current player or view player
+     * Used to update the background color of this view, based on the active player or view player
      */
     @Override
     public void updateBackground() {

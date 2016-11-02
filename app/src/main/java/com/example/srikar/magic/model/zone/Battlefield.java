@@ -27,7 +27,7 @@ public class Battlefield extends BaseGameZone {
      * Holds the lands and creatures used by both players.
      * Constructed by dependency injection.
      * @param listChangeBus Event bus used to pass information to listening RecyclerViewModels
-     * @param playerInfo Used to determine who the current player is
+     * @param playerInfo Used to determine who the active player is
      * @param lifeTotals Keeps track of player life totals, so can deal damage
      */
     public Battlefield(ListChangeBus listChangeBus, PlayerInfo playerInfo, LifeTotals lifeTotals) {
@@ -158,10 +158,10 @@ public class Battlefield extends BaseGameZone {
     /**
      * Used to determine if should skip combat for this player or not, since can't attack with no creatures
      * Used by Turn.nextStep() after start of combat, since stuff could still happen in that step
-     * @return Number of creatures current player controls
+     * @return Number of creatures active player controls
      */
-    public int getCurrentPlayerCreaturesSize() {
-        int player = mPlayerInfo.getCurrentPlayer();
+    public int getActivePlayerCreaturesSize() {
+        int player = mPlayerInfo.getActivePlayer();
         if (mCreatures[player] == null) return 0;
         return mCreatures[player].size();
     }
@@ -180,13 +180,13 @@ public class Battlefield extends BaseGameZone {
      * Listeners for changes in steps in the turn
      **********************************************************************************************/
     /**
-     * At start of untap step, untap all permanents current player controls.
+     * At start of untap step, untap all permanents active player controls.
      */
     public void onUntapStep() {
-        MagicLog.d(TAG, "onUntapStep: Untapping all lands and creatures current player controls");
-        int index = mPlayerInfo.getCurrentPlayer();
+        MagicLog.d(TAG, "onUntapStep: Untapping all lands and creatures active player controls");
+        int index = mPlayerInfo.getActivePlayer();
 
-        //untap all current player lands
+        //untap all active player lands
         if (mLands[index] != null) {
             for (int i = 0; i < mLands[index].size(); i++) {
                 mLands[index].get(i).untap();
@@ -194,7 +194,7 @@ public class Battlefield extends BaseGameZone {
             }
         }
 
-        //untap all current player creatures
+        //untap all active player creatures
         if (mCreatures[index] != null) {
             for (int i = 0; i < mCreatures[index].size(); i++) {
                 if (mCreatures[index].get(i).untap()) {
@@ -210,7 +210,7 @@ public class Battlefield extends BaseGameZone {
      */
     public void onConfirmAttack() {
         MagicLog.d(TAG, "onAttackersConfirmed: Tap all attackers without vigilance");
-        int index = mPlayerInfo.getCurrentPlayer();
+        int index = mPlayerInfo.getActivePlayer();
         if (mCreatures[index] != null) {
             for (int i = 0; i < mCreatures[index].size(); i++) {
                 Card creature = mCreatures[index].get(i);
@@ -234,7 +234,7 @@ public class Battlefield extends BaseGameZone {
         MagicLog.d(TAG, "onCombatDamageStep: Creatures deal combat damage");
         //every attacking creature deals damage, since no blockers yet
         //get list (moving away from using Combat object for this)
-        int index = mPlayerInfo.getCurrentPlayer();
+        int index = mPlayerInfo.getActivePlayer();
         List<Card> attackers = new ArrayList<>();
         if (mCreatures[index] != null) {
             for (Card creature : mCreatures[index]) {
