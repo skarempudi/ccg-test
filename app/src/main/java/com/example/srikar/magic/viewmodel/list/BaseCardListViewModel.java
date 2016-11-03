@@ -60,7 +60,7 @@ public abstract class BaseCardListViewModel extends BaseBoardModel implements
     }
 
     /**
-     * Use this function to attach the Adapter and LayoutManager to the bound RecyclerView
+     * Use this function to attach the Adapter and LayoutManager to the bound RecyclerView.
      * Called by custom binding for attribute bind:recyclerViewModel="@{recyclerViewModel}"
      * @param recyclerView The RecyclerView being set up
      */
@@ -98,8 +98,8 @@ public abstract class BaseCardListViewModel extends BaseBoardModel implements
     }
 
     /**
-     * Called by the Adapter created by this view model, to determine the size of the RecyclerView
-     * Which list to use is determined by subclass
+     * Called by the Adapter created by this view model, to determine the size of the RecyclerView.
+     * Which list to use is determined by subclass.
      * @return Number of items in relevant list
      */
     public abstract int getItemCount();

@@ -3,43 +3,38 @@ package com.example.srikar.magic.viewmodel.list;
 import android.databinding.ViewDataBinding;
 import android.widget.ImageView;
 
-import com.example.srikar.magic.databinding.CardBinding;
-import com.example.srikar.magic.view.BoardBinding;
 import com.example.srikar.magic.MagicApplication;
 import com.example.srikar.magic.R;
+import com.example.srikar.magic.databinding.CardBinding;
 import com.example.srikar.magic.model.DataModelConstants;
-import com.example.srikar.magic.model.zone.Hand;
+import com.example.srikar.magic.model.zone.Battlefield;
+import com.example.srikar.magic.view.BoardBinding;
 import com.squareup.picasso.Picasso;
 
 import javax.inject.Inject;
 
 /**
- * Using data binding, the layout uses this View Model to interact with the rest of the code.
- * View model for the RecyclerView that stores Cards in hand
- * Created by Srikar on 6/29/2016.
+ * Created by Srikar on 11/1/2016.
  */
-public class HandListViewModel extends BaseCardListViewModel {
-    @Inject
-    protected Hand mHand;
 
-    public HandListViewModel(BoardBinding binding) {
-        super(binding, DataModelConstants.LIST_HAND);
-        //gets singleton Hand instance
+public class LandListViewModel extends BaseCardListViewModel {
+    @Inject
+    Battlefield mBattlefield;
+
+    public LandListViewModel(BoardBinding binding) {
+        super(binding, DataModelConstants.LIST_LANDS);
+
+        //injects singleton instance
         MagicApplication.getInstance()
                 .getMainComponent()
                 .inject(this);
 
-        //sets self in binding
-        mBinding.get().setHandModel(this);
+        mBinding.get().setLandsModel(this);
     }
 
-    /**
-     * Get the number of Cards in Hand.
-     * @return Number of Cards
-     */
     @Override
     public int getItemCount() {
-        return mHand.getHandSize();
+        return mBattlefield.getViewPlayerLandsSize();
     }
 
     @Override
@@ -69,6 +64,6 @@ public class HandListViewModel extends BaseCardListViewModel {
         int backgroundResource = getViewPlayerBackground();
 
         //set resource
-        mBinding.get().handRecyclerview.setBackgroundResource(backgroundResource);
+        mBinding.get().landsRecyclerview.setBackgroundResource(backgroundResource);
     }
 }

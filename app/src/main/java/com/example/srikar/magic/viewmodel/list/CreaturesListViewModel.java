@@ -4,26 +4,27 @@ import android.databinding.ViewDataBinding;
 import android.view.View;
 import android.widget.ImageView;
 
+import com.example.srikar.magic.MagicApplication;
 import com.example.srikar.magic.MagicLog;
+import com.example.srikar.magic.R;
 import com.example.srikar.magic.databinding.PermanentBinding;
 import com.example.srikar.magic.model.Card;
+import com.example.srikar.magic.model.DataModelConstants;
 import com.example.srikar.magic.model.detail.CreatureDetails;
 import com.example.srikar.magic.model.state.Combat;
 import com.example.srikar.magic.model.state.Turn;
-import com.example.srikar.magic.view.BoardBinding;
-import com.example.srikar.magic.MagicApplication;
-import com.example.srikar.magic.R;
-import com.example.srikar.magic.model.DataModelConstants;
 import com.example.srikar.magic.model.zone.Battlefield;
+import com.example.srikar.magic.view.BoardBinding;
 import com.squareup.picasso.Picasso;
 
 import javax.inject.Inject;
 
 /**
- * View model for Battlefield list of your creatures or lands
- * Created by Srikar on 7/7/2016.
+ * Base class for all view models that display a list of creatures
+ * Created by Srikar on 11/1/2016.
  */
-public class MyBattlefieldListViewModel extends BaseCardListViewModel {
+
+public abstract class CreaturesListViewModel extends BaseCardListViewModel {
     @Inject
     Battlefield mBattlefield;
     @Inject
@@ -31,30 +32,12 @@ public class MyBattlefieldListViewModel extends BaseCardListViewModel {
     @Inject
     Turn mTurn;
 
-    public MyBattlefieldListViewModel(BoardBinding binding, int listName) {
+    public CreaturesListViewModel(BoardBinding binding, int listName) {
         super(binding, listName);
         //injects singleton instances
         MagicApplication.getInstance()
                 .getMainComponent()
                 .inject(this);
-
-        //set in binding, based on list name
-        if (listName == DataModelConstants.LIST_MY_CREATURES) {
-            mBinding.get().setCreaturesModel(this);
-        }
-        else if (listName == DataModelConstants.LIST_LANDS) {
-            mBinding.get().setLandsModel(this);
-        }
-    }
-
-    /**
-     * Gets the number of items in the RecyclerView from a list in the Battlefield specified during
-     * construction of this class.
-     * @return Number of items in Battlefield list
-     */
-    @Override
-    public int getItemCount() {
-        return mBattlefield.getViewPlayerListSize(mListName);
     }
 
     @Override
@@ -62,17 +45,20 @@ public class MyBattlefieldListViewModel extends BaseCardListViewModel {
         return R.layout.permanent;
     }
 
-    @Override
-    public void onItemClick(ViewDataBinding binding, int position) {
-        if (mListName == DataModelConstants.LIST_MY_CREATURES) {
-            //get creature
-            Card creature = retrievePermanent(position);
-            PermanentBinding permBinding = (PermanentBinding)binding;
+    /**
+     * Called by the CreaturesListViewModel implementations on the game board
+     * @param binding Binding for the view
+     * @param position What card in list was clicked
+     */
+    protected void onBoardItemClick(ViewDataBinding binding, int position) {
+        //get creature
+        Card creature = retrieveCreature(position);
+        PermanentBinding permBinding = (PermanentBinding)binding;
 
-            //if is own turn, declare attackers step, and attack has not been confirmed, then
-            //toggle creature attack declaration
-            if (mPlayerInfo.getActivePlayer() == mPlayerInfo.getViewPlayer()
-                    && mTurn.getCurrentStep() == DataModelConstants.STEP_DECLARE_ATTACKERS
+        //if is active player list
+        if (isActivePlayerList()) {
+            //if declare attackers and attack hasn't been confirmed, toggle creature's attack declaration
+            if (mTurn.getCurrentStep() == DataModelConstants.STEP_DECLARE_ATTACKERS
                     && !mCombat.isAttackConfirmed()) {
                 //if declared attacking, declare not attacking
                 if (creature.isDeclaredAttacking()) {
@@ -101,20 +87,21 @@ public class MyBattlefieldListViewModel extends BaseCardListViewModel {
         //get the image view
         ImageView view = permBinding.cardImage;
         //get the permanent
-        Card perm = retrievePermanent(position);
+        Card perm = retrieveCreature(position);
 
-        //if tapped, rotate 90 degrees
+        //if tapped, rotate 90 degrees from untapped rotation
         if (perm.isTapped()) {
             MagicLog.d(TAG, "onItemLoad: Drawing tapped");
             Picasso.with(view.getContext())
                     .load(R.drawable.ic_launcher)
-                    .rotate(90f)
+                    .rotate(getTappedRotation())
                     .into(view);
         }
         else {
             MagicLog.d(TAG, "onItemLoad: Drawing untapped");
             Picasso.with(view.getContext())
                     .load(R.drawable.ic_launcher)
+                    .rotate(getUntappedRotation())
                     .into(view);
         }
 
@@ -127,45 +114,46 @@ public class MyBattlefieldListViewModel extends BaseCardListViewModel {
         }
 
         //set power and toughness
-        if (mListName == DataModelConstants.LIST_MY_CREATURES) {
-            permBinding.powerToughness.setText(getPTText(perm));
-        }
+        permBinding.powerToughness.setText(getPTText(perm));
     }
 
     /**
-     * Using the listName list and the position in that list, get the Permanent Card that matches to this
-     * position in the RecyclerView
+     * Using the relevant creature list, get the Card that matches to this position in the RecyclerView
      * @param position Position in list of Cards
-     * @return Permanent
+     * @return Creature
      */
-    private Card retrievePermanent(int position) {
-        return mBattlefield.getViewPlayerCard(mListName, position);
-    }
+    protected abstract Card retrieveCreature(int position);
+
+    /**
+     * Gets how much the card image should be rotated when untapped
+     * @return Rotation in degrees
+     */
+    protected abstract float getUntappedRotation();
+
+    /**
+     * Gets how much the card image should be rotated when tapped
+     * @return Rotation in degrees
+     */
+    protected abstract float getTappedRotation();
 
     /**
      * Get text to display for creature power and toughness
      * @param perm Card that getting details from
      * @return Power/toughness string
      */
-    public String getPTText(Card perm) {
+    protected String getPTText(Card perm) {
         CreatureDetails details = perm.details;
         return details.power + "/" + details.toughness;
     }
 
     /**
-     * Used to update the background color of this view, based on the active player or view player
+     * Used for onClick events, determine if interacting with list for the active player
+     * @return If interacting with list belonging to active player
      */
-    @Override
-    public void updateBackground() {
-        //background based on view player
-        int backgroundResource = getViewPlayerBackground();
-
-        //choose which view to set based on list name
-        if (mListName == DataModelConstants.LIST_LANDS) {
-            mBinding.get().landsRecyclerview.setBackgroundResource(backgroundResource);
-        }
-        else if (mListName == DataModelConstants.LIST_MY_CREATURES) {
-            mBinding.get().creaturesRecyclerview.setBackgroundResource(backgroundResource);
-        }
+    protected boolean isActivePlayerList() {
+        //if interacting with MY_CREATURES list while viewing as active player, or if interacting
+        //with OPP_CREATURES list while viewing as opposing player
+        return (mListName == DataModelConstants.LIST_MY_CREATURES) ==
+                (mPlayerInfo.getActivePlayer() == mPlayerInfo.getViewPlayer());
     }
 }
